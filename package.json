@@ -1,0 +1,19 @@
+{
+  "name": "desafios_backend_finochioadrian_coderhouse",
+  "version": "1.0.0",
+  "description": "Desafios de Estudio BackEnd NodeJS de CoderHouse BackEnd",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse.git"
+  },
+  "author": "Finochio Adrian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/issues"
+  },
+  "homepage": "https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse#readme"
+}
