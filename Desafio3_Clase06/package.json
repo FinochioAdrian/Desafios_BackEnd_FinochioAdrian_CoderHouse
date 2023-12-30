@@ -1,0 +1,19 @@
+{
+  "name": "desafio3_clase06",
+  "version": "1.0.0",
+  "description": "Desafío 3 de curso coderHouse para backEnd con NodeJS",
+  "main": "./index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon ./index.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": ["*.json"]
+  },
+  "author": "Finochio Adrian E",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
