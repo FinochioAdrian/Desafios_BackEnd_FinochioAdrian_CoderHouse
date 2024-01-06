@@ -115,34 +115,5 @@ class ProductManager {
 }
 
 
-/*
-const productoPrueba = {
-  title: "producto prueba",
-  description: "Este es un producto prueba",
-  price: 200,
-  thumbnail: "Sin imagen",
-  code: "abc123",
-  stock: 25,
-};
 
-const { title, description, price, thumbnail, code, stock } = productoPrueba;
-// Se creará una instancia de la clase “ProductManager”
- const pm = new ProductManager();
-(async () => {
-  try {
-    
-    console.log("Se llamará al método “addProduct” con los campos:");
-    await pm.addProduct(title, description, price, thumbnail, code, stock);
-    await pm.addProduct(title, description, price, thumbnail, "abc123B", stock);
-    await pm.addProduct(title, description, price, thumbnail, "def123a", stock); //-> El objeto debe agregarse satisfactoriamente con un id generado automáticamente SIN REPETIRSE
-    console.log(
-      "Se llamará el método “getProducts” nuevamente, esta vez debe aparecer el producto recién agregado"
-    );
-    await pm.getProducts().then((res) => console.log(res));
-    
-    
-  } catch (e) {
-    console.log(e);
-  }
-})(); */
 export default ProductManager
