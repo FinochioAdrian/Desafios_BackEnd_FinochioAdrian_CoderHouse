@@ -98,7 +98,7 @@ class ProductManager {
     if (productsJson.length===0){
       return []
     }
-    console.log("productsJson",productsJson);
+    
     return JSON.parse(productsJson);
   }
 

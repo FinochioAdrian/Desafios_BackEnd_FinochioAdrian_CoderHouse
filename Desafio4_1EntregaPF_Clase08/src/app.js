@@ -1,10 +1,12 @@
 
 import express from "express";
 import productsRouter from './routers/products.router.js'
+import cartRouter from './routers/carts.router.js'
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use('/api/products',productsRouter)
+app.use('/api/carts',cartRouter)
 
 app.get("/", (req, res) => {
   res.send('Hello World! , visite <a href="http://localhost:8080/products">http://localhost:8080/products</a> ');

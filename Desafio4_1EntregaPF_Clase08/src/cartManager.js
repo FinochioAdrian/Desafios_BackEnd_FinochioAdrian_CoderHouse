@@ -1,11 +1,9 @@
 import fs from "fs";
+
 import crypto from "node:crypto";
 
 class CartManager {
-  
-
   constructor() {
-    
     this.path = "./carrito.json";
   }
   /* Devuelve un id conformado del timeStamp y valor random crypto */
@@ -14,39 +12,24 @@ class CartManager {
     return `${Date.now().toString(16)}-${randomValue}`;
   }
 
-  async addCart({product,quantity}) {
-    if (
-      [product,quantity].some((field) => !field)
-    ) {
-      const error = new Error(
-        "Todos los campos son obligatorios 'product,quantity'"
-      );
+  async newCart({ products }) {
+    if (products.length === 0) {
+      const error = new Error("products is empty");
       error.status = 400;
       throw error;
     }
-    const productsExist = await this.getProducts();
-    if (productsExist.some((prod) => prod.code === code)) {
-      const error = new Error(`El Producto: ${title} existe con el code: ${code}`);
-      error.status = 400;
-      throw error;
-    }
+
+    const cartsExist = await this.getCarts();
     const id = this.newID();
 
-    let product = {
+    let cart = {
       id,
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-      status,
+      products,
     };
-    
-    
+
     try {
-      await this.writeFile([...productsExist, product]);
-      return product;
+      await this.writeFile([...cartsExist, cart]);
+      return cart;
     } catch (error) {
       console.error(error);
       const err = new Error("Error guardando el producto");
@@ -59,19 +42,19 @@ class CartManager {
     return this.readFile();
   }
 
-  async getProductById(id) {
-    const products = await this.readFile();
-    const foundProduct = products.find((pro) => pro.id === id);
+  async getCartById(id) {
+    const carts = await this.readFile();
+    const foundCart = carts.find((pro) => pro.id === id);
 
-    if (!foundProduct) {
-      const error = new Error(`El producto con el Id: ${id} no existe `);
+    if (!foundCart) {
+      const error = new Error(`El Cart con el Id: ${id} no existe `);
       error.status = 404;
       throw error;
     }
 
-    return foundProduct;
+    return foundCart;
   }
-
+  
   async fileExist() {
     try {
       await fs.promises.access(this.path);
@@ -85,25 +68,37 @@ class CartManager {
     const exist = await this.fileExist();
     if (!exist) return [];
 
-    const productsJson = await fs.promises.readFile(this.path);
-    if (productsJson.length===0){
-      return []
+    const cartsJson = await fs.promises.readFile(this.path);
+    if (cartsJson.length === 0) {
+      return [];
     }
-    return JSON.parse(productsJson);
+    return JSON.parse(cartsJson);
   }
 
-  async deleteProductByID(id) {
-    const products = await this.getProducts();
+  
 
-    if (!products.some((prod) => prod.id === id)) {
+  async updateCartFields(id, productId) {
+    const cart = await this.readFile();
+    const indexCart = cart.findIndex((cart) => cart.id === id);
+
+    if (indexCart === -1) {
       const error = new Error(`El producto con el Id: ${id} no existe `);
       error.status = 404;
       throw error;
     }
+    const indexProduct = cart[indexCart].products.findIndex((prod) => {return prod.id == productId})
+    console.log("indexProduct",indexProduct);
+    if (indexProduct ==-1){
+      cart[indexCart].products.push({id:productId,quantity:1})
+    }
+    else{
+      cart[indexCart].products[indexProduct].quantity++
+    }
 
-    const filteredProducts = products.filter((pro) => pro.id !== id);
+    
     try {
-      await this.writeFile(filteredProducts);
+      await this.writeFile(cart);
+      
     } catch (error) {
       console.error(error);
       const err = new Error("Error guardando el producto");
@@ -112,38 +107,11 @@ class CartManager {
     }
   }
 
-  async updateProductFields(id, updatedFields) {
-    const products = await this.readFile();
-    const index = products.findIndex((pro) => pro.id === id);
-
-    if (index === -1) {
-      const error = new Error(`El producto con el Id: ${id} no existe `);
-      error.status = 404;
-      throw error;
-    }
-
-    const updatedProduct = { ...products[index], ...updatedFields };
-    products[index] = updatedProduct;
-    try {
-      await this.writeFile(products);
-      return updatedProduct;
-    } catch (error) {
-      console.error(error);
-      const err = new Error("Error guardando el producto");
-      err.status = 500;
-      throw err;
-    }
-  }
-
-  async updateProduct({ id, ...product }) {
-    await this.updateProductFields(id, product);
-  }
+  
 
   async writeFile(data) {
     await fs.promises.writeFile(this.path, JSON.stringify(data));
   }
-
-  
 }
 
 export default CartManager;
