@@ -4,6 +4,7 @@
   "description": "Desafios de Estudio BackEnd NodeJS de CoderHouse BackEnd",
   "main": "index.js",
   "scripts": {
+    "start": "node ./Desafio4_1EntregaPF_Clase08/index.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/issues"
   },
-  "homepage": "https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse#readme"
+  "homepage": "https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
 }
