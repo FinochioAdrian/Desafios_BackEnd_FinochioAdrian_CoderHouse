@@ -1,6 +1,6 @@
-# Desafio 3 CoderHouse BackEnd
+# Desafio 4 Preentrega proyecto final CoderHouse BackEnd
 
-Desafío 3 de curso coderHouse para backEnd con NodeJS
+Desafío 4 de curso coderHouse para backEnd con NodeJS
 
 ## Instalación y configuración del entorno de desarrollo.
 
@@ -10,4 +10,4 @@ Desafío 3 de curso coderHouse para backEnd con NodeJS
 
 3. Instalar dependencias "npm i"
 
-4. Ejecutar con "npm start";
+4. Ejecutar con "npm run start";
