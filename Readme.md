@@ -13,7 +13,7 @@ Desafío 4 de curso coderHouse para backEnd con NodeJS
 4. Ejecutar con "npm run start";
 
 5. Para una ejecución rápida probar
-     Desafio_1 = npm run start_1 => "start_1": "node ./Desafio1_Clase02/Desafio_Clase02_FinochioAdrian.js"
-     Desafio_2 = npm run start_2 => "start_2": "node ./Desafio2_Clase04/Desafio_Clase04_FinochioAdrian.js"
-     Desafio_3 = npm run start_3 => "start_3": "node ./Desafio3_Clase06/index.js"
-     Desafio_4 = npm run start_4 => "start_4": "node ./Desafio4_1EntregaPF_Clase08/index.js"
+     - Desafio_1 = npm run start_1 => "start_1": "node ./Desafio1_Clase02/Desafio_Clase02_FinochioAdrian.js"
+     - Desafio_2 = npm run start_2 => "start_2": "node ./Desafio2_Clase04/Desafio_Clase04_FinochioAdrian.js"
+     - Desafio_3 = npm run start_3 => "start_3": "node ./Desafio3_Clase06/index.js"
+     - Desafio_4 = npm run start_4 => "start_4": "node ./Desafio4_1EntregaPF_Clase08/index.js"
