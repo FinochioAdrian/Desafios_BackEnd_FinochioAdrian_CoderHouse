@@ -4,7 +4,10 @@
   "description": "Desafios de Estudio BackEnd NodeJS de CoderHouse BackEnd",
   "main": "index.js",
   "scripts": {
-    "start": "node ./Desafio4_1EntregaPF_Clase08/index.js ",
+    "start_1": "node ./Desafio1_Clase02/Desafio_Clase02_FinochioAdrian.js",
+    "start_2": "node ./Desafio2_Clase04/Desafio_Clase04_FinochioAdrian.js",
+    "start_3": "node ./Desafio3_Clase06/index.js",
+    "start_4": "node ./Desafio4_1EntregaPF_Clase08/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

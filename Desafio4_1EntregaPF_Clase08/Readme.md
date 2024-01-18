@@ -1,6 +1,5 @@
 # Desafio 4 Preentrega proyecto final CoderHouse BackEnd
 
-Desafío 4 de curso coderHouse para backEnd con NodeJS
 
 ## Instalación y configuración del entorno de desarrollo.
 
