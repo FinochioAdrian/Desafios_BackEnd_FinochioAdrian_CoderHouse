@@ -2,16 +2,15 @@
 
 Desafío 4 de curso coderHouse para backEnd con NodeJS
 
-## Instalación y configuración del entorno de desarrollo.
+## Instalación y configuración del entorno de desarrollo
 
-1. Clonar el repositorio en tu máquina local: `git clone https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/
+1. Clonar el repositorio en tu máquina local: `git clone <https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/>
 
 2. Posicionarse en la carpeta del desafío correspondiente
 
 3. Instalar dependencias "npm i"
 
 4. Ejecutar con "npm run start";
-
 
 5. Para una ejecución rápida probar
      Desafio_1 = npm run start_1 => "start_1": "node ./Desafio1_Clase02/Desafio_Clase02_FinochioAdrian.js"
