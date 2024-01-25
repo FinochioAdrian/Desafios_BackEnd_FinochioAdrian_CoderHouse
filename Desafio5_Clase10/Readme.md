@@ -1,5 +1,8 @@
-# Desafio 4 Preentrega proyecto final CoderHouse BackEnd
+# Desafio 5 Clase 10
 
+## Uso de Socket y handlebars
+
+## Acedde a la rutas /realTimeProducts y / para visualizar los productos
 
 ## Instalación y configuración del entorno de desarrollo.
 

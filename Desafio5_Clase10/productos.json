@@ -1,109 +1,30 @@
 [
-    {
-        "id": "0",
-        "title": "producto prueba",
-        "description": "Este es un producto prueba",
-        "price": 200,
-        "thumbnail": "Sin imagen",
-        "code": "abc123",
-        "stock": 25
-    },
-    {
-        "id": "1",
-        "title": "Producto A",
-        "description": "Descripción del Producto A",
-        "price": 150,
-        "thumbnail": "Imagen_A.jpg",
-        "code": "def456",
-        "stock": 20
-    },
-    {
-        "id": "2",
-        "title": "Producto B",
-        "description": "Descripción del Producto B",
-        "price": 300,
-        "thumbnail": "Imagen_B.jpg",
-        "code": "ghi789",
-        "stock": 15
-    },
-    {
-        "id": "3",
-        "title": "Producto C",
-        "description": "Descripción del Producto C",
-        "price": 180,
-        "thumbnail": "Imagen_C.jpg",
-        "code": "jkl012",
-        "stock": 30
-    },
-    {
-        "id": "4",
-        "title": "Producto D",
-        "description": "Descripción del Producto D",
-        "price": 250,
-        "thumbnail": "Imagen_D.jpg",
-        "code": "mno345",
-        "stock": 18
-    },
-    {
-        "id": "5",
-        "title": "Producto E",
-        "description": "Descripción del Producto E",
-        "price": 220,
-        "thumbnail": "Imagen_E.jpg",
-        "code": "pqr678",
-        "stock": 22
-    },
-    {
-        "id": "6",
-        "title": "Producto F",
-        "description": "Descripción del Producto F",
-        "price": 270,
-        "thumbnail": "Imagen_F.jpg",
-        "code": "stu901",
-        "stock": 25
-    },
-    {
-        "id": "7",
-        "title": "Producto G",
-        "description": "Descripción del Producto G",
-        "price": 190,
-        "thumbnail": "Imagen_G.jpg",
-        "code": "vwx234",
-        "stock": 16
-    },
-    {
-        "id": "8",
-        "title": "Producto H",
-        "description": "Descripción del Producto H",
-        "price": 320,
-        "thumbnail": "Imagen_H.jpg",
-        "code": "yzab56",
-        "stock": 28
-    },
-    {
-        "id": "9",
-        "title": "Producto I",
-        "description": "Descripción del Producto I",
-        "price": 200,
-        "thumbnail": "Imagen_I.jpg",
-        "code": "cdef78",
-        "stock": 21
-    },
+    
     {
         "id": "18d1a4c8b79-16b05e12",
-        "title": "Nuevo Producto",
-        "description": "Producto J",
+        "title": " Producto A",
+        "description": "Nuevo Producto A",
         "price": 5000,
-        "thumbnail": [],
+        "thumbnail": ["Imagen_A1.jpg"],
         "code": "A1B2C3",
         "stock": 100,
         "status": true
     },
     {
         "id": "18d1dcfbf60-1e953666",
-        "title": "Producto k",
-        "description": "Nuevo Producto K",
+        "title": "Producto B",
+        "description": "Nuevo Producto B",
         "price": 5000,
+        "thumbnail": ["Imagen_B1.jpg","Imagen_B2.jpg"],
+        "code": "D4E5F6",
+        "stock": 100,
+        "status": true
+    },
+    {
+        "id": "18d1dcfbf65-1e953986",
+        "title": "Producto C",
+        "description": "Nuevo Producto C",
+        "price": 2000,
         "thumbnail": [],
         "code": "D4E5F6",
         "stock": 100,
