@@ -74,25 +74,34 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (key === "status") {
           // Convertir el valor booleano a un valor string ('true' o 'false')
           console.log(value);
-          formDataObject[key] = value == "on" ? true : false
-          
+          formDataObject[key] = value == "on" ? true : false;
         } else if (key === "price") {
-            // Convertir a valor numerico
-            formDataObject[key] = parseFloat(value);
-        
+          // Convertir a valor numerico
+          formDataObject[key] = parseFloat(value);
         } else if (key === "stock") {
-            // Convertir a valor numerico
-            formDataObject[key] = parseInt(value);
-        }
-         else {
+          // Convertir a valor numerico
+          formDataObject[key] = parseInt(value);
+        } else {
           formDataObject[key] = value;
         }
       });
 
       console.log(formDataObject);
       socket.emit("addNewProduct", formDataObject);
+      Swal.fire({
+        title: "Se registro un nuevo Producto",
+        text: `El nombre del productos es ${formDataObject.title}`,
+        icon: "success",
+        toast: true,
+      });
+      form.reset();
     } else {
-      console.log("Todos los campos son obligatorios");
+      Swal.fire({
+        title: "Error",
+        text: `Todos los campos son obligatorios`,
+        icon: "error",
+        toast: true,
+      });
     }
   });
 });
@@ -111,4 +120,13 @@ function validateFormNotEmpty(form) {
   return true;
 }
 
-socket.on("error", (data) => console.error(data));
+socket.on("error", (data) => {
+  Swal.fire({
+    title: "Error procesando guardando el Producto",
+    text: `${data}`,
+    icon: "error",
+    toast: true,
+  });
+
+  console.error(data);
+});

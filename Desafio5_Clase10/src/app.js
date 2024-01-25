@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
       //enviar los productos al cliente
       socket.emit("products", products);
     } catch (error) {
-      socket.emit("error", {error});
+      socket.emit("error", error);
     }
     
   });
