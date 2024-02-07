@@ -1,6 +1,31 @@
 # TODO
 
-- Diseño de la página usando css I
+## Hu Products
+
+- [ ] add handler endpoint  for /api/products (CRUD)
+- [] validate params after insert in CRUD
+
+## HU Carts
+
+- [ ] add handler endpoint  for /api/carts (CRUD)
+- [] validate params after insert in CRUD
+
+## HU Chats
+
+- [ ] add handler webSocket  for /chat (CRUD)
+- [] validate params after insert in
+
+## HU Views
+
+- [] create the view engine and set it to EJS
+
+- [] Diseño de la página usando css
+- [] Create the products List view
+    - []  Create internal panel administration for CRUD products 
+
+- [] Create the cart view
+- [] Create the chat view
+
 - Funcionalidad de Modificar productos
 - Funcionalidad Borrar productos
 - Mover Añadir productos a un panel interno de administración

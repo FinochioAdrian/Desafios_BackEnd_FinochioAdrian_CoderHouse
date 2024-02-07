@@ -1,16 +1,16 @@
 import express from "express";
-import __dirname from "./utils.js";
-import mongoose from 'moongose'
+import __dirname from "./utils/utils.js";
+import mongoose from 'mongoose'
 
 
 //importamos las rutas
-import viewsRouter from "./routers/views.router.js";
-import productsRouter from "./routers/products.router.js";
-import cartRouter from "./routers/carts.router.js";
-import handlebars_config from "./handlebars_config.js";
-import IOconfig from "./IOconfig.js";
+import viewsRouter from "./feature/views/views.router.js";
+import productsRouter from "./feature/products/products.router.js";
+import cartRouter from "./feature/carts/carts.router.js";
+import handlebars_config from "./utils/handlebars_config.js";
+import IOconfig from "./utils/IOconfig.js";
 
-mongoose.connect("mongodb://localhost:2707/ecommerce")
+mongoose.connect("mongodb://localhost:27017/ecommerce")
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));

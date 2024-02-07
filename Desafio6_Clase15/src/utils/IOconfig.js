@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import Joi from "joi";
-import ProductManager from "./dao/productManager.js";
+import ProductManager from "../manager/productManager.js";
 const productAddSchema = Joi.object({
     id: Joi.alternatives().try(Joi.number(), Joi.string()),
     title: Joi.string().required(),

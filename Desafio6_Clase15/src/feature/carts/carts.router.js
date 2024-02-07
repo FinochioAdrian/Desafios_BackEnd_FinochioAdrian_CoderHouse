@@ -1,6 +1,6 @@
 import express from "express";
-import ProductManager from "../dao/productManager.js";
-import CartManager from "../dao/cartManager.js";
+import ProductManager from "../../manager/productManager.js";
+import CartManager from "../../manager/cartManager.js";
 
 import Joi from "joi";
 

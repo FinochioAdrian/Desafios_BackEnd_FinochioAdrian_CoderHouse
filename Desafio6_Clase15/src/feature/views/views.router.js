@@ -1,10 +1,13 @@
 import express from "express";
-import ProductManager from "../dao/productManager.js";
+import * as ProductsController from '../products/products.controller.js'
+
+
 const router = express.Router();
-const pm = new ProductManager()
+
+
 
 router.get("/", async (req, res) => {
-  const products = await pm.getProducts()
+  const products = await ProductsController.getAll()
   
   res.render("home",{title:"home", products});
 });
