@@ -1,5 +1,5 @@
 import handlebars from "express-handlebars";
-import __dirname from "./utils.js";
+import __dirname from "../utils/utils.js";
 
 const handlebars_config = (app)=>{
     app.engine("handlebars", handlebars.engine());
