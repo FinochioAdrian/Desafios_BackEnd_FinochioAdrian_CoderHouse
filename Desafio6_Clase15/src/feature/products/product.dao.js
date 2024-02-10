@@ -17,6 +17,14 @@ class ProductsDao {
       throw new Error("Error get all products with Stock ");
     }
   }
+  static async getWithCode(code) {
+    try {
+      return Products.findOne({ code: code }).lean();
+    } catch (error) {
+      console.log("Error get  products with Code " + error);
+      throw new Error("Error get products with Code ");
+    }
+  }
   static async getAllWithLimit(limit, skip = 0) {
     try {
       return Products.find().skip(skip).limit(limit).lean();
@@ -65,9 +73,7 @@ class ProductsDao {
   static async remove(id) {
     try {
       const result = await Products.findByIdAndDelete(id).lean();
-  
-     
-  
+
       return result;
     } catch (error) {
       console.log("Error remove product " + error + " " + error.name);

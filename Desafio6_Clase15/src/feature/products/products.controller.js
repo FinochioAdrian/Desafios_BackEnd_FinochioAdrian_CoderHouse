@@ -1,6 +1,5 @@
+import { validationResult } from "express-validator";
 import Products from "./product.dao.js";
-
-
 
 async function getAll(req, res) {
   try {
@@ -8,30 +7,20 @@ async function getAll(req, res) {
     // /?limit=1
     // Check the existence of the query.limit
     if (limit && !skip) {
-      limit = parseInt(limit, 10);
-
-      // Verify if it's a valid number
-      if (!isNaN(limit) && limit > 0) {
-        // Apply limit to the list of products
-        let limitedProducts = await Products.getAllWithLimit(limit);
-        return res.send({ products: limitedProducts });
-      } else {
-        return res.status(400).send({
-          status: "error",
-          error: 'The "limit" parameter must be a positive integer.',
-        });
-      }
+      // Apply limit to the list of products
+      let limitedProducts = await Products.getAllWithLimit(limit);
+      return res.send({ products: limitedProducts });
     }
+
     // /?skip=1
     // Check the existence of the query.skip
     if (skip && !limit) {
-      skip = parseInt(skip, 10);
+      // Apply starting point to the list of products
+      let limitedProducts = await Products.getAllWithLimit(skip);
+      return res.send({ products: limitedProducts });
 
       // Verify if it's a valid number
       if (!isNaN(skip) && skip > 0) {
-        // Apply starting point to the list of products
-        let limitedProducts = await Products.getAllWithLimit(skip);
-        return res.send({ products: limitedProducts });
       } else {
         return res.status(400).send({
           status: "error",
@@ -39,31 +28,14 @@ async function getAll(req, res) {
         });
       }
     }
+
     // /?limit=1&skip=1
     // Check the existence of the query.skip && query.limit
     if (limit && skip) {
-      limit = parseInt(limit, 10);
-      skip = parseInt(skip, 10);
-
-      // Verify limit if it's a valid number
-      if (isNaN(limit) && !(limit > 0)) {
-        // Apply limit to the list of products
-        return res.status(400).send({
-          status: "error",
-          error: 'The "limit" parameter must be a positive integer.',
-        });
-      }
-      // Verify skip if it's a valid number
-      if (isNaN(skip) && !(skip > 0)) {
-        // Apply limit to the list of products
-        return res.status(400).send({
-          status: "error",
-          error: 'The "skip" parameter must be a positive integer.',
-        });
-      }
       let limitedProducts = await Products.getAllWithLimit(limit, skip);
       return res.send({ products: limitedProducts });
     }
+
     let products = await Products.getAll();
     res.send({ products });
   } catch (error) {
@@ -73,31 +45,16 @@ async function getAll(req, res) {
 
 async function get(req, res) {
   try {
-    // Check the existence of the query.limit
-    if (!req.params.pid) {
-      return res.status(400).send({
-        status: "error",
-        error: "Search parameter 'id' is required in the URL.",
-      });
-    }
     let { pid } = req.params;
 
-    try {
-      let productFound = await Products.getById(pid);
-      if (!productFound) {
-        return res
-          .status(404)
-          .send({ status: "fail", msg: `Product with ID ${pid} not found.` });
-      }
-      // Product found, send it in the response
-      return res.send({ product: productFound });
-    } catch (error) {
-      // Handle specific error when the product is not found
-      return res.status(404).send({
-        status: "error",
-        error: `Product with ID ${pid} not found.`,
-      });
+    let productFound = await Products.getById(pid);
+    if (!productFound) {
+      return res
+        .status(404)
+        .send({ status: "fail", msg: `Product with ID ${pid} not found.` });
     }
+    // Product found, send it in the response
+    return res.send({ product: productFound });
   } catch (error) {
     console.error(error);
     res.status(error.status || 500).send({ error: error.message });
@@ -108,38 +65,31 @@ async function create(req, res) {
   const { body } = req;
   // Validate the request body against the schema
   try {
-    console.table(body);
-    console.log(body);
+    const result = await Products.getWithCode(body.code);
+
+    if (result) {
+      return res.status(409).send({
+        status: "fail",
+        msg: `The 'code': ${body.code} $ field already exists in the database.`,
+      });
+    }
     const payload = await Products.add({ ...body });
-    console.log("payload", payload);
+
     res.status(201).send({ status: "success", payload });
   } catch (error) {
     console.error(error);
     res.status(500).send({
       status: "error",
-      error: "Error occurring when creating this product.",
+      error: "Error occurring when creating this product." + error,
     });
   }
 }
 
 async function update(req, res) {
   try {
-    // Check that the pid is exist
-    if (!req.params || !req.params.pid) {
-      return res.status(400).send({
-        status: "error",
-        error: "Search parameter 'id' is required in the URL.",
-      });
-    }
+    
 
     let { pid } = req.params;
-    // Check that the pid is of type string, if not send to response
-    if (!typeof pid === "string") {
-      return res.status(422).send({
-        status: "error",
-        error: "The parameter 'id' in the URL is not a valid product ID.",
-      });
-    }
     const product = req.body;
 
     // Update products
