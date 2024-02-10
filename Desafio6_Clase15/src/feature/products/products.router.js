@@ -8,6 +8,6 @@ const router = express.Router();
 router.get("/", productValidationMiddleware('getAllQueries'),runValidation ,ProductsController.getAll);
 router.get("/:pid",productValidationMiddleware('isID'),runValidation, ProductsController.get);
 router.post("/", productValidationMiddleware('createProduct'),runValidation,ProductsController.create);
-router.put("/:pid",productValidationMiddleware('createProduct'),runValidation, ProductsController.update);
-router.delete("/:pid", ProductsController.remove);
+router.put("/:pid",productValidationMiddleware('updateProduct'),runValidation, ProductsController.update);
+router.delete("/:pid",productValidationMiddleware('isID'),runValidation, ProductsController.remove);
 export default router;

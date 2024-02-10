@@ -92,8 +92,20 @@ async function update(req, res) {
     let { pid } = req.params;
     const product = req.body;
 
+
+    let  result = await Products.getWithCode(product.code);
+    result= JSON.parse(JSON.stringify(result))
+    
+    console.log(result && result._id!==pid);
+    if (result.length>0 && result._id!==pid) {
+      return res.status(409).send({
+        status: "fail",
+        msg: `The 'code': ${product.code} $ field already exists in the database.`,
+      });
+    }
+
     // Update products
-    console.log(product);
+    
     let productUpdate = await Products.update(pid, product);
     console.log(productUpdate);
     // Response Product not found
@@ -114,22 +126,10 @@ async function update(req, res) {
 
 async function remove(req, res) {
   try {
-    // Check the existence pid
-    if (!req.params.pid) {
-      return res.status(400).send({
-        status: "error",
-        error: "Search parameter 'id' is required in the URL.",
-      });
-    }
+    
 
     let { pid } = req.params;
-    // Check that the pid is of type string, if not send to response
-    if (!typeof pid === "string") {
-      return res.status(422).send({
-        status: "error",
-        error: "The parameter 'id' in the URL is not a valid product ID.",
-      });
-    }
+    
 
     // Delete product
     const productRemove = await Products.remove(pid);
