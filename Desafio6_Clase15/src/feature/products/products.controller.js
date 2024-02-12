@@ -1,4 +1,3 @@
-import { validationResult } from "express-validator";
 import Products from "./product.dao.js";
 
 async function getAll(req, res) {
@@ -19,14 +18,7 @@ async function getAll(req, res) {
       let limitedProducts = await Products.getAllWithLimit(skip);
       return res.send({ products: limitedProducts });
 
-      // Verify if it's a valid number
-      if (!isNaN(skip) && skip > 0) {
-      } else {
-        return res.status(400).send({
-          status: "error",
-          error: 'The "skip" parameter must be a positive integer.',
-        });
-      }
+      
     }
 
     // /?limit=1&skip=1
@@ -66,8 +58,10 @@ async function create(req, res) {
   // Validate the request body against the schema
   try {
     const result = await Products.getWithCode(body.code);
+    console.log("🚀 ~ create ~ result:", result)
 
-    if (result) {
+    
+    if (result.length>0) {
       return res.status(409).send({
         status: "fail",
         msg: `The 'code': ${body.code} $ field already exists in the database.`,
