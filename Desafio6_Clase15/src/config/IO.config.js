@@ -13,6 +13,8 @@ const productAddSchema = Joi.object({
     thumbnails: Joi.array().items(Joi.string()),
   });
 
+  let contadorChat = 1;
+  const consulta = {mail:"",chat:""} ;
  const IOinit = (httpServer) => {
     const io = new Server(httpServer);
   io.on("connection", (socket) => {
@@ -50,7 +52,80 @@ const productAddSchema = Joi.object({
       }
       
     });
+
+    // Mensajes del chat
+   
+
+      
+  
+      // socket.on('event', function)
+  
+      socket.on("disconnect", () => {
+          console.log("A user disconnected");
+      })
+  
+      
+      socket.on("message", (msg) => {
+          socket.emit("message", msg);
+          setTimeout(()=>socket.emit("res",mensajePredefinido(contadorChat,msg) ),1500)
+          
+      })
+  
+ 
   });
+
+  }
+function mensajePredefinido(contador,msg){
+
+  switch (contador) {
+    case 1: {
+      contadorChat=2
+      return "Bienvenido Al ChatBot de tu tienda Online" }
+      
+      
+    case 2: {
+      contadorChat=3
+      return "Ingrese un mail para poder dar seguimiento a su consulta" }
+      
+      
+    case 3: {
+        let estadoValidacion=validarEmail(msg)
+        if(!estadoValidacion){
+          return "Ingrese un mail valido"
+        }
+        consulta.mail=msg
+        contadorChat=4
+        
+        mensajePredefinido(contadorChat)
+      }
+      case 4: {
+        contadorChat=5
+          return "Ingrese Su consulta " + contadorChat
+      
+      }
+      case 5: {
+        consulta.chat=msg
+        //TODO Guardar chat en Chat.create
+        guardarChat(consulta)
+        contadorChat=1
+          return "Gracias, un representante se estará comunicado con usted a la brevedad"
+      
+      }
+      
+    
+  
+    default:
+      break;
+  } 
+  return  
+}
+
+  function validarEmail(email){
+    return true
+  }
+  function guardarChat (chat) {
+
+    
 
   }
   
