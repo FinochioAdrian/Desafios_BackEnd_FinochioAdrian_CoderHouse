@@ -20,9 +20,14 @@
       window.scrollTo(0, document.body.scrollHeight);
     });
     socket.on('res', (msg) => {
-      const item = document.createElement('li');
-      item.textContent = msg;
-      messages.appendChild(item);
+        msg = msg.split('\n')
+        console.log(msg);
+        msg.forEach(val=> {
+          const item = document.createElement('li');
+          item.textContent = val;
+          messages.appendChild(item);
+          
+      })
       window.scrollTo(0, document.body.scrollHeight);
     });
  

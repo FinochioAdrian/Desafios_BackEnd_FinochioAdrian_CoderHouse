@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
-const chatCollection = "chats"
+const messagesCollection = "messages"
 
-const chatSchema = mongoose.Schema({
+const messagesSchema = mongoose.Schema({
     user: {
       type: String,
       validate: {
@@ -11,7 +11,7 @@ const chatSchema = mongoose.Schema({
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           return emailRegex.test(value);
         },
-        message: `${VALUE} no es un formato de correo electrónico válido.`,
+        message: (value) => `${value} no es un formato de correo electrónico válido.`,
       },
       required: true,
     },
@@ -21,5 +21,5 @@ const chatSchema = mongoose.Schema({
     },
   });
   
-  export default mongoose.model(chatCollection, chatSchema);
+  export default mongoose.model(messagesCollection, messagesSchema);
   
