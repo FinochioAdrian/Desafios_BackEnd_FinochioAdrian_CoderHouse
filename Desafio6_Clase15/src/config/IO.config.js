@@ -1,4 +1,6 @@
 import { Server } from "socket.io";
+import validator from 'validator'
+const {isEmail} = validator
 import Joi from "joi";
 import ProductManager from "../manager/productManager.js";
 const productAddSchema = Joi.object({
@@ -100,7 +102,7 @@ function mensajePredefinido(contador,msg){
       }
       case 4: {
         contadorChat=5
-          return "Ingrese Su consulta " + contadorChat
+          return "Ingrese Su consulta "
       
       }
       case 5: {
@@ -121,7 +123,7 @@ function mensajePredefinido(contador,msg){
 }
 
   function validarEmail(email){
-    return true
+    return isEmail(email);
   }
   function guardarChat (chat) {
 
