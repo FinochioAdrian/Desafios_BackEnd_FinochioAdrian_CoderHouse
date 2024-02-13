@@ -1,5 +1,13 @@
-<div class="container mt-5 d-flex justify-content-center">
-  <form class="col-6" id="formAddProducts" enctype="multipart/form-data" action="/api/products/" method="post" >
+<div class="container mt-5 d-flex justify-content-center row">
+  <div
+    class="row justify-content-center align-items-center g-2 text-center"
+  >
+    <h1>Añadir Nuevos Productos</h1>
+  </div>
+  <div
+    class="row justify-content-center align-items-center g-2"
+  >
+    <form class="col-6" id="formAddProducts" enctype="multipart/form-data" action="/api/products/" method="post" >
     <div class="form-group">
       <label for="title">Title</label>
       <input
@@ -83,11 +91,16 @@
         id="thumbnails"
         name="thumbnails"
         placeholder="Enter comma-separated URLs"
+        multiple 
       />
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  </div>
+  
+  
+  
 </div>
 
 <div class="container my-5">
@@ -101,5 +114,4 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/addProducts.js"></script>

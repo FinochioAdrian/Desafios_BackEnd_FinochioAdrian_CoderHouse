@@ -31,7 +31,8 @@ async function getAll(req, res) {
     let products = await Products.getAll();
     res.send({ products });
   } catch (error) {
-    res.status(error.status || 500).send({ error: error.message });
+    console.log("🚀 ~ getAll ~ error:", error)
+    return res.status(error.status || 500).send({ error: error.message });
   }
 }
 
@@ -58,8 +59,8 @@ async function create(req, res) {
   // Validate the request body against the schema
   try {
     const result = await Products.getWithCode(body.code);
-    console.log("🚀 ~ create ~ result:", result)
-
+    
+    
     
     if (result.length>0) {
       return res.status(409).send({
@@ -67,9 +68,20 @@ async function create(req, res) {
         msg: `The 'code': ${body.code} $ field already exists in the database.`,
       });
     }
+
+
+    if(req.files ){
+
+      const filePath = req.files
+      const thumbnails=filePath.map((value) => {return value.path.replace(/\\/g, '/')})
+      body.thumbnails=thumbnails
+      
+    }
+   
     const payload = await Products.add({ ...body });
 
     res.status(201).send({ status: "success", payload });
+
   } catch (error) {
     console.error(error);
     res.status(500).send({
