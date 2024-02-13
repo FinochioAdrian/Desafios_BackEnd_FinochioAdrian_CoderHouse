@@ -1,20 +1,72 @@
-import Carts from "./feature/carts/cart.model.js";
 import connectDB from './config/db.config.js'
-import mongoose from "mongoose";
+import ProductsDao from './feature/products/product.dao.js';
+import ProductManager from './manager/productManager.js';
+import CartManager from './manager/cartManager.js';
+import CartDao from './feature/carts/cart.dao.js';
 async function enviromentPrueba (){
 
-    connectDB()
-    
-    const newCartId =new mongoose.Types.ObjectId().toString();;
-    const cartId = "65c3e353bdb5337609395e85" ;
-    const productId ="65c3e353bdb5337609395e98";
+    await connectDB()
 
-    const result = await Carts.findOneAndUpdate(
-        { _id: cartId },
-        { $addToSet: { carts: { _id: productId, quantity: 1 } } },
-        { upsert: true, new: true }
-      );
-    console.log(result);
+    await cargarCarritoAtlas()
+   /*  await cargarProductosAtlas() */
+   
+
+    
+}
+
+
+ const cargarCarritoAtlas = async ()=> {
+  
+  const cm = new CartManager()
+  const cartJSON = await cm.getCarts()
+  await asyncForEach(cartJSON, async (item) => {
+    
+    await guardarCartEnAtlas(item);
+  });
+
+}
+ const cargarProductosAtlas = async ()=> {
+  const pm = new ProductManager()
+  const productsJSON = await pm.getProducts()
+  await asyncForEach(productsJSON, async (item) => {
+    
+    await guardarProductosEnAtlas(item);
+  });
+
+}
+
+const guardarCartEnAtlas = async({products}) => {
+  try {
+    
+    console.log("🚀 ~ guardarCartEnAtlas ~ products:", products)
+    let result = await CartDao.add(products)
+    console.log("🚀 ~ guardarCartEnAtlas ~ result:", result)
+    
+  } catch (error) {
+    console.log("🚀 ~ guardarEnAtlas ~ error:", error)
+    
+  }
+  
+}
+const guardarProductosEnAtlas = async({title,description,price,thumbnail,code,stock,status,category='IT'}) => {
+  try {
+    let result = await ProductsDao.add({title,description,code,price,stock,status,category,thumbnail})
+    
+  } catch (error) {
+    console.log("🚀 ~ guardarEnAtlas ~ error:", error)
+    
+  }
+  
 }
 
 enviromentPrueba()
+
+
+async function asyncForEach(array, callback) {
+  for (const item of array) {
+    await callback(item);
+  }
+}
+
+
+

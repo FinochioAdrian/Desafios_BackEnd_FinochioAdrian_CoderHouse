@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
  
 export default function connectDB() {
-  const url = "mongodb://localhost:27017/ecommerce";
+  const url = "mongodb+srv://eidrienhez33:K0DW1LhyMOcpSKZy@ecommercecluster.nmjs8p9.mongodb.net/ecommerce?retryWrites=true&w=majority";
   
   try {
     mongoose.connect(url);
