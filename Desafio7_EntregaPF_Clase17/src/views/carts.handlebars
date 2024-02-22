@@ -4,8 +4,8 @@
   <div class="row justify-content-center align-items-center g-2">
     {{#each result.products}}
         
-        <div  class="col ">
-        <div class="card" style="width: 18rem;">
+        <a href="/product/{{this._id}}" class="col text-decoration-none">
+          <div class="card" style="width: 18rem;">
             
                 <svg
                 class="bd-placeholder-img card-img-top"
@@ -41,8 +41,8 @@
             <p class="card-text">Quantity: {{this.quantity}}</p>
             
             </div>
-        </div>
-        </div>
+          </div>
+        </a>
 
         
 {{/each}}
