@@ -4,11 +4,9 @@ const containerCardsProducts = document.querySelector(
 );
 
 const products = [];
-console.log("hola mundo");
 socket.emit("getProducts", null);
 
 socket.on("products", (data) => {
-  console.log(data);
   renderProducts(data);
 });
 
@@ -73,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
           formDataObject[key] = value.split(",");
         } else if (key === "status") {
           // Convertir el valor booleano a un valor string ('true' o 'false')
-          console.log(value);
           formDataObject[key] = value == "on" ? true : false;
         } else if (key === "price") {
           // Convertir a valor numerico
@@ -86,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      console.log(formDataObject);
       socket.emit("addNewProduct", formDataObject);
       Swal.fire({
         title: "Se registro un nuevo Producto",

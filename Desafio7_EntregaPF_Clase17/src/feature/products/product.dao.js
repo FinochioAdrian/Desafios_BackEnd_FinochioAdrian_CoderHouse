@@ -1,9 +1,24 @@
 import Products from "./product.model.js";
 
 class ProductsDao {
-  static async getAll() {
+  static async getAll(limit, page, sort, category, available) {
+
+    limit = limit || 10;
+    page = page || 1;
+    sort = sort || "asc";
+    category = category || null;
+    available = available || true;
+
     try {
-      return Products.find().lean();
+      const query = { status:available };
+      if (category) {
+        query.category = category;
+      }
+      const productsFind = Products.paginate(
+        query,
+        { page, limit, sort:{price:sort}, lean: true }
+      );
+      return productsFind;
     } catch (error) {
       console.log("Error while getting all products " + error);
       throw new Error("Error getting all products ");
@@ -20,7 +35,7 @@ class ProductsDao {
   static async getWithCode(code) {
     try {
       const result = await Products.find({ code }).lean();
-      return result
+      return result;
     } catch (error) {
       console.log("Error get  products with Code " + error);
       throw new Error("Error get products with Code ");
@@ -37,6 +52,16 @@ class ProductsDao {
   static async getById(id) {
     try {
       return Products.findOne({ _id: id }).lean();
+    } catch (error) {
+      console.log("Error getting one product " + error);
+      throw new Error("Error getting one product");
+    }
+  }
+  //get all products in one array the ids
+  static async getByIdInMatriz(productIds) {
+    try {
+      
+      return Products.find({ _id: { $in: productIds } }).lean();
     } catch (error) {
       console.log("Error getting one product " + error);
       throw new Error("Error getting one product");
@@ -71,11 +96,9 @@ class ProductsDao {
       throw new Error("Error add product");
     }
   }
-  static async update(id,
-    products
-  ) {
+  static async update(id, products) {
     try {
-      const updateProduct = Products.findByIdAndUpdate(id,products)
+      const updateProduct = Products.findByIdAndUpdate(id, products);
 
       /* const savedProduct = await newProduct.save(); */
       return updateProduct;

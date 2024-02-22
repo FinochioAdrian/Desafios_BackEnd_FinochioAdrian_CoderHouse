@@ -1,5 +1,6 @@
 import connectDB from './config/db.config.js'
 import ProductsDao from './feature/products/product.dao.js';
+import ProductsModel from './feature/products/product.model.js';
 import ProductManager from './manager/productManager.js';
 import CartManager from './manager/cartManager.js';
 import CartDao from './feature/carts/cart.dao.js';
@@ -7,13 +8,24 @@ async function enviromentPrueba (){
 
     await connectDB()
 
-    await cargarCarritoAtlas()
+
+const category = null
+const status = true
+    await obtnerProductos(category,status)
+     
+    /* await cargarCarritoAtlas() */
    /*  await cargarProductosAtlas() */
    
 
     
 }
-
+const obtnerProductos = async (category,status) => {
+  const query = {status}
+  if (category){
+    query.category=category
+  }
+  const result = await ProductsModel.find(query)
+}
 
  const cargarCarritoAtlas = async ()=> {
   
@@ -38,9 +50,7 @@ async function enviromentPrueba (){
 const guardarCartEnAtlas = async({products}) => {
   try {
     
-    console.log("🚀 ~ guardarCartEnAtlas ~ products:", products)
     let result = await CartDao.add(products)
-    console.log("🚀 ~ guardarCartEnAtlas ~ result:", result)
     
   } catch (error) {
     console.log("🚀 ~ guardarEnAtlas ~ error:", error)

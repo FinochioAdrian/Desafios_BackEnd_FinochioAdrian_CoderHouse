@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node ./index.js ",
     "dev": "npx nodemon ./index.js ",
+    "load": "npx nodemon ./src/pruebas.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "nodemonConfig": {

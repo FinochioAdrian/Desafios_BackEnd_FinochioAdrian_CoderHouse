@@ -3,29 +3,7 @@ import Carts from "./cart.dao.js";
 
 async function getAll(req, res) {
   try {
-    let { limit, skip } = req.query;
-    // /?limit=1
-    // Check the existence of the query.limit
-    if (limit && !skip) {
-      // Apply limit to the list of carts
-      let limitedCarts = await Carts.getAllWithLimit(limit);
-      return res.send({ carts: limitedCarts });
-    }
 
-    // /?skip=1
-    // Check the existence of the query.skip
-    if (skip && !limit) {
-      // Apply starting point to the list of carts
-      let limitedCarts = await Carts.getAllWithLimit(skip);
-      return res.send({ carts: limitedCarts });
-    }
-
-    // /?limit=1&skip=1
-    // Check the existence of the query.skip && query.limit
-    if (limit && skip) {
-      let limitedCarts = await Carts.getAllWithLimit(limit, skip);
-      return res.send({ carts: limitedCarts });
-    }
 
     const cartFound = await Carts.getAll();
     res.send(cartFound);
@@ -49,7 +27,7 @@ async function get(req, res) {
         .send({ status: "fail", msg: `Cart with ID ${cid} not found.` });
     }
 
-    res.send(cartFound);
+    res.send({status:"success",payload:cartFound});
   } catch (error) {
     console.error(error);
     res.status(error.status || 500).send({
@@ -63,15 +41,15 @@ async function get(req, res) {
 async function create(req, res) {
   try {
     const { body } = req;
-    console.log("🚀 ~ create ~ body:", body);
-    console.log("body".body);
-    const payload = await Carts.add({ ...body });
+    
+   
+    const payload =  await Carts.add(body.products ); 
     res.status(201).send({ status: "success", payload });
   } catch (error) {
     console.error(error);
     res
-      .status(500)
-      .send({ status: "error", error: "Error guardando el producto." });
+      .status(error.status||500)
+      .send({ status: "error", error: error.message });
   }
 }
 
@@ -101,6 +79,63 @@ async function addProductInCart(req, res) {
       .send({ status: "error", error: error.message });
   }
 }
+async function updateQuantityProductInCart(req, res) {
+  try {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+    if (!quantity || isNaN(quantity) ) {
+      return res.status(404).send({ status: "fail", msg: "Quantity product number in body is required" });
+    }
+
+    const cart = await Carts.getById(cid);
+    if (!cart) {
+      return res.status(404).send({ status: "fail", msg: "Cart no found" });
+    }
+    const product = await Products.getById(pid);
+
+    if (!product) {
+      return res.status(404).send({ status: "fail", msg: "Product no found" });
+    }
+
+    const result =  await Carts.updateOneProductInCart(cart._id, product._id,quantity); 
+   
+    return res.status(201).send({ status: "success" ,payload: result });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(error.status || 500)
+      .send({ status: "error", error: error.message });
+  }
+}
+
+// update all products in cart by id param and products array in body,
+async function updateProductsInCart(req, res) {
+  try {
+    const { cid, pid } = req.params;
+    const { products } = req.body;
+
+    const cart = await Carts.getById(cid);
+
+    if (!cart) {
+      return res.status(404).send({ status: "fail", msg: "Cart no found" });
+    }
+    const product = await Products.getById(pid);
+
+    if (!products) {
+      return res.status(404).send({ status: "fail", msg: "Products no found" });
+    }
+
+    const result = await Carts.updateAllProductsInCart(cart._id, products);
+
+    
+    return res.status(201).send({ status: "success" ,payload: result });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(error.status || 500)
+      .send({ status: "error", error: error.message });
+  }
+}
 async function removeProductInCart(req, res) {
   try {
     const { cid, pid } = req.params;
@@ -116,7 +151,6 @@ async function removeProductInCart(req, res) {
     }
 
     const result = await Carts.removeProductInCartById(cart._id, product._id);
-    console.log("🚀 ~ removeProductInCart ~ result:", result)
     
     if (!result){
       return res.status(400).send({ status: "fail", msg: `No element with _id ${product._id} found in cart`  });
@@ -146,4 +180,4 @@ async function removeCart(req,res){
       .send({ status: "error", error: error.message });
   }
 }
-export { getAll, get, create, addProductInCart ,removeProductInCart ,removeCart};
+export { getAll, get, create, addProductInCart, updateProductsInCart, updateQuantityProductInCart ,removeProductInCart ,removeCart};

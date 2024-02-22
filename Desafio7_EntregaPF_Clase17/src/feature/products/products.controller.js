@@ -2,36 +2,25 @@ import Products from "./product.dao.js";
 
 async function getAll(req, res) {
   try {
-    let { limit, skip } = req.query;
-    // /?limit=1
-    // Check the existence of the query.limit
-    if (limit && !skip) {
-      // Apply limit to the list of products
-      let limitedProducts = await Products.getAllWithLimit(limit);
-      return res.send({ products: limitedProducts });
-    }
+    const limit = req.query?.limit || 10;
+    const page = req.query?.page || 1;
+    const sort = req.query?.sort || "asc";
+    const category = req.query?.category || null;
+    const available = req.query?.available || true;
 
-    // /?skip=1
-    // Check the existence of the query.skip
-    if (skip && !limit) {
-      // Apply starting point to the list of products
-      let limitedProducts = await Products.getAllWithLimit(skip);
-      return res.send({ products: limitedProducts });
+    let result = await Products.getAll(limit, page, sort, category, available);
+    const payload = result.docs;
+    delete result.docs;
+    result.prevLink = result.hasPrevPage
+      ? `http://localhost:8080/home?page=${result.prevPage}`
+      : null;
+    result.nextLink = result.hasNextPage
+      ? `http://localhost:8080/home?page=${result.nextPage}`
+      : null;
 
-      
-    }
-
-    // /?limit=1&skip=1
-    // Check the existence of the query.skip && query.limit
-    if (limit && skip) {
-      let limitedProducts = await Products.getAllWithLimit(limit, skip);
-      return res.send({ products: limitedProducts });
-    }
-
-    let products = await Products.getAll();
-    res.send({ products });
+    res.send({ status: "sucess", payload, ...result });
   } catch (error) {
-    console.log("🚀 ~ getAll ~ error:", error)
+    console.log("🚀 ~ getAll ~ error:", error);
     return res.status(error.status || 500).send({ error: error.message });
   }
 }
@@ -59,29 +48,25 @@ async function create(req, res) {
   // Validate the request body against the schema
   try {
     const result = await Products.getWithCode(body.code);
-    
-    
-    
-    if (result.length>0) {
+
+    if (result.length > 0) {
       return res.status(409).send({
         status: "fail",
         msg: `The 'code': ${body.code} $ field already exists in the database.`,
       });
     }
 
-
-    if(req.files ){
-
-      const filePath = req.files
-      const thumbnails=filePath.map((value) => {return value.path.replace(/\\/g, '/')})
-      body.thumbnails=thumbnails
-      
+    if (req.files) {
+      const filePath = req.files;
+      const thumbnails = filePath.map((value) => {
+        return value.path.replace(/\\/g, "/");
+      });
+      body.thumbnails = thumbnails;
     }
-   
+
     const payload = await Products.add({ ...body });
 
     res.status(201).send({ status: "success", payload });
-
   } catch (error) {
     console.error(error);
     res.status(500).send({
@@ -93,17 +78,13 @@ async function create(req, res) {
 
 async function update(req, res) {
   try {
-    
-
     let { pid } = req.params;
     const product = req.body;
 
+    let result = await Products.getWithCode(product.code);
+    result = JSON.parse(JSON.stringify(result));
 
-    let  result = await Products.getWithCode(product.code);
-    result= JSON.parse(JSON.stringify(result))
-    
-    console.log(result && result._id!==pid);
-    if (result.length>0 && result._id!==pid) {
+    if (result.length > 0 && result._id !== pid) {
       return res.status(409).send({
         status: "fail",
         msg: `The 'code': ${product.code} $ field already exists in the database.`,
@@ -111,7 +92,7 @@ async function update(req, res) {
     }
 
     // Update products
-    
+
     let productUpdate = await Products.update(pid, product);
     console.log(productUpdate);
     // Response Product not found
@@ -132,10 +113,7 @@ async function update(req, res) {
 
 async function remove(req, res) {
   try {
-    
-
     let { pid } = req.params;
-    
 
     // Delete product
     const productRemove = await Products.remove(pid);

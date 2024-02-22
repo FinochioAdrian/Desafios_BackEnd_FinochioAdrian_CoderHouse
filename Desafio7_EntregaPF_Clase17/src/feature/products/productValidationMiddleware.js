@@ -6,8 +6,22 @@ export default function validate(method) {
   switch (method) {
     case "getAllQueries": {
       return [
-        query("limit", "Query params 'Limit' is incorrect").optional().isInt(),
-        query("skip", "Query params 'Skip' is incorrect").optional().isInt(),
+        query("limit", "Query params 'limit' is incorrect").optional().isInt(),
+        query("page", "Query params 'page' is incorrect").optional().isInt(),
+        query("sort", "Query params 'sort' is incorrect")
+          .optional()
+          .isString()
+          .isIn(["asc", "desc"])
+          .withMessage("Valid option for sort is 'asc','desc' "),
+        query("stock", "Query params 'stock' is incorrect")
+          .optional()
+          .isString(),
+        query("available", "Query params 'available' is incorrect")
+          .optional()
+          .isString(),
+        query("category", "Query params 'category' is incorrect")
+          .optional()
+          .isString(),
       ];
     }
 
@@ -41,17 +55,16 @@ export default function validate(method) {
           .withMessage("The 'price' field is required.")
           .isFloat()
           .withMessage("The 'code' field isn´t number."),
-        body("status","The 'status' isn´t boolean.")
-          .customSanitizer((value, { req }) => {
+        body("status", "The 'status' isn´t boolean.").customSanitizer(
+          (value, { req }) => {
             if (value === "on") {
               req.body.status = true;
             } else {
               req.body.status = false;
             }
             return true;
-          })
-          ,
-
+          }
+        ),
         body("stock")
           .notEmpty()
           .withMessage("The 'stock' field is required.")
@@ -132,14 +145,12 @@ export default function validate(method) {
 export const runValidation = (req, res, next) => {
   const errors = validationResult(req);
 
-  
   if (!errors.isEmpty()) {
     const filePath = req.file && req.file.path;
     if (filePath) {
       //elimina el archivo subido
       fs.unlinkSync(filePath).catch((err) => {
-        console.log(
-          "🚀 ~ runValidation ~ err:",
+        console.log("🚀 ~ runValidation ~ err:",
           "error eliminando el archivo " + filePath + " ",
           err
         );

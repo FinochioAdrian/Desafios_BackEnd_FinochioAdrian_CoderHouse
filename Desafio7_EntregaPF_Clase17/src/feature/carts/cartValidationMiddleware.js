@@ -3,12 +3,19 @@ import { isValidObjectId } from "mongoose";
 
 export default function validate(method) {
   switch (method) {
-    case "isID": {
+    case "isCid": {
       return param("cid")
         .exists()
-        .withMessage("Search parameter 'id' is required")
+        .withMessage("Search parameter cart 'id' is required")
         .custom((value) => (isValidObjectId(value) ? value : false))
-        .withMessage("Search parameter 'id':  is not a valid identifier.");
+        .withMessage("Search parameter  cart 'id':  is not a valid identifier.");
+    }
+    case "isPid": {
+      return param("pid")
+        .exists()
+        .withMessage("Search parameter product 'id' is required")
+        .custom((value) => (isValidObjectId(value) ? value : false))
+        .withMessage("Search parameter product 'id':  is not a valid identifier.");
     }
     case "getAll": {
       return [
@@ -32,7 +39,7 @@ export default function validate(method) {
                   throw new Error("Each product must be a valid object.");
                 }
 
-                if (!product._id || !isValidObjectId(product._id)) {
+                if (!product.product || !isValidObjectId(product.product)) {
                   throw new Error(
                     'Each product must have a valid MongoDB object ID for "id".'
                   );
@@ -58,32 +65,7 @@ export default function validate(method) {
           }),
       ];
     }
-    case "isCid,isPid": {
-      return [
-        param("cid")
-          .exists()
-          .withMessage("Search parameter 'id cart' is required")
-          .custom((value) => {
-            if (!isValidObjectId(value)) {
-              throw new Error(
-                "Search parameter 'id cart' is not a valid identifier."
-              );
-            }
-            return value;
-          }),
-        param("pid")
-          .exists()
-          .withMessage("Search parameter 'id product' is required")
-          .custom((value) => {
-            if (!isValidObjectId(value)) {
-              throw new Error(
-                "Search parameter 'id product' is not a valid identifier."
-              );
-            }
-            return value;
-          }),
-      ];
-    }
+   
   }
 }
 
