@@ -1,7 +1,7 @@
 {
-  "name": "desafio7_entrega_pf_clase17",
+  "name": "desafio8_clase19",
   "version": "1.0.0",
-  "description": "Desafío 3 de curso coderHouse para backEnd con NodeJS",
+  "description": "Desafío 8 de curso coderHouse para backEnd con NodeJS",
   "main": "./index.js",
   "type": "module",
   "scripts": {
