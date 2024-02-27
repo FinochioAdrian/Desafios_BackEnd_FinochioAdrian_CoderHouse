@@ -1,5 +1,12 @@
-<h4 class="d-flex justify-content-center">Todos nuestros Productos</h4>
+{{>nav}}
+
 <div class="container-fluid">
+
+<div class="row justify-content-center align-items-center g-2">
+    <h2>Bienvenido {{user.first_name}} {{user.last_name}} </h2>
+  <p>email: {{user.email}} Años: {{user.age}}  Rol: {{user.role}}</p>
+</div>
+<h4 class="d-flex justify-content-center">Todos nuestros Productos</h4>
   <div class="row justify-content-center align-items-center g-2">
     {{#each result.docs}}
         

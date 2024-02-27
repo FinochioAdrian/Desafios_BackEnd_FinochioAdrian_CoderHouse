@@ -1,4 +1,18 @@
-# Desafio 7 Clase 17
+# Desafío 8 Clase 19
+
+## Feature Desafío 8
+
+    - Add views 
+        -- login
+        -- register 
+    - Add ViewsRouter
+        -- router.get("/register")
+        -- router.get("/login")
+    - Add SessionRouter
+        -- router.get("/register")
+        -- router.get("/login")
+        -- router.get("/logout")
+    - Modify views Products for look user data in view
 
 ## Routes
 

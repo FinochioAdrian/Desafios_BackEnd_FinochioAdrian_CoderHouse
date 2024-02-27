@@ -2,7 +2,7 @@
 
 ## Hu Products
 
-- [ ] add handler endpoint  for /api/products (CRUD)
+- [✅] add handler endpoint  for /api/products (CRUD)
 - [] validate params after insert in CRUD
 
 ## HU Carts

@@ -20,7 +20,7 @@ async function getAll(req, res) {
 
     res.send({ status: "sucess", payload, ...result });
   } catch (error) {
-    console.log("🚀 ~ getAll ~ error:", error);
+    console.log("❌ ~ getAll ~ error:", error);
     return res.status(error.status || 500).send({ error: error.message });
   }
 }

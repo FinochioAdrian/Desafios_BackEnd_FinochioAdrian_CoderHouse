@@ -8,6 +8,10 @@
     "start_2": "node ./Desafio2_Clase04/Desafio_Clase04_FinochioAdrian.js",
     "start_3": "node ./Desafio3_Clase06/index.js",
     "start_4": "node ./Desafio4_1EntregaPF_Clase08/index.js",
+    "start_5": "node ./Desafio5_Clase10/index.js",
+    "start_6": "node ./Desafio6_Clase15/index.js",
+    "start_7": "node ./Desafio7_EntregaPF_Clase17/index.js",
+    "start_8": "node ./Desafio8_Clase19/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -1,8 +1,11 @@
 import Products from "../products/product.dao.js";
 import Carts from "../carts/cart.dao.js";
+import UsersDAO from "../users/users.dao.js";
 async function home(req, res) {
   try {
-    res.render("home", { title: "home" });
+    const user = req.session.user;
+
+    return res.render("home", { title: "home", user });
   } catch (error) {
     return res.status(error.status || 500).send({ error: error.message });
   }
@@ -32,7 +35,9 @@ async function products(req, res) {
         }`
       : null;
 
-    res.render("products", { title: "Products", result });
+    const user = req.session.user;
+
+    return res.render("products", { title: "Products", result ,user});
   } catch (error) {
     return res.status(error.status || 500).send(`<h1>${error.message} </h1>`);
   }
@@ -52,7 +57,7 @@ async function product(req, res) {
 
     res.render("product", { title: "Products", product });
   } catch (error) {
-    console.log("🚀 ~ product ~ error:", error);
+    console.log("❌ ~ product ~ error:", error);
   }
 }
 

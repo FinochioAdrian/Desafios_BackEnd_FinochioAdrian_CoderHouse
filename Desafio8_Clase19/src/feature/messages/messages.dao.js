@@ -5,7 +5,7 @@ class MessagesDao {
     try {
       return Messages.find().lean();
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ getAll ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ getAll ~ error:", error);
       throw err;
     }
   }
@@ -13,7 +13,7 @@ class MessagesDao {
     try {
       return Messages.find({ _id: id }).lean();
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ getById ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ getById ~ error:", error);
       throw err;
     }
   }
@@ -21,7 +21,7 @@ class MessagesDao {
     try {
       return Messages.find({ user: userMail }).lean();
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ getByUser ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ getByUser ~ error:", error);
       throw err;
     }
   }
@@ -30,7 +30,7 @@ class MessagesDao {
       const newMessage =new Messages({ user: userMail, message });
       return newMessage.save()
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ add ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ add ~ error:", error);
       throw err;
     }
   }
@@ -62,7 +62,7 @@ class MessagesDao {
     try {
       return Messages.findOneAndUpdate({ _id: id }, message);
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ update ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ update ~ error:", error);
       throw error;
     }
   }
@@ -70,7 +70,7 @@ class MessagesDao {
     try {
       return Messages.findByIdAndDelete(id);
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ remove ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ remove ~ error:", error);
       throw error;
     }
   }
@@ -78,7 +78,7 @@ class MessagesDao {
     try {
       return Messages.findAndDelete({ user: userMail });
     } catch (error) {
-      console.log("🚀 ~ MessagesDao ~ removeByUser ~ error:", error);
+      console.log("❌ ~ MessagesDao ~ removeByUser ~ error:", error);
       throw error;
     }
   }
