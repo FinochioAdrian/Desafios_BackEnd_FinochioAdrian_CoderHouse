@@ -1,17 +1,18 @@
 # Desafios Hacia el proyecto final CoderHouse BackEnd con Express JS
 
--Aquí encontraras una lista de las resolución de los desafíos propuestos para la carrera de BackEnd de CoderHouse.
+- Aquí encontraras una lista de las resolución de los desafíos propuestos para la carrera de BackEnd de CoderHouse.
+- Desafíos del curso coderHouse para backEnd con NodeJS
 
--Desafíos del curso coderHouse para backEnd con NodeJS
-     ### Visita la soluciones a los Desafíos
-     - [Desafió 1](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio1_Clase02)
-     - [Desafió 2](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio2_Clase04)
-     - [Desafió 3](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio3_Clase06)
-     - [Desafió 4](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio4_1EntregaPF_Clase08)
-     - [Desafió 5](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio5_Clase10)
-     - [Desafió 6](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio6_Clase15)
-     - [Desafió 7](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio7_EntregaPF_Clase17)
-     - [Desafió 8](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio8_Clase19)
+## Visita las soluciones a los Desafíos
+
+- [Desafió 1](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio1_Clase02)
+- [Desafió 2](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio2_Clase04)
+- [Desafió 3](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio3_Clase06)
+- [Desafió 4](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio4_1EntregaPF_Clase08)
+- [Desafió 5](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio5_Clase10)
+- [Desafió 6](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio6_Clase15)
+- [Desafió 7](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio7_EntregaPF_Clase17)
+- [Desafió 8](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio8_Clase19)
 
 ## Instalación y configuración del entorno de desarrollo
 
