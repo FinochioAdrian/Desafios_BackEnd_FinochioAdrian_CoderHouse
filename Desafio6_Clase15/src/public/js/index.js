@@ -4,23 +4,35 @@ const containerCardsProducts = document.querySelector(
 );
 
 const products = [];
-console.log("hola mundo");
 socket.emit("getProducts", null);
 
 socket.on("products", (data) => {
-  console.log(data);
   renderProducts(data);
 });
 
 const renderProducts = (products) => {
+  console.log("🚀 ~ renderProducts ~ products:", products);
   let plantilla = "";
   products.forEach(
-    ({ code, description, id, price, status, stock, thumbnail, title }) => {
-      plantilla += `
-<div class="col">
+    ({
+      code,
+      description,
+      _id,
+      price,
+      status,
+      category,
+      stock,
+      thumbnails,
+      title,
+    }) => {
+      plantilla += `<div class="col">
       <div class="card" style="width: 18rem;">
-
-        <svg
+        ${
+          thumbnails.length > 0
+            ? '<img src="/images/products/' +
+              thumbnails[0] +
+              '" class="bd-placeholder-img card-img-top img-fluid ratio-4x3" alt="...">'
+            : `<svg
           class="bd-placeholder-img card-img-top"
           role="img"
           aria-label="Marcador de posición: Cap de imagen"
@@ -34,18 +46,19 @@ const renderProducts = (products) => {
             y="50%"
             fill="#dee2e6"
             dy=".3em"
-          >
-          ${thumbnail.length > 0 ? thumbnail[0] : "Sin imagen previa"}}
-            
-          </text>
-        </svg>
+          >Sin imagen previa</text>
+        </svg>`
+        }
+        
 
         <div class="card-body">
           <h5 class="card-title"> ${title}</h5>
-          <p>Id:${id}</p>
+          <p>Id:${_id}</p>
           <p class="card-text">${description}</p>
           <p class="card-text"><span>Price: $${price}</span>
             <span>Stock: ${stock}</span></p>
+            
+          <p class="card-text">category: ${category}</p>
           <p class="card-text">${code}</p>
 
         </div>
@@ -56,7 +69,7 @@ const renderProducts = (products) => {
   containerCardsProducts.innerHTML = plantilla;
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+/* document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#formAddProducts");
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -70,10 +83,13 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.forEach((value, key) => {
         // Verificar si la clave es 'thumbnails' y dividir el valor en un array
         if (key === "thumbnails") {
-          formDataObject[key] = value.split(",");
+
+
+          const filesArray = Array.from(value); // Convertir la lista de archivos a un array
+          const fileNames = filesArray.map((file) => file.name);
+          formDataObject[key] = fileNames;
         } else if (key === "status") {
           // Convertir el valor booleano a un valor string ('true' o 'false')
-          console.log(value);
           formDataObject[key] = value == "on" ? true : false;
         } else if (key === "price") {
           // Convertir a valor numerico
@@ -86,11 +102,64 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      console.log(formDataObject);
       socket.emit("addNewProduct", formDataObject);
       Swal.fire({
         title: "Se registro un nuevo Producto",
         text: `El nombre del productos es ${formDataObject.title}`,
+        icon: "success",
+        toast: true,
+      });
+      form.reset();
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: `Todos los campos son obligatorios`,
+        icon: "error",
+        toast: true,
+      });
+    }
+  });
+}); */
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("#formAddProducts");
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (validateFormNotEmpty(form)) {
+      const formData = new FormData(form);
+
+      // Crear un objeto para almacenar los datos del formulario
+      const formDataObject = {};
+
+    
+      // Obtener todas las promesas de lectura de archivos
+      const filesPromises = [];
+      for (const [key, value] of formData.entries()) {
+        
+    if (key === "status") {
+          // Convertir el valor booleano a un valor string ('true' o 'false')
+          formDataObject[key] = value == "on" ? true : false;
+        } else if (key === "price") {
+          // Convertir a valor numerico
+          formDataObject[key] = parseFloat(value);
+        } else if (key === "stock") {
+          // Convertir a valor numerico
+          formDataObject[key] = parseInt(value);
+        } else {
+          formDataObject[key] = value;
+        }
+      }
+
+      formDataObject.thumbnails = formData.getAll("thumbnails");
+
+         
+
+
+      // Emitir al socket después de completar el procesamiento
+      await socket.emit("addNewProduct", formDataObject);
+
+      Swal.fire({
+        title: "Se registró un nuevo Producto",
+        text: `El nombre del producto es ${formDataObject.title}`,
         icon: "success",
         toast: true,
       });
@@ -127,6 +196,4 @@ socket.on("error", (data) => {
     icon: "error",
     toast: true,
   });
-
-  console.error(data);
 });

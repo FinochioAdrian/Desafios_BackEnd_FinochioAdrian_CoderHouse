@@ -20,7 +20,7 @@ class ProductsDao {
   static async getWithCode(code) {
     try {
       const result = await Products.find({ code }).lean();
-      return result
+      return result;
     } catch (error) {
       console.log("Error get  products with Code " + error);
       throw new Error("Error get products with Code ");
@@ -71,11 +71,9 @@ class ProductsDao {
       throw new Error("Error add product");
     }
   }
-  static async update(id,
-    products
-  ) {
+  static async update(id, products) {
     try {
-      const updateProduct = Products.findByIdAndUpdate(id,products)
+      const updateProduct = Products.findByIdAndUpdate(id, products);
 
       /* const savedProduct = await newProduct.save(); */
       return updateProduct;

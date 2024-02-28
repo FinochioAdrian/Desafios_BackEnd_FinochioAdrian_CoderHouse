@@ -68,7 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.forEach((value, key) => {
         // Verificar si la clave es 'thumbnails' y dividir el valor en un array
         if (key === "thumbnails") {
-          formDataObject[key] = value.split(",");
+            const filesArray = Array.from(value); // Convertir la lista de archivos a un array
+            const fileNames = filesArray.map(file => file.name);
+            formDataObject[key] = fileNames;
         } else if (key === "status") {
           // Convertir el valor booleano a un valor string ('true' o 'false')
           formDataObject[key] = value == "on" ? true : false;
@@ -124,5 +126,4 @@ socket.on("error", (data) => {
     toast: true,
   });
 
-  console.error(data);
 });

@@ -4,6 +4,11 @@ import validator from "validator";
 const { isEmail, isEmpty } = validator;
 import Joi from "joi";
 import ProductManager from "../manager/productManager.js";
+import ProductDao from "../feature/products/product.dao.js";
+import __dirname from "../utils.js";
+import path from "path";
+import { writeFile, mkdir } from "fs/promises";
+import sharp from "sharp";
 const productAddSchema = Joi.object({
   id: Joi.alternatives().try(Joi.number(), Joi.string()),
   title: Joi.string().required(),
@@ -13,7 +18,7 @@ const productAddSchema = Joi.object({
   status: Joi.boolean().default(true),
   stock: Joi.number().integer().strict(true).required(),
   category: Joi.string().required(),
-  thumbnails: Joi.array().items(Joi.string()),
+  thumbnails: Joi.array().items(Joi.binary()),
 });
 
 let contadorChat = 1;
@@ -24,15 +29,17 @@ const IOinit = (httpServer) => {
     console.log("Nuevo Cliente conectado");
 
     socket.on("getProducts", async (data) => {
-      const pm = new ProductManager();
-      const products = await pm.getProducts();
-      //enviar los productos al cliente
-      socket.emit("products", products);
+      try {
+        const products = await ProductDao.getAll();
+        //enviar los productos al cliente
+        socket.emit("products", products);
+      } catch (error) {
+        console.log("❌ ~ socket.on ~ error:", error);
+      }
     });
 
     socket.on("addNewProduct", async (data) => {
-      console.log(data);
-      const pm = new ProductManager();
+      console.log("🚀 ~ socket.on ~ data:", data);
       try {
         // Validar el cuerpo de la solicitud contra el esquema
         const validationResult = productAddSchema.validate(data, {
@@ -40,20 +47,40 @@ const IOinit = (httpServer) => {
         });
 
         if (validationResult.error) {
+          console.log(
+            "❌ ~ socket.on ~ validationResult.error:",
+            validationResult.error
+          );
+          const errors = validationResult.error.details.map(
+            (error) => error.message
+          );
           // Si hay errores de validación, enviar una respuesta con los errores
           return socket.emit("error", {
             status: "error",
-            errors: validationResult.error.details.map(
-              (error) => error.message
-            ),
+            errors,
           });
         }
-        await pm.addProduct(data);
-        const products = await pm.getProducts();
+
+        try {
+          // Guardando de imágenes en el servidor
+          const savedImages = await SaveImages(data.thumbnails);
+
+          
+
+          data.thumbnails = savedImages;
+        } catch (error) {
+          console.error("Error al subir imágenes:", error);
+          // Manejar el error según sea necesario
+          throw error;
+        }
+
+        await ProductDao.add({ ...data });
+        const products = await ProductDao.getAll();
         //enviar los productos al cliente
         socket.emit("products", products);
       } catch (error) {
-        socket.emit("error", error);
+        console.log("❌ ~ socket.on ~ error:", error);
+        socket.emit({ status: "error", error: error.message });
       }
     });
 
@@ -132,6 +159,41 @@ function validarEmail(email) {
 async function guardarChat(messages) {
   const result = await Messages.add(messages.mail, messages.message);
   return result;
+}
+
+async function SaveImages(data) {
+  try {
+    // Aquí puedes procesar y guardar las imágenes en el servidor
+
+    const fileNames = await Promise.all(
+      data.map(async (image, index) => {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+
+        const fileName = `${uniqueSuffix}.webp`;
+        const directoryPath = path.join(__dirname, "/public/images/products/");
+        const filePath = path.join(directoryPath, fileName);
+
+        await mkdir(directoryPath, { recursive: true });
+        const convertedImageBuffer = await sharp(image)
+          .toFormat("webp")
+          .toBuffer();
+
+        await writeFile(filePath, convertedImageBuffer);
+        return fileName;
+      })
+    );
+    fileNames.forEach((fileName) => {
+      console.log("Imagen guardada:", fileName);
+    });
+    // Devolver nombres de archivo al cliente
+    return fileNames;
+  } catch (error) {
+    console.log(
+      "❌ ~ SaveImages ~ error:",
+      "Error al procesar imágenes:",
+      error
+    );
+  }
 }
 
 export default IOinit;

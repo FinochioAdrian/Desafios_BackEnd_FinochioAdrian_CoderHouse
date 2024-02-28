@@ -4,11 +4,9 @@ const containerCardsProducts = document.querySelector(
 );
 
 const products = [];
-console.log("hola mundo");
 socket.emit("getProducts", null);
 
 socket.on("products", (data) => {
-  console.log(data);
   renderProducts(data);
 });
 
@@ -70,10 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.forEach((value, key) => {
         // Verificar si la clave es 'thumbnails' y dividir el valor en un array
         if (key === "thumbnails") {
-          formDataObject[key] = value.split(",");
+            const filesArray = Array.from(value); // Convertir la lista de archivos a un array
+            const fileNames = filesArray.map(file => file.name);
+            formDataObject[key] = fileNames;
         } else if (key === "status") {
           // Convertir el valor booleano a un valor string ('true' o 'false')
-          console.log(value);
           formDataObject[key] = value == "on" ? true : false;
         } else if (key === "price") {
           // Convertir a valor numerico
@@ -86,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      console.log(formDataObject);
       socket.emit("addNewProduct", formDataObject);
       Swal.fire({
         title: "Se registro un nuevo Producto",
@@ -128,5 +126,4 @@ socket.on("error", (data) => {
     toast: true,
   });
 
-  console.error(data);
 });

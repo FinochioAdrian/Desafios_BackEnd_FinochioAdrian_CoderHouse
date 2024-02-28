@@ -4,7 +4,7 @@
         "title": " Producto A",
         "description": "Nuevo Producto A",
         "price": 5000,
-        "thumbnail": [
+        "thumbnails": [
             "Imagen_A1.jpg"
         ],
         "code": "A1B2C3",
@@ -16,7 +16,7 @@
         "title": "Producto B",
         "description": "Nuevo Producto B",
         "price": 5000,
-        "thumbnail": [
+        "thumbnails": [
             "Imagen_B1.jpg",
             "Imagen_B2.jpg"
         ],
@@ -29,7 +29,7 @@
         "title": "Producto C",
         "description": "Nuevo Producto C",
         "price": 2000,
-        "thumbnail": [],
+        "thumbnails": [],
         "code": "D41E5F6",
         "stock": 100,
         "status": true
@@ -39,7 +39,7 @@
         "title": "Producto D",
         "description": "Nuevo Producto D",
         "price": 7865,
-        "thumbnail": [],
+        "thumbnails": [],
         "code": "G6H7I8",
         "stock": 45,
         "status": true
@@ -49,7 +49,7 @@
         "title": "Producto E",
         "description": "Nuevo Producto E",
         "price": 9898,
-        "thumbnail": [],
+        "thumbnails": [],
         "code": "J9K10L11",
         "stock": 50,
         "status": true
@@ -59,7 +59,7 @@
         "title": "Producto F",
         "description": "Nuevo Producto F",
         "price": 45632,
-        "thumbnail": [],
+        "thumbnails": [],
         "code": "M12N13O14",
         "stock": 10,
         "status": true
@@ -69,9 +69,19 @@
         "title": "Producto G",
         "description": "Nuevo Producto g",
         "price": 5250,
-        "thumbnail": [],
+        "thumbnails": [],
         "code": "P15Q16R17",
         "stock": 1000,
+        "status": true
+    },
+    {
+        "id": "18ded41f8c2-6d2e64f6",
+        "title": "H",
+        "description": "H",
+        "price": 120,
+        "thumbnails": [],
+        "code": "H123",
+        "stock": 10,
         "status": true
     }
 ]

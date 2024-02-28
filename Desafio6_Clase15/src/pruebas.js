@@ -7,8 +7,8 @@ async function enviromentPrueba (){
 
     await connectDB()
 
-    await cargarCarritoAtlas()
-   /*  await cargarProductosAtlas() */
+    /* await cargarCarritoAtlas() */
+    await cargarProductosAtlas()
    
 
     
@@ -48,9 +48,9 @@ const guardarCartEnAtlas = async({products}) => {
   }
   
 }
-const guardarProductosEnAtlas = async({title,description,price,thumbnail,code,stock,status,category='IT'}) => {
+const guardarProductosEnAtlas = async({title,description,price,thumbnails,code,stock,status,category='IT'}) => {
   try {
-    let result = await ProductsDao.add({title,description,code,price,stock,status,category,thumbnail})
+    let result = await ProductsDao.add({title,description,code,price,stock,status,category,thumbnails})
     
   } catch (error) {
     console.log("🚀 ~ guardarEnAtlas ~ error:", error)
