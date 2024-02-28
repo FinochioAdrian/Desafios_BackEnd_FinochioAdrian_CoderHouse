@@ -14,16 +14,10 @@ const messagesSchema = mongoose.Schema({
     },
     required: true,
   },
-  messages: [{
-    date: {
-      type: Date,
-      default: Date.now,
-    },
-    msg: {
+  message:{ 
       type: String,
-      required: true,
-    },
-  }],
+      required: true,}
+    
 });
   
   export default mongoose.model(messagesCollection, messagesSchema);

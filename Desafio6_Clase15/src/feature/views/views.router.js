@@ -14,6 +14,9 @@ router.get("/realTimeProducts", async (req, res) => {
 router.get("/chat", async (req, res) => {
   res.render("chat",{stylesheet:"/css/chat.css", title:"Chat con Socket.IO"});
 });
+router.get("/chatBot", async (req, res) => {
+  res.render("chatBot",{stylesheet:"/css/chat.css", title:"ChatBot con Socket.IO"});
+});
 router.get("/addProducts", async (req, res) => {
   res.render("addProducts",{title:"addProducts"});
 });

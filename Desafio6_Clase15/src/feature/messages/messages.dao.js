@@ -34,6 +34,17 @@ class MessagesDao {
       throw err;
     }
   }
+  static async addMany(collection) {
+    console.log("🚀 ~ MessagesDao ~ addMany ~ collection:", collection)
+    try {
+      const newMessage = await Messages.insertMany(collection);
+      
+      return newMessage
+    } catch (error) {
+      console.log("🚀 ~ MessagesDao ~ add ~ error:", error);
+      throw error;
+    }
+  }
 
   static async addNewMessageByUserMail(userMail, message) {
     try {

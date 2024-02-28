@@ -25,8 +25,9 @@ let contadorChat = 1;
 
 const IOinit = (httpServer) => {
   const io = new Server(httpServer);
+  let messagesChat = []
   io.on("connection", (socket) => {
-    console.log("Nuevo Cliente conectado");
+    console.log("New user is connected");
 
     socket.on("getProducts", async (data) => {
       try {
@@ -84,16 +85,17 @@ const IOinit = (httpServer) => {
       }
     });
 
-    // Mensajes del chat
-
-    // socket.on('event', function)
+    
 
     socket.on("disconnect", () => {
+      guardarChat(messagesChat)
       console.log("A user disconnected");
     });
+
+    /* //Implemetacion Chat Bot
     const messages = { mail: "", message: "" };
-    socket.on("message", async (msg) => {
-      socket.emit("message", msg);
+    socket.on("ChatBot-message", async (msg) => {
+      socket.emit("ChatBot-message", msg);
       setTimeout(
         async () =>
           socket.emit(
@@ -102,7 +104,20 @@ const IOinit = (httpServer) => {
           ),
         1500
       );
-    });
+    }); */
+    
+    //implementacion Chat
+
+
+    socket.on("message", (data)=>{
+      messagesChat.push(data)
+     io.emit("message", data);
+    })
+
+    socket.on('login', data => {
+      socket.emit('messageLogs', messagesChat)
+      socket.broadcast.emit('register', data)
+  })
   });
 };
 async function mensajePredefinido(contador, msg, messages) {
@@ -157,7 +172,7 @@ function validarEmail(email) {
   return isEmail(email);
 }
 async function guardarChat(messages) {
-  const result = await Messages.add(messages.mail, messages.message);
+  const result = await Messages.addMany(messages);
   return result;
 }
 
