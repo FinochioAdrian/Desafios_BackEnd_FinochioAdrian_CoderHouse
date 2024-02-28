@@ -26,13 +26,5 @@
   "homepage": "https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse#readme",
   "devDependencies": {
     "nodemon": "^3.0.3"
-  },
-  "dependencies": {
-    "connect-flash": "^0.1.1",
-    "connect-mongo": "^5.1.0",
-    "cookie-parser": "^1.4.6",
-    "express-session": "^1.18.0",
-    "express-validator": "^7.0.1",
-    "joi": "^17.12.1"
   }
 }
