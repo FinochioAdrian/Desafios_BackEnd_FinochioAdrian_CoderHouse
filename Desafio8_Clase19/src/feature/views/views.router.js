@@ -104,6 +104,10 @@ router.get("/register", (req, res) => {
     return res.status(error?.status || 500).send("Internal Server error");
   }
 });
-
+router.get("/chatBot", async (req, res) => {
+  res.render("chatBot",{stylesheet:"/css/chat.css", title:"ChatBot con Socket.IO"});
+});
 // Export the router instance
+
+
 export default router;

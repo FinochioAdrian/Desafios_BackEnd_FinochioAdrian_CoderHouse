@@ -25,13 +25,14 @@ async function products(req, res) {
         }`
       : null;
     result.nextLink = result.hasNextPage
-      ? `../products?page=${result.prevPage}&limit=${result.limit}${
-          category ? "&category=" + category : ""
-        }${sort ? "&sort=" + sort : ""}${
-          !available ? "&available=" + available : ""
-        }`
-      : null;
-
+    ? `../products?page=${result.prevPage}&limit=${result.limit}${
+      category ? "&category=" + category : ""
+    }${sort ? "&sort=" + sort : ""}${
+      !available ? "&available=" + available : ""
+    }`
+    : null;
+    
+    console.log("🚀 ~ products ~ result:", result)
     res.render("products", { title: "Products", result });
   } catch (error) {
     return res.status(error.status || 500).send(`<h1>${error.message} </h1>`);

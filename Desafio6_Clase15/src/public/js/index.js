@@ -69,57 +69,7 @@ const renderProducts = (products) => {
   containerCardsProducts.innerHTML = plantilla;
 };
 
-/* document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("#formAddProducts");
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (validateFormNotEmpty(form)) {
-      const formData = new FormData(form);
 
-      // Crear un objeto para almacenar los datos del formulario
-      const formDataObject = {};
-
-      // Iterar sobre las entradas del objeto FormData y asignarlas al objeto
-      formData.forEach((value, key) => {
-        // Verificar si la clave es 'thumbnails' y dividir el valor en un array
-        if (key === "thumbnails") {
-
-
-          const filesArray = Array.from(value); // Convertir la lista de archivos a un array
-          const fileNames = filesArray.map((file) => file.name);
-          formDataObject[key] = fileNames;
-        } else if (key === "status") {
-          // Convertir el valor booleano a un valor string ('true' o 'false')
-          formDataObject[key] = value == "on" ? true : false;
-        } else if (key === "price") {
-          // Convertir a valor numerico
-          formDataObject[key] = parseFloat(value);
-        } else if (key === "stock") {
-          // Convertir a valor numerico
-          formDataObject[key] = parseInt(value);
-        } else {
-          formDataObject[key] = value;
-        }
-      });
-
-      socket.emit("addNewProduct", formDataObject);
-      Swal.fire({
-        title: "Se registro un nuevo Producto",
-        text: `El nombre del productos es ${formDataObject.title}`,
-        icon: "success",
-        toast: true,
-      });
-      form.reset();
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: `Todos los campos son obligatorios`,
-        icon: "error",
-        toast: true,
-      });
-    }
-  });
-}); */
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#formAddProducts");
   form.addEventListener("submit", async (event) => {

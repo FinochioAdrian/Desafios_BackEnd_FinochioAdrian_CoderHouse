@@ -1,6 +1,12 @@
 {{>nav}}
 <div class="container mt-5 d-flex justify-content-center">
-  <form class="col-6" id="formAddProducts" enctype="multipart/form-data" action="/api/products/" method="post" >
+  <form
+    class="col-6"
+    id="formAddProducts"
+    enctype="multipart/form-data"
+    action="/api/products/"
+    method="post"
+  >
     <div class="form-group">
       <label for="title">Title</label>
       <input
@@ -84,6 +90,7 @@
         id="thumbnails"
         name="thumbnails"
         placeholder="Enter comma-separated URLs"
+        multiple
       />
     </div>
 

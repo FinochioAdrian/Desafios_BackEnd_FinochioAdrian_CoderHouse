@@ -13,8 +13,10 @@ import Server from "./server.js";
 const app = express();
 
 connectDB()
+const PORT = 3000;
+
 //Iniciamos el Server
-const httpServer =Server(app,8080)
+const httpServer =Server(app,PORT)
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

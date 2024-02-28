@@ -22,5 +22,7 @@ router.get("/chat", async (req, res) => {
 router.get("/addProducts", async (req, res) => {
   res.render("addProducts",{title:"addProducts"});
 });
-
+router.get("/chatBot", async (req, res) => {
+  res.render("chatBot",{stylesheet:"/css/chat.css", title:"ChatBot con Socket.IO"});
+});
 export default router;
