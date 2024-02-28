@@ -25,7 +25,7 @@ let contadorChat = 1;
 
 const IOinit = (httpServer) => {
   const io = new Server(httpServer);
-  let messagesChat = []
+  let messagesChat = [];
   io.on("connection", (socket) => {
     console.log("New user is connected");
 
@@ -40,7 +40,6 @@ const IOinit = (httpServer) => {
     });
 
     socket.on("addNewProduct", async (data) => {
-      console.log("🚀 ~ socket.on ~ data:", data);
       try {
         // Validar el cuerpo de la solicitud contra el esquema
         const validationResult = productAddSchema.validate(data, {
@@ -66,8 +65,6 @@ const IOinit = (httpServer) => {
           // Guardando de imágenes en el servidor
           const savedImages = await SaveImages(data.thumbnails);
 
-          
-
           data.thumbnails = savedImages;
         } catch (error) {
           console.error("Error al subir imágenes:", error);
@@ -85,10 +82,8 @@ const IOinit = (httpServer) => {
       }
     });
 
-    
-
     socket.on("disconnect", () => {
-      guardarChat(messagesChat)
+      guardarChat(messagesChat);
       console.log("A user disconnected");
     });
 
@@ -105,19 +100,18 @@ const IOinit = (httpServer) => {
         1500
       );
     }); */
-    
+
     //implementacion Chat
 
+    socket.on("message", (data) => {
+      messagesChat.push(data);
+      io.emit("message", data);
+    });
 
-    socket.on("message", (data)=>{
-      messagesChat.push(data)
-     io.emit("message", data);
-    })
-
-    socket.on('login', data => {
-      socket.emit('messageLogs', messagesChat)
-      socket.broadcast.emit('register', data)
-  })
+    socket.on("login", (data) => {
+      socket.emit("messageLogs", messagesChat);
+      socket.broadcast.emit("register", data);
+    });
   });
 };
 async function mensajePredefinido(contador, msg, messages) {
@@ -197,9 +191,7 @@ async function SaveImages(data) {
         return fileName;
       })
     );
-    fileNames.forEach((fileName) => {
-      console.log("Imagen guardada:", fileName);
-    });
+    fileNames.forEach((fileName) => {});
     // Devolver nombres de archivo al cliente
     return fileNames;
   } catch (error) {

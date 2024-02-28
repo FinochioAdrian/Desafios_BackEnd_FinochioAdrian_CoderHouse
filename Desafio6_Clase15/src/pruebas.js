@@ -38,12 +38,10 @@ async function enviromentPrueba (){
 const guardarCartEnAtlas = async({products}) => {
   try {
     
-    console.log("🚀 ~ guardarCartEnAtlas ~ products:", products)
     let result = await CartDao.add(products)
-    console.log("🚀 ~ guardarCartEnAtlas ~ result:", result)
     
   } catch (error) {
-    console.log("🚀 ~ guardarEnAtlas ~ error:", error)
+    console.log(" ❌ ~ guardarEnAtlas ~ error:", error)
     
   }
   
@@ -53,7 +51,7 @@ const guardarProductosEnAtlas = async({title,description,price,thumbnails,code,s
     let result = await ProductsDao.add({title,description,code,price,stock,status,category,thumbnails})
     
   } catch (error) {
-    console.log("🚀 ~ guardarEnAtlas ~ error:", error)
+    console.log(" ❌ ~ guardarEnAtlas ~ error:", error)
     
   }
   

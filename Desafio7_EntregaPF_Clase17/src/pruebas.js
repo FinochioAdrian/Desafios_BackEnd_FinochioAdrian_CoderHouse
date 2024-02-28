@@ -53,7 +53,7 @@ const guardarCartEnAtlas = async({products}) => {
     let result = await CartDao.add(products)
     
   } catch (error) {
-    console.log("🚀 ~ guardarEnAtlas ~ error:", error)
+    console.log(" ❌ ~ guardarEnAtlas ~ error:", error)
     
   }
   
@@ -63,7 +63,7 @@ const guardarProductosEnAtlas = async({title,description,price,thumbnail,code,st
     let result = await ProductsDao.add({title,description,code,price,stock,status,category,thumbnail})
     
   } catch (error) {
-    console.log("🚀 ~ guardarEnAtlas ~ error:", error)
+    console.log(" ❌ ~ guardarEnAtlas ~ error:", error)
     
   }
   

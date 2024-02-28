@@ -32,7 +32,7 @@ async function products(req, res) {
     }`
     : null;
     
-    console.log("🚀 ~ products ~ result:", result)
+    console.log(" ❌ ~ products ~ result:", result)
     res.render("products", { title: "Products", result });
   } catch (error) {
     return res.status(error.status || 500).send(`<h1>${error.message} </h1>`);
@@ -53,7 +53,7 @@ async function product(req, res) {
 
     res.render("product", { title: "Products", product });
   } catch (error) {
-    console.log("🚀 ~ product ~ error:", error);
+    console.log(" ❌ ~ product ~ error:", error);
   }
 }
 

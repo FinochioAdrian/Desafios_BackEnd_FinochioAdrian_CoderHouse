@@ -11,7 +11,6 @@ socket.on("products", (data) => {
 });
 
 const renderProducts = (products) => {
-  console.log("🚀 ~ renderProducts ~ products:", products);
   let plantilla = "";
   products.forEach(
     ({

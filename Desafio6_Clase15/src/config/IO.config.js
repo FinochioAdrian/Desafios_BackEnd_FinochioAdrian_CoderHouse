@@ -40,7 +40,6 @@ const IOinit = (httpServer) => {
     });
 
     socket.on("addNewProduct", async (data) => {
-      console.log("🚀 ~ socket.on ~ data:", data);
       try {
         // Validar el cuerpo de la solicitud contra el esquema
         const validationResult = productAddSchema.validate(data, {
@@ -198,7 +197,6 @@ async function SaveImages(data) {
       })
     );
     fileNames.forEach((fileName) => {
-      console.log("Imagen guardada:", fileName);
     });
     // Devolver nombres de archivo al cliente
     return fileNames;

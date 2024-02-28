@@ -31,7 +31,7 @@ async function getAll(req, res) {
     let products = await Products.getAll();
     res.send({ products });
   } catch (error) {
-    console.log("🚀 ~ getAll ~ error:", error)
+    console.log(" ❌ ~ getAll ~ error:", error)
     return res.status(error.status || 500).send({ error: error.message });
   }
 }
@@ -102,7 +102,6 @@ async function update(req, res) {
     let  result = await Products.getWithCode(product.code);
     result= JSON.parse(JSON.stringify(result))
     
-    console.log(result && result._id!==pid);
     if (result.length>0 && result._id!==pid) {
       return res.status(409).send({
         status: "fail",
@@ -113,7 +112,6 @@ async function update(req, res) {
     // Update products
     
     let productUpdate = await Products.update(pid, product);
-    console.log(productUpdate);
     // Response Product not found
     if (!productUpdate) {
       return res

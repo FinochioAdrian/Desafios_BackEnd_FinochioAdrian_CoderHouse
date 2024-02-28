@@ -63,8 +63,6 @@ async function get(req, res) {
 async function create(req, res) {
   try {
     const { body } = req;
-    console.log("🚀 ~ create ~ body:", body);
-    console.log("body".body);
     const payload = await Carts.add({ ...body });
     res.status(201).send({ status: "success", payload });
   } catch (error) {
@@ -116,7 +114,6 @@ async function removeProductInCart(req, res) {
     }
 
     const result = await Carts.removeProductInCartById(cart._id, product._id);
-    console.log("🚀 ~ removeProductInCart ~ result:", result)
     
     if (!result){
       return res.status(400).send({ status: "fail", msg: `No element with _id ${product._id} found in cart`  });

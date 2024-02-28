@@ -87,7 +87,6 @@ class CartManager {
       throw error;
     }
     const indexProduct = cart[indexCart].products.findIndex((prod) => {return prod.id == productId})
-    console.log("indexProduct",indexProduct);
     if (indexProduct ==-1){
       cart[indexCart].products.push({id:productId,quantity:1})
     }

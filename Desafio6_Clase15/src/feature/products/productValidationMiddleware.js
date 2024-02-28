@@ -139,7 +139,7 @@ export const runValidation = (req, res, next) => {
       //elimina el archivo subido
       fs.unlinkSync(filePath).catch((err) => {
         console.log(
-          "🚀 ~ runValidation ~ err:",
+          " ❌ ~ runValidation ~ err:",
           "error eliminando el archivo " + filePath + " ",
           err
         );

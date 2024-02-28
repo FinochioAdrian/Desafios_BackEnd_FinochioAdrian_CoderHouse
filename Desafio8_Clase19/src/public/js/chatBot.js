@@ -21,7 +21,6 @@
     });
     socket.on('res', (msg) => {
         msg = msg.split('\n')
-        console.log(msg);
         msg.forEach(val=> {
           const item = document.createElement('li');
           item.textContent = val;

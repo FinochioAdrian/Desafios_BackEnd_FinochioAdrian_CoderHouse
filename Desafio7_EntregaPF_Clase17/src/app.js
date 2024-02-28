@@ -13,7 +13,7 @@ import Server from "./server.js";
 const app = express();
 
 connectDB()
-const PORT = 3000;
+const PORT = process.env.PORT || 8080;
 
 //Iniciamos el Server
 const httpServer =Server(app,PORT)
