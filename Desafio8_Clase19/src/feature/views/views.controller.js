@@ -28,7 +28,7 @@ async function products(req, res) {
         }`
       : null;
     result.nextLink = result.hasNextPage
-      ? `../products?page=${result.prevPage}&limit=${result.limit}${
+      ? `../products?page=${result.nextPage}&limit=${result.limit}${
           category ? "&category=" + category : ""
         }${sort ? "&sort=" + sort : ""}${
           !available ? "&available=" + available : ""
@@ -36,6 +36,7 @@ async function products(req, res) {
       : null;
 
     const user = req.session.user;
+
 
     return res.render("products", { title: "Products", result ,user});
   } catch (error) {

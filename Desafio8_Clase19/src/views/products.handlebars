@@ -11,9 +11,15 @@
     {{#each result.docs}}
         
         <a href="/product/{{this._id}}" class="col text-decoration-none">
-        <div  >
+        
         <div class="card" style="width: 18rem;">
+          {{#if this.thumbnails.length}}
+<img src="/images/products/{{this.thumbnails.[0]}}" class="bd-placeholder-img card-img-top img-fluid" style="aspect-ratio:4/3;" alt="...">
+            {{else}}
+             
             
+         
+         
                 <svg
                 class="bd-placeholder-img card-img-top"
                 
@@ -30,16 +36,12 @@
                     fill="#dee2e6"
                     dy=".3em"
                 >
-                {{#if this.thumbnail.length}}
-            
-                {{this.thumbnail.[0]}}
-            
-                {{else}}
+               
                    Sin imagen previa
-                {{/if}}
+                
                 </text>
                 </svg>
-            
+            {{/if}}
             <div class="card-body">
             <h5 class="card-title">{{this.title}} </h5>
             <p class="card-text">{{this.description}}</p>
@@ -51,7 +53,7 @@
             
             </div>
         </div>
-        </div>
+        
 
         </a>
         
@@ -63,10 +65,12 @@
     <li class="page-item {{#unless result.prevPage }}disabled{{/unless}}">
       <a class="page-link" href="{{result.prevLink}}">Previous</a>
     </li>
+    {{#if result.prevPage}}  <li class="page-item "><a class="page-link" href="{{result.prevLink}}">{{result.prevPage}}</a></li>{{/if}}
     <li class="page-item active"><a class="page-link" href="">{{result.page}}</a></li>
     
+    {{#if result.nextPage}}  <li class="page-item"><a class="page-link" href="{{result.nextLink}}">{{result.nextPage}}</a></li>{{/if}}
     
-    <li class="page-item {{#unless result.prevPage }}disabled{{/unless}}">
+    <li class="page-item {{#unless result.nextPage }}disabled{{/unless}}">
       <a class="page-link" href="{{result.nextLink}}">Next</a>
     </li>
   </ul>
