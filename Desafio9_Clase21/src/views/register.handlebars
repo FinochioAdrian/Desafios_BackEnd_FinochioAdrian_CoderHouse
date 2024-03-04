@@ -1,0 +1,41 @@
+
+<div class="container-fluid">
+  <div class="row justify-content-center align-items-center g-2">
+    <h1 class="text-center">Registrarse</h1>
+<div class="row justify-content-center" >
+<form method="POST" action="/api/sessions/register" class="col-4" >
+    <input type="text" name="first_name" placeholder="First name"/><br>
+    <input type="text" name="last_name" placeholder="Last name"/><br>
+    <input type="number" name="age" placeholder="Age"/></br>
+    <input type="text" name="email" placeholder="Email"/><br>
+    <input type="password" name="password" placeholder="Password"/><br>
+    <input type="submit" value="Registrarse"/>
+</form>
+</div>
+<div class="row">
+   {{#if dangerMsg.length }}
+  <div class="alert alert-danger" role="alert">
+    {{#each dangerMsg}}
+      <p>{{this}}</p>
+    {{/each}}
+  </div>
+{{/if}}
+
+{{#if warningMSG.length}}
+  <div class="alert alert-warning" role="alert">
+    {{#each warningMSG}}
+      <p>{{this}}</p>
+    {{/each}}
+  </div>
+{{/if}} 
+</div>
+
+
+
+<p><a href="/login">Iniciar sesion</a></p>
+<p><a href="#" class="disabled" aria-disabled="true">Recuperar cuenta</a></p>
+
+  </div>
+
+</div>
+
