@@ -107,6 +107,24 @@ router.get("/register", (req, res) => {
 router.get("/chatBot", async (req, res) => {
   res.render("chatBot",{stylesheet:"/css/chat.css", title:"ChatBot con Socket.IO"});
 });
+
+// add desafio 9
+router.get('/password-reset', (req, res) => {
+  try {
+    // render login page with message if there is
+    const errorValidation = req.flash("errorValidation");
+    const emptyField = req.flash("errorEmptyField");
+
+    res.render("passwordReset", {
+      dangerMsg: errorValidation,
+      warningMSG: emptyField,
+    });
+  } catch (error) {
+    console.log("❌ ~ router.post ~ error:", error);
+    return res.status(error?.status || 500).send("Internal Server error");
+  }
+ 
+});
 // Export the router instance
 
 
