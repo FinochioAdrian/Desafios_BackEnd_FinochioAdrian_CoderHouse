@@ -1,4 +1,14 @@
-# Desafío 8 Clase 19
+# Desafío 9 Clase 21
+
+## Feature Desafío 9
+- Add views 
+        -- reset-password
+- Add ViewsRouter
+        -- router.get("/password-reset")
+- Add SessionRouter
+        -- router.post("/password-reset")
+
+- Add in util.js,function for bycrypt, createHash(password), isValidPassword(user,password).
 
 ## Feature Desafío 8
 
@@ -9,8 +19,8 @@
         -- router.get("/register")
         -- router.get("/login")
     - Add SessionRouter
-        -- router.get("/register")
-        -- router.get("/login")
+        -- router.post("/register")
+        -- router.post("/login")
         -- router.get("/logout")
     - Modify views Products for look user data in view
 
