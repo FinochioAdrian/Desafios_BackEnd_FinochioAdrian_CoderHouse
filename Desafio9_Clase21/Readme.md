@@ -9,7 +9,7 @@
 - Add SessionRouter
         -- router.post("/password-reset")
 
-- Add in util.js,function for bycrypt, createHash(password), isValidPassword(user,password).
+- Add in util.js,function for bcrypt, createHash(password), isValidPassword(user,password).
 
 ## Feature Desafío 8
 
