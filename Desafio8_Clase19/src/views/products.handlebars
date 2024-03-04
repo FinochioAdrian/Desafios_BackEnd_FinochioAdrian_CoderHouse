@@ -60,7 +60,10 @@
 {{/each}}
 
 
-<nav aria-label="...">
+
+
+  </div>
+<nav aria-label="..." class="my-3">
   <ul class="pagination">
     <li class="page-item {{#unless result.prevPage }}disabled{{/unless}}">
       <a class="page-link" href="{{result.prevLink}}">Previous</a>
@@ -75,8 +78,6 @@
     </li>
   </ul>
 </nav>
-  </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
