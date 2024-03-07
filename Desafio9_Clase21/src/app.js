@@ -3,6 +3,8 @@ import __dirname from "./utils.js";
 import connectDB from "./config/db.config.js";
 import handlebars_config from "./config/handlebars.config.js";
 import IOconfig from "./config/IO.config.js";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 // service session and login
 import session from "express-session";
@@ -42,6 +44,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+// configuracion y manejo de session por passport local
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
  // Mensajes Flash
 app.use(flash());
 // Manejo de Handlebars

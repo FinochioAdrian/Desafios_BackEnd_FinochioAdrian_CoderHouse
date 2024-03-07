@@ -71,14 +71,17 @@ router.get("/addProducts",auth, async (req, res) => {
 router.get("/login", (req, res) => {
   try {
     // render login page with message if there is
-    const dangerMsg = req.flash("errorValidation");
-    const emptyField = req.flash("errorEmptyField");
+    const errorMessage = req.flash("error");
+    
+    const errorValidation = req.flash("errorValidation");
+    const emptyField = errorMessage[0]=="Missing credentials"?["Oops! It looks like you missed a few fields."]:req.flash("errorEmptyField");
+
     const infoMSG = req.flash("infoMsg");
     if (req.session.user) {
       return res.redirect("/products");
     } else {
       return res.render("login", {
-        dangerMsg,
+        dangerMsg:errorValidation,
         warningMSG: emptyField,
         infoMSG,
       });
@@ -91,9 +94,11 @@ router.get("/login", (req, res) => {
 
 router.get("/register", (req, res) => {
   try {
-    // render login page with message if there is
+    
+    const errorMessage = req.flash("error");
+    
     const errorValidation = req.flash("errorValidation");
-    const emptyField = req.flash("errorEmptyField");
+    const emptyField = errorMessage[0]=="Missing credentials"?["Oops! It looks like you missed a few fields."]:req.flash("errorEmptyField");
 
     return res.render("register", {
       dangerMsg: errorValidation,
