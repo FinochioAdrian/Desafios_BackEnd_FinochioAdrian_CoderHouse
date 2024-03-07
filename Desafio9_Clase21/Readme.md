@@ -2,17 +2,17 @@
 
 ## Feature Desafío 9
 
-- Add views
-        -- reset-password
-- Add ViewsRouter
-        -- router.get("/password-reset")
-- Add SessionRouter
-        -- router.post("/password-reset")
-        --router.get("/github", passport.authenticate('github',{scope:['user:email']})...)
-        --router.get("/githubcallback", passport.authenticate('github',{failureRedirect:'/login',failureFlash:true})...)
-
-- Add in util.js,function for bcrypt, createHash(password), isValidPassword(user,password).
-- Add in passport.config.js passport-local and passport-github2
+    - Add views
+            -- reset-password
+    - Add ViewsRouter
+            -- router.get("/password-reset")
+    - Add SessionRouter
+            -- router.post("/password-reset")
+            --router.get("/github", passport.authenticate('github',{scope:['user:email']})...)
+            --router.get("/githubcallback", passport.authenticate('github',{failureRedirect:'/login',failureFlash:true})...)
+    
+    - Add in util.js,function for bcrypt, createHash(password), isValidPassword(user,password).
+    - Add in passport.config.js passport-local and passport-github2
 
 ## Feature Desafío 8
 
