@@ -27,7 +27,7 @@
           </p>
           <p class="card-text">Code: {{product.code}}</p>
           <div>
-            <form class="d-flex" role="search" action="/carts/65d5ee0a15638b9eeb1fd4ac/product/{{product._id}}"
+            <form class="d-flex" role="search" action="/carts/{{user.cart}}/product/{{product._id}}"
               method="post">
               <input class="form-control me-2" type="number" placeholder="Add Cart" aria-label="Quantity" required
                 name="quantity" min="1" max="{{product.stock}}" />

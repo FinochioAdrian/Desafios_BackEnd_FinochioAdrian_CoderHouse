@@ -83,7 +83,8 @@ const IOinit = (httpServer) => {
     });
 
     socket.on("disconnect", () => {
-      guardarChat(messagesChat);
+      if (messagesChat.length>0)guardarChat(messagesChat)
+      ;
       console.log("A user disconnected");
     });
 

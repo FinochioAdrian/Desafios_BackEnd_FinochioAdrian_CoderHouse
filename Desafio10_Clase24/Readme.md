@@ -1,6 +1,19 @@
 # Desafío 10 Clase 24
 
 ## Feature Desafío 10
+-status  modify
+    ok  views
+    ok  css
+    ok  app.js delete connect-mongo
+    ok  util.js
+    ok  passport
+    ok  view.router mensajes de passport 
+    ok  view.router integro passportCall(jwt)
+    session.router
+    add cart de user
+    add image in views carts
+    -falta
+    arreglar el readme
 
 ## Feature Desafío 9
 

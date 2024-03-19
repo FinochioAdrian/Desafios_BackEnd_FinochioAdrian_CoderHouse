@@ -8,31 +8,20 @@
         <a href="/product/{{this._id}}" class="col text-decoration-none">
           <div class="card" style="width: 18rem;">
             
-                <svg
-                class="bd-placeholder-img card-img-top"
-                
-                role="img"
-                aria-label="Marcador de posición: Cap de imagen"
-                focusable="false"
-                preserveAspectRatio="xMidYMid slice"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <title>Marcador de posición</title>
-                <rect width="100%" height="100%" fill="#868e96"></rect><text
-                    x="50%"
-                    y="50%"
-                    fill="#dee2e6"
-                    dy=".3em"
-                >
-                {{#if this.product.thumbnail.length}}
-            
-                {{this.product.thumbnail.[0]}}
-            
-                {{else}}
-                   Sin imagen previa
-                {{/if}}
-                </text>
-                </svg>
+                {{#if product.thumbnails.length}}
+        <img src="/images/products/{{product.thumbnails.[0]}}" class="bd-placeholder-img card-img-top img-fluid"
+          style="aspect-ratio:4/3;" alt="...">
+        {{else}}
+        <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Marcador de posición: Cap de imagen"
+          focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <title>Marcador de posición</title>
+          <rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">
+
+            Sin imagen previa
+
+          </text>
+        </svg>
+        {{/if}}
             
             <div class="card-body">
             <h5 class="card-title">{{this.product.title}} </h5>

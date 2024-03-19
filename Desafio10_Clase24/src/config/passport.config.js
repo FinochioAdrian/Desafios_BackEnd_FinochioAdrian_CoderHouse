@@ -2,20 +2,31 @@ import passport from "passport";
 import local from "passport-local";
 import UsersDAO from "../feature/users/users.dao.js";
 import { createHash, isValidPassword } from "../utils.js";
+import jwt from "passport-jwt";
 import GitHubStrategy from "passport-github2";
+
 const LocalStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
+const PRIVATE_KEY_JWT = "EidrienKeyJWTSecret";
+const CLIENT_ID_GITHUB = "Iv1.22246b77e8ada6d5";
+const CLIENT_SECRET_GITHUB = "3f9302173d409d27920c91dfcfc11319502973f1";
+const CALLBACK_URL_GITHUB = "http://localhost:8080/api/sessions/githubcallback";
 
 const initializePassport = () => {
+  // Passport Local register
   passport.use(
     "register",
     new LocalStrategy(
       {
         passReqToCallback: true,
         usernameField: "email",
+        passwordField: "password",
+        session: false,
       },
       async (req, username, password, done) => {
-        const { first_name, last_name, email } = req.body;
-        let age = parseInt(req.body.age);
+        const { first_name, last_name, email, age } = req.body;
         if (
           !username ||
           !first_name ||
@@ -29,125 +40,127 @@ const initializePassport = () => {
             message: "Oops! It looks like you missed a few fields.",
           });
         }
-
         try {
-          let emailUsed = await UsersDAO.getUserByEmail(username);
-
-          if (emailUsed) {
+          let user = await UsersDAO.getUserByEmail(username);
+          if (user) {
             return done(null, false, {
               type: "errorValidation",
               message: "The email address you entered is already in use.",
             });
           }
-
-          const user = {
+          const newUser = {
             first_name,
             last_name,
-            age,
             email,
+            age,
             password: createHash(password),
             role: "user",
           };
-          const result = await UsersDAO.insert(user);
+          let result = await UsersDAO.insert(newUser);
           return done(null, result);
         } catch (error) {
-          console.log("❌ ~ error:", error);
+          console.log("❌ ~passport.config - register - error:", error);
           return done("Error al registrar el usuario: " + error);
         }
       }
     )
   );
-  // Verificar credencial
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await UsersDAO.getUserByID(id);
-      done(null, user);
-    } catch (e) {
-      console.log("No se pudo obtener el usuario", e);
-      done(e, null);
-    }
-  });
-
+  //Passport local login
   passport.use(
-    "login",
+    "local-login",
     new LocalStrategy(
-      { usernameField: "email" },
+      { usernameField: "email", session: false },
       async (username, password, done) => {
         try {
           const user = await UsersDAO.getUserByEmail(username);
-
           if (!user) {
-            console.log("Usuario no encontrado");
             return done(null, false, {
               type: "errorValidation",
               message:
                 "No account exists with the email address or username you entered",
             });
           }
-          if (!isValidPassword(user, password)) {
-            console.log("Password incorrecto ");
-
+          if (!isValidPassword(user, password))
             return done(null, false, {
               type: "errorValidation",
-              message: "Incorrect password",
+              message: "Password is invalid",
             });
-          }
-
+          delete user.password;
           return done(null, user);
         } catch (error) {
-          console.log("❌ ~ passport.use ~ error:", error);
+          console.log("❌ ~ passport.use ~ login ~ error:", error);
+        }
+      }
+    )
+  );
+
+  // Passport JWT
+  passport.use(
+    "jwt",
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: PRIVATE_KEY_JWT,
+      },
+      async (jwt_payload, done) => {
+        try {
+          const {user} = jwt_payload
+          return done(null, user);
+        } catch (error) {
+          console.log("❌ ~ initializePassport ~ error:", error);
           return done(error);
         }
       }
     )
   );
+  // Passport Github Login and Register
   passport.use(
     "github",
     new GitHubStrategy(
       {
-        clientID: "Iv1.ce213734327e0267",
-
-        clientSecret: "d0b6c830edab5eab76846956da57f3f1fe9d35b6",
-        callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+        clientID: CLIENT_ID_GITHUB,
+        clientSecret: CLIENT_SECRET_GITHUB,
+        callbackURL: CALLBACK_URL_GITHUB,
+        scope: ["user:email"],
       },
       async (accessToken, refreshToken, profile, done) => {
-        try {
-          /* console.log(profile); */
-          let username = profile._json.id + profile._json.login + "@github.com";
-          // la doble validación es por si el usuario coloco su email en public en github
-          let user = await UsersDAO.getUserByEmail(username);
-           
-          if (!user){
-            user = await UsersDAO.getUserByEmail(profile._json.email);
-          } 
+        // console.log(profile);
 
+        const email =
+          profile?.emails[0].value ||
+          profile._json.id + profile._json.login + "@github.com";
+        try {
+          let user = await UsersDAO.getUserByEmail(email);
           if (!user) {
-            
-            const newUser = {
+            let newUser = {
               first_name: profile._json.name,
               last_name: "",
               age: 18,
-              email: username,
+              email,
               password: "",
-              role: "user",
             };
-            const userInsert = await UsersDAO.insert(newUser);
-            
-            done(null, userInsert);
+            let result = await UsersDAO.create(newUser);
+            delete result.password;
+            return done(null, result);
           } else {
+            delete user.password;
             done(null, user);
           }
         } catch (error) {
           console.log("❌ ~ error:", error);
-
-          return done(error);
+          done(error);
         }
       }
     )
   );
 };
+
+function cookieExtractor(req) {
+  let token = null;
+  if (req && req.signedCookies) {
+    token = req.signedCookies["jwt"];
+  }
+  return token;
+}
 
 export default initializePassport;

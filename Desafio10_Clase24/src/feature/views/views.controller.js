@@ -3,7 +3,7 @@ import Carts from "../carts/cart.dao.js";
 import UsersDAO from "../users/users.dao.js";
 async function home(req, res) {
   try {
-    const user = req.session.user;
+    const user = req.user;
 
     return res.render("home", { title: "home", user });
   } catch (error) {
@@ -11,6 +11,7 @@ async function home(req, res) {
   }
 }
 async function products(req, res) {
+  
   try {
     const limit = req.query?.limit || 10;
     const page = req.query?.page || 1;
@@ -35,7 +36,7 @@ async function products(req, res) {
         }`
       : null;
 
-    const user = req.session.user;
+    const user = req.user;
 
 
     return res.render("products", { title: "Products", result ,user});
@@ -45,6 +46,7 @@ async function products(req, res) {
 }
 async function product(req, res) {
   try {
+    const user = req.user;
     const { pid } = req.params;
 
     if (!pid) {
@@ -56,7 +58,7 @@ async function product(req, res) {
       res.redirect("/products");
     }
 
-    res.render("product", { title: "Products", product });
+    res.render("product", { title: "Product", product ,user});
   } catch (error) {
     console.log("❌ ~ product ~ error:", error);
   }

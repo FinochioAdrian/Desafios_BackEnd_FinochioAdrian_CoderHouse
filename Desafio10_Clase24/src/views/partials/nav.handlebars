@@ -26,9 +26,11 @@
         <li class="nav-item">
           <a class="nav-link" href="/chat">Chat</a>
         </li>
+        {{#if user.cart}}
         <li class="nav-item">
-          <a class="nav-link" href="/carts/65d5ee0a15638b9eeb1fd4ac">Cart</a>
+          <a class="nav-link" href="/carts/{{user.cart}}">Cart</a>
         </li>
+        {{/if}}
       </ul>
       <form class="d-flex me-5" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

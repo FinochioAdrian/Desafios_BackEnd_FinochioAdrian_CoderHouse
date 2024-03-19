@@ -1,5 +1,5 @@
 import Users from "./users.model.js";
-
+import CartDao from "../carts/cart.dao.js"
 // UsersDAO class
 class UsersDAO {
   // get user by email
@@ -27,8 +27,18 @@ class UsersDAO {
   // insert new user
   static async insert(userData) {
     try {
+      console.log("🚀 ~ UsersDAO ~ insert ~ userData:", userData)
+      const cart = await CartDao.createCartEmpty()
+      console.log("🚀 ~ UsersDAO ~ insert ~ cart:", cart)
+      userData.cart=cart._id
+      console.log("🚀 ~ UsersDAO ~ insert ~ userData:", userData)
       // save new user to database
-      return await new Users(userData).save();
+      const newuser= await new Users(userData).save();
+      if (newuser) {
+        await cart.save()
+       
+      }
+      return newuser
     } catch (error) {
       console.log("❌ ~ UsersDAO ~ insert ~ error:", error);
       throw error;
@@ -57,6 +67,7 @@ class UsersDAO {
       throw error;
     }
   }
+  
 }
 
 export default UsersDAO;

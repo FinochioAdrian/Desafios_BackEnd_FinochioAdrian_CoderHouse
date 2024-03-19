@@ -136,5 +136,14 @@ class CartDao {
       throw new Error("Error get all carts with limit");
     }
   }
+  static async createCartEmpty(){
+    try {
+      const newCart = new Cart()
+      return newCart
+    } catch (error) {
+      console.log("Error get all carts with limit " + error);
+      throw new Error("Error get all carts with limit");
+    }
+  }
 }
 export default CartDao;

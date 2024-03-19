@@ -5,11 +5,9 @@ import handlebars_config from "./config/handlebars.config.js";
 import IOconfig from "./config/IO.config.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-
-// service session and login
 import session from "express-session";
+// service session and login
 import cookieParser from "cookie-parser";
-import MongoStore from "connect-mongo";
 
 //envió de mensaje entre vistas
 import flash from "connect-flash";
@@ -21,33 +19,35 @@ import cartRouter from "./feature/carts/carts.router.js";
 import sessionsRouter from "./feature/sessions/sessions.router.js";
 import Server from "./server.js";
 const app = express();
-//const URL ="mongodb://localhost:27017/ecommerce"
-const URL = "mongodb+srv://eidrienhez33:K0DW1LhyMOcpSKZy@ecommercecluster.nmjs8p9.mongodb.net/ecommerce?retryWrites=true&w=majority";
+//enviroment var
+const PRIVATE_KEY_COOKIE = "EidrienKeyCookieSecret";
+const PORT = process.env.PORT||8080;
+const URL_LOCAL_MONGOOSE = "mongodb://localhost:27017/loginClase20"
 
-connectDB(URL);
+const URL_ONLINE_MONGOOSE = "mongodb+srv://eidrienhez33:K0DW1LhyMOcpSKZy@ecommercecluster.nmjs8p9.mongodb.net/ecommerce?retryWrites=true&w=majority";
+
+connectDB(URL_ONLINE_MONGOOSE);
+
 //Iniciamos el Server
-const PORT = process.env.PORT || 8080;
+
 const httpServer = Server(app, PORT);
 // Config Server
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(PRIVATE_KEY_COOKIE));
 // Configuración de sesión y almacenamiento en MongoDB
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl:URL,
-      ttl: 300,
-    }),
-    secret: "secretCode",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
+
+app.use(session({
+    cookie: {maxAge:60000},
+    secret:PRIVATE_KEY_COOKIE,
+    resave:false,
+    saveUninitialized:false
+}))
+
 // configuracion y manejo de session por passport local
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
+
 
  // Mensajes Flash
 app.use(flash());

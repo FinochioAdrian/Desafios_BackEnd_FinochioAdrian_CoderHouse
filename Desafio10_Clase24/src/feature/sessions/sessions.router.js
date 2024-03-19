@@ -1,22 +1,24 @@
 import Router from "express";
 
 import UsersDAO from "../users/users.dao.js";
-import { createHash, isValidPassword } from "../../utils.js";
+import { createHash, generateToken, passportCall,auth } from "../../utils.js";
 import passport from "passport";
 
 const router = Router();
 
 router.post(
   "/register",
-  passport.authenticate("register", {
+  passportCall("register", {
     failureRedirect: "/register",
     failureFlash: true,
   }),
+
   async (req, res) => {
-    req.flash("infoMsg", "Inicie Sesión");
+    
 
     // Verificar si el cliente acepta HTML
     if (req.accepts("html")) {
+      req.flash("infoMsg", "Inicie Sesión");
       return res.redirect("/login");
     }
 
@@ -25,45 +27,40 @@ router.post(
   }
 );
 
+
 router.post(
   "/login",
-  passport.authenticate("login", {
+  passportCall("local-login", {
     failureRedirect: "/login",
     failureFlash: true,
   }),
   async (req, res) => {
-    
-    if (!req.user) {
-      if (req.accepts("html")) {
-        req.flash("errorValidation", "Invalid credentials");
-        return res.redirect("/login");
-      }
-      return res.status(400).send({
-        status: "error",
-        msg: "Invalid credentials",
-      });
-    }
-    const { first_name, last_name, age, email } = req.user;
-    req.session.user = {
-      first_name,
-      last_name,
-      age,
-      email,
-    };
-
-    
+    const user = req.user;
+    const access_token = generateToken(user);
 
     if (req.accepts("html")) {
-      return res.redirect("/products");
+      return res
+        .cookie("jwt", access_token, {
+          signed: true,
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60,
+        })
+        .redirect("/products");
     }
-
-    return res.send({ status: "success", payload: user });
+    res
+      .cookie("jwt", token, {
+        signed: true,
+        httpOnly: true,
+        maxAge: 3 * 60 * 60,
+      })
+      .json({ status: 200, msg: "Logged in" });
   }
 );
+
 router.post("/password-reset", async (req, res) => {
   try {
     let { email, password } = req.body;
-
+    /// copiar para el msg flash
     if (!email || !password) {
       if (req.accepts("html")) {
         req.flash("errorEmptyField", "Values name o password is empty");
@@ -75,6 +72,7 @@ router.post("/password-reset", async (req, res) => {
         msg: "Error Empty Values: Field name o password is empty",
       });
     }
+    
 
     let user = await UsersDAO.getUserByEmail(email);
 
@@ -90,6 +88,7 @@ router.post("/password-reset", async (req, res) => {
     user.password = createHash(password);
 
     await UsersDAO.newPassword(user);
+ 
 
     delete req.body.password;
     delete user.password;
@@ -113,17 +112,84 @@ router.post("/password-reset", async (req, res) => {
   }
 });
 
-router.get("/github", passport.authenticate('github',{scope:['user:email']}),async (req,res)=>{})
-router.get("/githubcallback", passport.authenticate('github',{failureRedirect:'/login',failureFlash:true}),async (req,res)=>{
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
 
-  req.session.user = req.user;
-  res.redirect('/')
-})
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", {
+    failureRedirect: "/login",
+    failureFlash: true,
+    session: false,
+  }),
+  async (req, res) => {
+    const user = req.user;
+    if (!user) {
+      if (req.accepts("html"))
+        return res.render("401", {
+          title: "Oops! Access Denied",
+          stylesheet: "/css/errorPage.css",
+        });
+
+      return res
+        .status(401)
+        .send({ status: "error", error: "Invalid credentials" });
+    }
+
+    const access_token = generateToken(user);
+
+    if (req.accepts("html")) {
+      return res
+        .cookie("jwt", access_token, {
+          signed: true,
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60,
+        })
+        .redirect("/");
+    }
+
+    res
+      .cookie("jwt", access_token, {
+        signed: true,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60,
+      })
+      .json({ status: 200, msg: "Logged in" });
+  }
+);
 
 router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    res.redirect("/");
-  });
+  res.clearCookie("jwt");
+  if (req.accepts("html")) return res.redirect("/login");
+  res.status(200).json({ status: 200, msg: "Logged out" });
 });
+
+router.get("/failregister", (req, res) => {
+  if (req.accepts("html"))
+    return res.render("403", {
+      title: "Oops! Access Denied",
+      stylesheet: "/css/errorPage.css",
+    });
+  return res.status(403).send({ error: "Failed register" });
+});
+
+router.get("/failLogin", (req, res) => {
+  if (req.accepts("html"))
+    return res.render("401", {
+      title: "Oops! Access Denied",
+      stylesheet: "/css/errorPage.css",
+    });
+  return res.status(401).send({ error: "Failed login" });
+});
+
+router.get(
+  "/current",passportCall("jwt"),auth,
+  (req, res) => {
+    res.json({ status: "success", payload: req.user });
+  }
+);
 
 export default router;

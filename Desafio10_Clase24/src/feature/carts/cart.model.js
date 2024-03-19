@@ -12,7 +12,7 @@ const cartSchema = mongoose.Schema({
         quantity: { type: Number, required: true },
       },
     ],
-    required: true,
+    
   },
 });
 export default mongoose.model(cartCollection, cartSchema);

@@ -1,26 +1,57 @@
- <div class="container min-vh-100 d-flex justify-content-center align-items-center ">
-    <div class="row  col-md-4">
-      <div >
-        <div class="login-form">
-          <h2>Login</h2>
-          <form  method="POST" action="/api/sessions/login" id="login-form">
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+<div
+  class="container min-vh-100 d-flex justify-content-center align-items-center"
+>
+  <div class="row col-md-4">
+    <div>
+      <div class="login-form">
+        <h2>Login</h2>
+        <form method="POST" action="/api/sessions/login" id="login-form">
+          {{#if dangerMsg}}
+            <div class="alert alert-danger" role="alert">
+              {{dangerMsg}}
             </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
+          {{/if}}
+
+          {{#if warningMSG}}
+            <div class="alert alert-warning" role="alert">
+              {{warningMSG}}
             </div>
-            <a href="/password-reset" class="float-end">Forgot Password?</a>
-            <button type="submit" class="btn btn-login">Log In</button>
-          </form>
-          <div class="social-auth">
-            <a href="/api/sessions/github"> <i class="fab fa-github"></i> Login with GitHub</a>
-            <a href="/register">Don't have an account? Register Here</a>
+          {{/if}}
+          {{#if infoMSG}}
+            <div class="alert alert-info" role="alert">
+              {{infoMSG}}
+            </div>
+          {{/if}}
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              class="form-control"
+              name="email"
+              id="email"
+              placeholder="Enter email"
+            />
           </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              id="password"
+              placeholder="Enter password"
+            />
+          </div>
+          <a href="/password-reset" class="float-end">Forgot Password?</a>
+          <button type="submit" class="btn btn-login">Log In</button>
+        </form>
+        <div class="social-auth">
+          <a href="/api/sessions/github">
+            <i class="fab fa-github"></i>
+            Login with GitHub</a>
+          <a href="/register">Don't have an account? Register Here</a>
         </div>
       </div>
     </div>
   </div>
-
+</div>

@@ -35,7 +35,7 @@ class MessagesDao {
     }
   }
   static async addMany(collection) {
-    console.log(" ❌ ~ MessagesDao ~ addMany ~ collection:", collection)
+   
     try {
       const newMessage = await Messages.insertMany(collection);
       
