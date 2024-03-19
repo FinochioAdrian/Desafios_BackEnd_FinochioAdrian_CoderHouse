@@ -35,3 +35,4 @@
      - Desafio_7 = npm run start_7 => "start_7": "node ./Desafio7_EntregaPF_Clase17/index.js"
      - Desafio_8 = npm run start_8 => "start_8": "node ./Desafio8_Clase19/index.js"
      - Desafio_9 = npm run start_9 => "start_9": "node ./Desafio9_Clase21/index.js"
+     - Desafio_10 = npm run start_10 => "start_10": "node ./Desafio10_Clase24/index.js"
