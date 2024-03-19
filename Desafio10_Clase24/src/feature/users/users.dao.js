@@ -27,15 +27,13 @@ class UsersDAO {
   // insert new user
   static async insert(userData) {
     try {
-      console.log("🚀 ~ UsersDAO ~ insert ~ userData:", userData)
       const cart = await CartDao.createCartEmpty()
-      console.log("🚀 ~ UsersDAO ~ insert ~ cart:", cart)
       userData.cart=cart._id
-      console.log("🚀 ~ UsersDAO ~ insert ~ userData:", userData)
       // save new user to database
       const newuser= await new Users(userData).save();
       if (newuser) {
         await cart.save()
+        return newuser
        
       }
       return newuser

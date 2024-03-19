@@ -124,7 +124,7 @@ const initializePassport = () => {
         scope: ["user:email"],
       },
       async (accessToken, refreshToken, profile, done) => {
-        // console.log(profile);
+        //  console.log(profile);
 
         const email =
           profile?.emails[0].value ||
@@ -139,7 +139,7 @@ const initializePassport = () => {
               email,
               password: "",
             };
-            let result = await UsersDAO.create(newUser);
+            let result = await UsersDAO.insert(newUser);
             delete result.password;
             return done(null, result);
           } else {

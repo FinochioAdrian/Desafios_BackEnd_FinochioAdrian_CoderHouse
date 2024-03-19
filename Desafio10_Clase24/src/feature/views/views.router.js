@@ -72,7 +72,9 @@ router.get("/addProducts", passportCall("jwt"), auth, async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
+  
   try {
+    
     // render login page with message if there is
     const errorMessage = req.flash("error");
     const errorValidation = req.flash("errorValidation");
