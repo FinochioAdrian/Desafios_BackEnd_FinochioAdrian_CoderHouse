@@ -4,15 +4,15 @@ import UsersDAO from "../feature/users/users.dao.js";
 import { createHash, isValidPassword } from "../utils.js";
 import jwt from "passport-jwt";
 import GitHubStrategy from "passport-github2";
-
+import envConfig from './config.js'
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
-const PRIVATE_KEY_JWT = "EidrienKeyJWTSecret";
-const CLIENT_ID_GITHUB = "Iv1.22246b77e8ada6d5";
-const CLIENT_SECRET_GITHUB = "3f9302173d409d27920c91dfcfc11319502973f1";
-const CALLBACK_URL_GITHUB = "http://localhost:8080/api/sessions/githubcallback";
+const PRIVATE_KEY_JWT = envConfig.PRIVATE_KEY_JWT;
+const CLIENT_ID_GITHUB = envConfig.CLIENT_ID_GITHUB;
+const CLIENT_SECRET_GITHUB = envConfig.CLIENT_SECRET_GITHUB;
+const CALLBACK_URL_GITHUB = envConfig.CALLBACK_URL_GITHUB;
 
 const initializePassport = () => {
   // Passport Local register

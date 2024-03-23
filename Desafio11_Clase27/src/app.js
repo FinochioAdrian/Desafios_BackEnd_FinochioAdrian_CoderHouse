@@ -5,6 +5,8 @@ import handlebars_config from "./config/handlebars.config.js";
 import IOconfig from "./config/IO.config.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+// importamos .env
+import envConfig from "./config/config.js";
 import session from "express-session";
 // service session and login
 import cookieParser from "cookie-parser";
@@ -19,14 +21,15 @@ import cartRouter from "./feature/carts/carts.router.js";
 import sessionsRouter from "./feature/sessions/sessions.router.js";
 import Server from "./server.js";
 const app = express();
-//enviroment var
-const PRIVATE_KEY_COOKIE = "EidrienKeyCookieSecret";
-const PORT = process.env.PORT||8080;
-const URL_LOCAL_MONGOOSE = "mongodb://localhost:27017/loginClase20"
 
-const URL_ONLINE_MONGOOSE = "mongodb+srv://eidrienhez33:K0DW1LhyMOcpSKZy@ecommercecluster.nmjs8p9.mongodb.net/ecommerce?retryWrites=true&w=majority";
+//environment var
 
-connectDB(URL_ONLINE_MONGOOSE);
+console.log(envConfig);
+const PRIVATE_KEY_COOKIE = envConfig.PRIVATE_KEY_COOKIE;
+const PORT = envConfig.PORT;
+const MONGO_URL = envConfig.MONGO_URL;
+
+connectDB(MONGO_URL);
 
 //Iniciamos el Server
 
@@ -37,19 +40,20 @@ app.use(express.json());
 app.use(cookieParser(PRIVATE_KEY_COOKIE));
 // Configuración de sesión y almacenamiento en MongoDB
 
-app.use(session({
-    cookie: {maxAge:60000},
-    secret:PRIVATE_KEY_COOKIE,
-    resave:false,
-    saveUninitialized:false
-}))
+app.use(
+  session({
+    cookie: { maxAge: 60000 },
+    secret: PRIVATE_KEY_COOKIE,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-// configuracion y manejo de session por passport local
-initializePassport()
-app.use(passport.initialize())
+// configuración y manejo de session por passport local
+initializePassport();
+app.use(passport.initialize());
 
-
- // Mensajes Flash
+// Mensajes Flash
 app.use(flash());
 // Manejo de Handlebars
 handlebars_config(app);
@@ -59,7 +63,7 @@ app.use(express.static(__dirname + "/public"));
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
-app.use("/api/sessions", sessionsRouter );
+app.use("/api/sessions", sessionsRouter);
 
 //manejo de Socket y chat
 IOconfig(httpServer);
