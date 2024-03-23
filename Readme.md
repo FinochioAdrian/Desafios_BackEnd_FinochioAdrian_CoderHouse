@@ -37,3 +37,108 @@
      - Desafio_8 = npm run start_8 => "start_8": "node ./Desafio8_Clase19/index.js"
      - Desafio_9 = npm run start_9 => "start_9": "node ./Desafio9_Clase21/index.js"
      - Desafio_10 = npm run start_10 => "start_10": "node ./Desafio10_Clase24/index.js"
+
+## Work in => Feature Desafío 11
+
+        - status    modify
+        - pending   add .env and const
+        - pending   separate logic in routers to controllers:
+                    -   users
+                    -   sessions
+                    -   products
+                    -   messages
+                    -   carts
+                    -   views
+
+## Feature Desafío 10
+
+    - modify  views
+    - modify  css
+    - modify  app.js delete connect-mongo
+    - modify  util.js
+    - modify  passport
+    - modify  view.router
+        -- mensajes de passport
+    - modify  view.router
+        -- integro passportCall(jwt)
+    - modify session.router
+         
+    - modify products.handlebars 
+        -- add cart user by id
+    - modify cart.handlebars
+        -- add image in views carts
+    - Next feature
+        -- modify views.controller products() find the user by id for get user update, for the client into de products page pueda ver su cart actualizado y no dependa de la actualización de la cookie de session
+
+## Feature Desafío 9
+
+    - Add views
+            -- reset-password
+    - Add ViewsRouter
+            -- router.get("/password-reset")
+    - Add SessionRouter
+            -- router.post("/password-reset")
+            --router.get("/github", passport.authenticate('github',{scope:['user:email']})...)
+            --router.get("/githubcallback", passport.authenticate('github',{failureRedirect:'/login',failureFlash:true})...)
+    
+    - Add in util.js,function for bcrypt, createHash(password), isValidPassword(user,password).
+    - Add in passport.config.js passport-local and passport-github2
+
+## Feature Desafío 8
+
+    - Add views 
+        -- login
+        -- register 
+    - Add ViewsRouter
+        -- router.get("/register")
+        -- router.get("/login")
+    - Add SessionRouter
+        -- router.post("/register")
+        -- router.post("/login")
+        -- router.get("/logout")
+    - Modify views Products for look user data in view
+
+## Routes
+
+### Cart Route => /api/carts
+
+// get all carts
+
+- get("/");
+// get cart by id
+- get("/:cid");
+//create new cart
+- post("/");
+// Add new product in cart by cart id and product id
+- post("/:cid/product/:pid");
+//update one product in cart by cart id and product id
+- put("/:cid/product/:pid");
+//update all product in cart by cart id
+- put("/:cid");
+//delete product in cart by  id cart and id product
+- delete("/:cid/product/:pid")
+//delete cart by id
+- delete("/:cid/");
+
+### Product Route => /api/products
+
+- router.get("/")
+- router.delete("/:pid")
+- router.get("/:pid")
+- router.post("/");
+- router.put("/:pid")
+
+## Routes Views
+
+- router.get("/") => redirect("/home")
+- router.get("/home") => render("home");
+- router.get("/realTimeProducts") => render("realTimeProducts")
+- router.get("/chat") => render("chat")
+- router.get("/addProducts") => render("addProducts")
+
+### Features Complete
+
+- Uso de Socket y handlebars
+- Acedé a la rutas /realTimeProducts y / para visualizar los productos
+- populate in - get("/:cid");
+- Chatbot in /chat
