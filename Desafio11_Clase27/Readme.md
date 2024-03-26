@@ -3,7 +3,14 @@
 ## Feature Desafío 11
 
         - status    modify
-        - pending   add .env and const
+        - Finish   add .env and const
+        - Finish   add conmmader and inquire for npm run start,
+                now this project accept:
+                
+                        -- npm run start" this execute child process on "node ./process.js " and run commander, this is similar execute node ./process.js -p [PORT] -m [MODE]
+                        -- npm run dev this execute "set NODE_ENV=development&& npx nodemon ./index.js",
+                         -- npm run prod "set NODE_ENV=production&& node ./index.js "
+
         - pending   separate logic in routers to controllers :
                     -   users
                     -   sessions

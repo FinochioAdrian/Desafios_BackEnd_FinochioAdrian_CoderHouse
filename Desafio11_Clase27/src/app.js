@@ -20,11 +20,11 @@ import productsRouter from "./feature/products/products.router.js";
 import cartRouter from "./feature/carts/carts.router.js";
 import sessionsRouter from "./feature/sessions/sessions.router.js";
 import Server from "./server.js";
+
 const app = express();
 
 //environment var
 
-console.log(envConfig);
 const PRIVATE_KEY_COOKIE = envConfig.PRIVATE_KEY_COOKIE;
 const PORT = envConfig.PORT;
 const MONGO_URL = envConfig.MONGO_URL;

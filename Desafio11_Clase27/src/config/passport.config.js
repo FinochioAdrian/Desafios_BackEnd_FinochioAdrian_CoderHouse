@@ -4,10 +4,11 @@ import UsersDAO from "../feature/users/users.dao.js";
 import { createHash, isValidPassword } from "../utils.js";
 import jwt from "passport-jwt";
 import GitHubStrategy from "passport-github2";
-import envConfig from './config.js'
+import envConfig from "./config.js";
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
+
 
 const PRIVATE_KEY_JWT = envConfig.PRIVATE_KEY_JWT;
 const CLIENT_ID_GITHUB = envConfig.CLIENT_ID_GITHUB;
@@ -104,7 +105,7 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          const {user} = jwt_payload
+          const { user } = jwt_payload;
           return done(null, user);
         } catch (error) {
           console.log("❌ ~ initializePassport ~ error:", error);
