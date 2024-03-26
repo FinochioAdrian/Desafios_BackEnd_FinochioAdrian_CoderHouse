@@ -15,6 +15,7 @@
 - [Desafió 8](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio8_Clase19)
 - [Desafió 9](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio9_Clase21)
 - [Desafió 10](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio10_Clase24)
+- [Desafió 11](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio11_Clase27)
 
 ## Instalación y configuración del entorno de desarrollo
 
@@ -37,12 +38,21 @@
      - Desafio_8 = npm run start_8 => "start_8": "node ./Desafio8_Clase19/index.js"
      - Desafio_9 = npm run start_9 => "start_9": "node ./Desafio9_Clase21/index.js"
      - Desafio_10 = npm run start_10 => "start_10": "node ./Desafio10_Clase24/index.js"
+     - Desafio_11 = npm run start_10 => "start_10": "node ./Desafio11_Clase27/index.js"
 
 ## Work in => Feature Desafío 11
 
+
         - status    modify
-        - pending   add .env and const
-        - pending   separate logic in routers to controllers:
+        - Finish   add .env and const
+        - Finish   add commander js and inquire for npm run start,
+                now this project accept:
+                
+                        -- npm run start" this execute child process on "node ./process.js " and run commander, this is similar execute node ./process.js -p [PORT] -m [MODE]
+                        -- npm run dev this execute "set NODE_ENV=development&& npx nodemon ./index.js",
+                         -- npm run prod "set NODE_ENV=production&& node ./index.js "
+
+        - pending   separate logic in routers to controllers :
                     -   users
                     -   sessions
                     -   products

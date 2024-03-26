@@ -4,7 +4,7 @@
 
         - status    modify
         - Finish   add .env and const
-        - Finish   add conmmader and inquire for npm run start,
+        - Finish   add commander js and inquire for npm run start,
                 now this project accept:
                 
                         -- npm run start" this execute child process on "node ./process.js " and run commander, this is similar execute node ./process.js -p [PORT] -m [MODE]
