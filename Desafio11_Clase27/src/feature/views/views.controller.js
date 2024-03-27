@@ -1,7 +1,11 @@
 import Products from "../products/product.dao.js";
 import Carts from "../carts/cart.dao.js";
 import UsersDAO from "../users/users.dao.js";
-async function home(req, res) {
+import viewValidatorMiddleware, {
+  runValidation,
+} from "./viewValidationMiddleware.js";
+import { passportCall, auth } from "../../utils.js";
+async function getHome(req, res) {
   try {
     const user = req.user;
 
@@ -10,8 +14,7 @@ async function home(req, res) {
     return res.status(error.status || 500).send({ error: error.message });
   }
 }
-async function products(req, res) {
-  
+async function getProducts(req, res) {
   try {
     const limit = req.query?.limit || 10;
     const page = req.query?.page || 1;
@@ -38,13 +41,12 @@ async function products(req, res) {
 
     const user = req.user;
 
-
-    return res.render("products", { title: "Products", result ,user});
+    return res.render("products", { title: "Products", result, user });
   } catch (error) {
     return res.status(error.status || 500).send(`<h1>${error.message} </h1>`);
   }
 }
-async function product(req, res) {
+async function getProduct(req, res) {
   try {
     const user = req.user;
     const { pid } = req.params;
@@ -58,13 +60,16 @@ async function product(req, res) {
       res.redirect("/products");
     }
 
-    res.render("product", { title: "Product", product ,user});
+    res.render("product", { title: "Product", product, user });
   } catch (error) {
     console.log("❌ ~ product ~ error:", error);
   }
 }
 
-async function carts(req, res) {
+async function getRealTimeProducts(req, res) {
+  res.render("realTimeProducts", { title: "realTimeProducts" });
+}
+async function getCarts(req, res) {
   const { cid } = req.params;
 
   const referer = req.get("referer") || "/products";
@@ -79,7 +84,7 @@ async function carts(req, res) {
 
   res.render("carts", { result: cartFound });
 }
-async function addProductInCart(req, res) {
+async function postProductInCart(req, res) {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
 
@@ -104,4 +109,100 @@ async function addProductInCart(req, res) {
   res.redirect(`/carts/${cid}`);
 }
 
-export { home, products, product, carts, addProductInCart };
+async function getChat(req, res) {
+  res.render("chat", {
+    stylesheet: "/css/chat.css",
+    title: "Chat con Socket.IO",
+  });
+}
+
+async function getAddProducts(req, res) {
+  res.render("addProducts", { title: "addProducts" });
+}
+
+async function getLogin(req, res) {
+  try {
+    // render login page with message if there is
+    const errorMessage = req.flash("error");
+    const errorValidation = req.flash("errorValidation");
+    const emptyField =
+      errorMessage[0] == "Missing credentials"
+        ? ["Oops! It looks like you missed a few fields."]
+        : req.flash("errorEmptyField");
+
+    const infoMSG = req.flash("infoMsg");
+    if (req.user) {
+      return res.redirect("/products");
+    } else {
+      return res.render("login", {
+        dangerMsg: errorValidation,
+        warningMSG: emptyField,
+        infoMSG,
+        stylesheet: "/css/login.css",
+      });
+    }
+  } catch (error) {
+    console.log("❌  ~ router.post ~ error:", error);
+    return res.status(error?.status || 500).send("Internal Server error");
+  }
+}
+
+async function getRegister(req, res) {
+  try {
+    const errorMessage = req.flash("error");
+    const errorValidation = req.flash("errorValidation");
+    const emptyField =
+      errorMessage[0] == "Missing credentials"
+        ? ["Oops! It looks like you missed a few fields."]
+        : req.flash("errorEmptyField");
+
+    return res.render("register", {
+      dangerMsg: errorValidation,
+      warningMSG: emptyField,
+      stylesheet: "/css/login.css",
+    });
+  } catch (error) {
+    console.log("❌ ~ router.post ~ error:", error);
+    return res.status(error?.status || 500).send("Internal Server error");
+  }
+}
+async function getChatBot(req, res) {
+  res.render("chatBot", {
+    stylesheet: "/css/chat.css",
+    title: "ChatBot con Socket.IO",
+  });
+}
+async function getPasswordReset(req, res) {
+  try {
+    // render login page with message if there is
+    const errorMessage = req.flash("error");
+    const errorValidation = req.flash("errorValidation");
+    const emptyField =
+      errorMessage[0] == "Missing credentials"
+        ? ["Oops! It looks like you missed a few fields."]
+        : req.flash("errorEmptyField");
+
+    res.render("passwordReset", {
+      dangerMsg: errorValidation,
+      warningMSG: emptyField,
+      stylesheet: "/css/login.css",
+    });
+  } catch (error) {
+    console.log("❌ ~ router.post ~ error:", error);
+    return res.status(error?.status || 500).send("Internal Server error");
+  }
+}
+export {
+  getHome,
+  getProducts,
+  getProduct,
+  getRealTimeProducts,
+  getCarts,
+  postProductInCart,
+  getChat,
+  getAddProducts,
+  getLogin,
+  getRegister,
+  getChatBot,
+  getPasswordReset
+};

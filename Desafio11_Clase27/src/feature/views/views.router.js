@@ -6,6 +6,7 @@ import * as ViewsController from "./views.controller.js";
 import viewValidatorMiddleware, {
   runValidation,
 } from "./viewValidationMiddleware.js";
+
 import { passportCall, auth } from "../../utils.js";
 // Create an express router instance
 const router = express.Router();
@@ -14,7 +15,7 @@ const router = express.Router();
 router.get("/", (req, res) => res.redirect("/login"));
 
 // Define a GET route for the "/home" URL that renders the home view
-router.get("/home", passportCall("jwt"), auth, ViewsController.home);
+router.get("/home", passportCall("jwt"), auth, ViewsController.getHome);
 
 // Define a GET route for the "/products" URL that validates the query parameters using the viewValidatorMiddleware function
 // and then renders the products view
@@ -24,16 +25,15 @@ router.get(
   auth,
   viewValidatorMiddleware("getAllQueries"),
   runValidation,
-  ViewsController.products
+  ViewsController.getProducts
 );
 
 // Define a GET route for the "/product/:pid" URL that renders the product view
-router.get("/product/:pid", passportCall("jwt"), auth, ViewsController.product);
+router.get("/product/:pid", passportCall("jwt"), auth, ViewsController.getProduct);
 
 // Define a GET route for the "/realTimeProducts" URL that renders the realTimeProducts view
-router.get("/realTimeProducts", passportCall("jwt"), auth, async (req, res) => {
-  res.render("realTimeProducts", { title: "realTimeProducts" });
-});
+router.get("/realTimeProducts", passportCall("jwt"), auth, ViewsController.getRealTimeProducts );
+
 
 // Define a GET route for the "/carts/:cid" URL that validates the cart ID using the viewValidatorMiddleware function
 // and then renders the carts view
@@ -43,7 +43,7 @@ router.get(
   auth,
   viewValidatorMiddleware("isCID"),
   runValidation,
-  ViewsController.carts
+  ViewsController.getCarts
 );
 
 // Define a POST route for the "/carts/:cid/product/:pid" URL that validates the cart ID and product ID using the viewValidatorMiddleware function
@@ -54,97 +54,23 @@ router.post(
   auth,
   viewValidatorMiddleware("isCID"),
   viewValidatorMiddleware("isPID"),
-  runValidation,
-  ViewsController.addProductInCart
+  
+  ViewsController.postProductInCart
 );
 
 // Define a GET route for the "/chat" URL that renders the chat view
-router.get("/chat", passportCall("jwt"), auth, async (req, res) => {
-  res.render("chat", {
-    stylesheet: "/css/chat.css",
-    title: "Chat con Socket.IO",
-  });
-});
+router.get("/chat", passportCall("jwt"), auth, ViewsController.getChat );
 
 // Define a GET route for the "/addProducts" URL that renders the addProducts view
-router.get("/addProducts", passportCall("jwt"), auth, async (req, res) => {
-  res.render("addProducts", { title: "addProducts" });
-});
+router.get("/addProducts", passportCall("jwt"), auth, ViewsController.getAddProducts);
 
-router.get("/login", (req, res) => {
-  
-  try {
-    
-    // render login page with message if there is
-    const errorMessage = req.flash("error");
-    const errorValidation = req.flash("errorValidation");
-    const emptyField =
-      errorMessage[0] == "Missing credentials"
-        ? ["Oops! It looks like you missed a few fields."]
-        : req.flash("errorEmptyField");
+router.get("/login", ViewsController.getLogin );
 
-    const infoMSG = req.flash("infoMsg");
-    if (req.user) {
-      return res.redirect("/products");
-    } else {
-      return res.render("login", {
-        dangerMsg: errorValidation,
-        warningMSG: emptyField,
-        infoMSG,
-        stylesheet: "/css/login.css",
-      });
-    }
-  } catch (error) {
-    console.log("❌  ~ router.post ~ error:", error);
-    return res.status(error?.status || 500).send("Internal Server error");
-  }
-});
+router.get("/register", ViewsController.getRegister);
 
-router.get("/register", (req, res) => {
-  try {
-    const errorMessage = req.flash("error");
-    const errorValidation = req.flash("errorValidation");
-    const emptyField =
-      errorMessage[0] == "Missing credentials"
-        ? ["Oops! It looks like you missed a few fields."]
-        : req.flash("errorEmptyField");
-
-    return res.render("register", {
-      dangerMsg: errorValidation,
-      warningMSG: emptyField,
-      stylesheet: "/css/login.css",
-    });
-  } catch (error) {
-    console.log("❌ ~ router.post ~ error:", error);
-    return res.status(error?.status || 500).send("Internal Server error");
-  }
-});
-router.get("/chatBot", passportCall("jwt"), async (req, res) => {
-  res.render("chatBot", {
-    stylesheet: "/css/chat.css",
-    title: "ChatBot con Socket.IO",
-  });
-});
+router.get("/chatBot", passportCall("jwt"), ViewsController.getChatBot );
 
 // add desafio 9
-router.get("/password-reset", (req, res) => {
-  try {
-    // render login page with message if there is
-    const errorMessage = req.flash("error");
-    const errorValidation = req.flash("errorValidation");
-    const emptyField = errorMessage[0] == "Missing credentials"
-    ? ["Oops! It looks like you missed a few fields."]
-    : req.flash("errorEmptyField");
-
-    res.render("passwordReset", {
-      dangerMsg: errorValidation,
-      warningMSG: emptyField,
-      stylesheet: "/css/login.css",
-    });
-  } catch (error) {
-    console.log("❌ ~ router.post ~ error:", error);
-    return res.status(error?.status || 500).send("Internal Server error");
-  }
-});
+router.get("/password-reset",ViewsController.getPasswordReset );
 
 export default router;

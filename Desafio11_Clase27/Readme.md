@@ -9,15 +9,13 @@
                 
                         -- npm run start" this execute child process on "node ./process.js " and run commander, this is similar execute node ./process.js -p [PORT] -m [MODE]
                         -- npm run dev this execute "set NODE_ENV=development&& npx nodemon ./index.js",
-                         -- npm run prod "set NODE_ENV=production&& node ./index.js "
+                        -- npm run prod "set NODE_ENV=production&& node ./index.js "
 
-        - pending   separate logic in routers to controllers :
-                    -   users
-                    -   sessions
-                    -   products
-                    -   messages
-                    -   carts
-                    -   views
+        - Finish   separate logic in routers to controllers :
+                - Finish   -separate logic in carts routers
+                - Finish   -separate logic in products routers
+                - Finish   -separate logic in sessions routers
+                - Finish   -separate logic in views routers
 
 ## Instalación y configuración del entorno de desarrollo
 

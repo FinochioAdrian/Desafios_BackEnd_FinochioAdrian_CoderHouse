@@ -38,10 +38,9 @@
      - Desafio_8 = npm run start_8 => "start_8": "node ./Desafio8_Clase19/index.js"
      - Desafio_9 = npm run start_9 => "start_9": "node ./Desafio9_Clase21/index.js"
      - Desafio_10 = npm run start_10 => "start_10": "node ./Desafio10_Clase24/index.js"
-     - Desafio_11 = npm run start_10 => "start_10": "node ./Desafio11_Clase27/index.js"
+     - Desafio_11 = npm run start_11 => "start_11": "node ./Desafio11_Clase27/index.js"
 
 ## Work in => Feature Desafío 11
-
 
         - status    modify
         - Finish   add .env and const
@@ -50,15 +49,13 @@
                 
                         -- npm run start" this execute child process on "node ./process.js " and run commander, this is similar execute node ./process.js -p [PORT] -m [MODE]
                         -- npm run dev this execute "set NODE_ENV=development&& npx nodemon ./index.js",
-                         -- npm run prod "set NODE_ENV=production&& node ./index.js "
+                        -- npm run prod "set NODE_ENV=production&& node ./index.js "
 
-        - pending   separate logic in routers to controllers :
-                    -   users
-                    -   sessions
-                    -   products
-                    -   messages
-                    -   carts
-                    -   views
+        - Finish   separate logic in routers to controllers :
+                - Finish   -separate logic in carts routers
+                - Finish   -separate logic in products routers
+                - Finish   -separate logic in sessions routers
+                - Finish   -separate logic in views routers
 
 ## Feature Desafío 10
 

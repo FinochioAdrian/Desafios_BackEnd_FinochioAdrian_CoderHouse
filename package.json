@@ -14,6 +14,7 @@
     "start_8": "node ./Desafio8_Clase19/index.js",
     "start_9": "node ./Desafio9_Clase21/index.js",
     "start_10": "node ./Desafio10_Clase24/index.js",
+    "start_11": "node ./Desafio11_Clase27/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
