@@ -16,6 +16,7 @@
 - [Desafió 9](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio9_Clase21)
 - [Desafió 10](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio10_Clase24)
 - [Desafió 11](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio11_Clase27)
+- [Desafió 12](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio12_Clase30)
 
 ## Instalación y configuración del entorno de desarrollo
 
@@ -39,8 +40,13 @@
      - Desafio_9 = npm run start_9 => "start_9": "node ./Desafio9_Clase21/index.js"
      - Desafio_10 = npm run start_10 => "start_10": "node ./Desafio10_Clase24/index.js"
      - Desafio_11 = npm run start_11 => "start_11": "node ./Desafio11_Clase27/index.js"
+     - Desafio_11 = npm run start_12 => "start_12": "node ./Desafio12_Clase30/index.js"
 
-## Work in => Feature Desafío 11
+## Work in => Feature Desafío 12
+
+        - status    modify
+
+## Feature Desafío 11
 
         - status    modify
         - Finish   add .env and const
