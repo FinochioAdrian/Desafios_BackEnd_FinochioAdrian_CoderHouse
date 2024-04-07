@@ -15,4 +15,5 @@ export default {
   CLIENT_ID_GITHUB: process.env.CLIENT_ID_GITHUB,
   CLIENT_SECRET_GITHUB: process.env.CLIENT_SECRET_GITHUB,
   CALLBACK_URL_GITHUB: `${process.env.HOST}:${process.env.PORT}${process.env.ENDPOINT_URL_GITHUB}`,
+  PERSISTENCE:process.env.PERSISTENCE
 };

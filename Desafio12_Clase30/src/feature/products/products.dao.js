@@ -1,7 +1,10 @@
 import Products from "./product.model.js";
 
-class ProductsDao {
-  static async getAll(limit, page, sort, category, available) {
+export default class ProductsDao {
+  constructor(){
+
+  }
+  getAll = async(limit, page, sort, category, available)=>{
 
     limit = limit || 10;
     page = page || 1;
@@ -24,7 +27,7 @@ class ProductsDao {
       throw new Error("Error getting all products ");
     }
   }
-  static async getAllWithStock() {
+   getAllWithStock=async ()=> {
     try {
       return Products.find({ stock: { $gt: 0 } }).lean();
     } catch (error) {
@@ -32,16 +35,16 @@ class ProductsDao {
       throw new Error("Error get all products with Stock ");
     }
   }
-  static async getWithCode(code) {
+   getWithCode=async (code)=> {
     try {
-      const result = await Products.find({ code }).lean();
+      const result = await Products.findOne({ code }).lean();
       return result;
     } catch (error) {
       console.log("Error get  products with Code " + error);
       throw new Error("Error get products with Code ");
     }
   }
-  static async getAllWithLimit(limit, skip = 0) {
+   getAllWithLimit=async (limit, skip = 0)=> {
     try {
       return Products.find().skip(skip).limit(limit).lean();
     } catch (error) {
@@ -49,7 +52,7 @@ class ProductsDao {
       throw new Error("Error get all products with limit");
     }
   }
-  static async getById(id) {
+   getById=async (id)=> {
     try {
       return Products.findOne({ _id: id }).lean();
     } catch (error) {
@@ -58,7 +61,7 @@ class ProductsDao {
     }
   }
   //get all products in one array the ids
-  static async getByIdInMatriz(productIds) {
+   getByIdInMatriz=async (productIds)=> {
     try {
       
       return Products.find({ _id: { $in: productIds } }).lean();
@@ -67,26 +70,12 @@ class ProductsDao {
       throw new Error("Error getting one product");
     }
   }
-  static async add(
-    title,
-    description,
-    code,
-    price,
-    status,
-    stock,
-    category,
-    thumbnails
-  ) {
+    add=async(
+    productDTO
+  ) =>{
     try {
       const newProduct = new Products(
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
+        productDTO
       );
 
       const savedProduct = await newProduct.save();
@@ -96,18 +85,17 @@ class ProductsDao {
       throw new Error("Error add product");
     }
   }
-  static async update(id, products) {
+   update=async(id, productDTO) =>{
     try {
-      const updateProduct = Products.findByIdAndUpdate(id, products);
+      const updateProduct = Products.findByIdAndUpdate(id, productDTO);
 
-      /* const savedProduct = await newProduct.save(); */
       return updateProduct;
     } catch (error) {
       console.log("Error add product " + error);
       throw new Error("Error add product");
     }
   }
-  static async remove(id) {
+   remove=async(id) =>{
     try {
       const result = await Products.findByIdAndDelete(id).lean();
 
@@ -119,4 +107,4 @@ class ProductsDao {
   }
 }
 
-export default ProductsDao;
+

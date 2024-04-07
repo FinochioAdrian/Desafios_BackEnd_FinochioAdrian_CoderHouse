@@ -1,4 +1,4 @@
-import Products from "../products/product.dao.js";
+import {productsService as Products} from "../products/repository/index.js";
 import Carts from "./cart.dao.js";
 
 async function getAll(req, res) {

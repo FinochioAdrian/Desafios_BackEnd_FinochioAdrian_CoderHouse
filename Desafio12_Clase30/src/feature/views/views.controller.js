@@ -1,4 +1,5 @@
-import Products from "../products/product.dao.js";
+
+import { productsService as Products } from "../products/repository/index.js";
 import Carts from "../carts/cart.dao.js";
 import UsersDAO from "../users/users.dao.js";
 import viewValidatorMiddleware, {

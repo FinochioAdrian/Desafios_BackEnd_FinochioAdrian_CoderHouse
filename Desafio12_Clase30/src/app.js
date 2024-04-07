@@ -27,9 +27,7 @@ const app = express();
 
 const PRIVATE_KEY_COOKIE = envConfig.PRIVATE_KEY_COOKIE;
 const PORT = envConfig.PORT;
-const MONGO_URL = envConfig.MONGO_URL;
 
-connectDB(MONGO_URL);
 
 //Iniciamos el Server
 

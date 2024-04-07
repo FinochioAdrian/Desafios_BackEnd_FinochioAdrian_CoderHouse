@@ -1,4 +1,4 @@
-import ProductsDao from "../products/product.dao.js";
+import { productsService } from "../products/repository/index.js";
 import Cart from "./cart.model.js";
 
 class CartDao {
@@ -19,7 +19,7 @@ class CartDao {
       error.status = 422;
       throw error;
     }
-    const productsFind = await ProductsDao.getByIdInMatriz(
+    const productsFind = await productsService.getByIdInMatriz(
       Array.from(uniqueProductIds)
     );
     if (uniqueProductIds.size !== productsFind.length) {

@@ -1,10 +1,9 @@
 import { Server } from "socket.io";
+import {productsService} from '../feature/products/repository/index.js'
 import Messages from "../feature/messages/messages.dao.js";
 import validator from "validator";
 const { isEmail, isEmpty } = validator;
 import Joi from "joi";
-import ProductManager from "../manager/productManager.js";
-import ProductDao from "../feature/products/product.dao.js";
 import __dirname from "../utils.js";
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
@@ -31,7 +30,7 @@ const IOinit = (httpServer) => {
 
     socket.on("getProducts", async (data) => {
       try {
-        const products = await ProductDao.getAll();
+        const products = await productsService.getAll();
         //enviar los productos al cliente
         socket.emit("products", products);
       } catch (error) {
@@ -72,8 +71,8 @@ const IOinit = (httpServer) => {
           throw error;
         }
 
-        await ProductDao.add({ ...data });
-        const products = await ProductDao.getAll();
+        await productsService.add({ ...data });
+        const products = await productsService.getAll();
         //enviar los productos al cliente
         socket.emit("products", products);
       } catch (error) {
@@ -83,8 +82,7 @@ const IOinit = (httpServer) => {
     });
 
     socket.on("disconnect", () => {
-      if (messagesChat.length>0)guardarChat(messagesChat)
-      ;
+      if (messagesChat.length > 0) guardarChat(messagesChat);
       console.log("A user disconnected");
     });
 

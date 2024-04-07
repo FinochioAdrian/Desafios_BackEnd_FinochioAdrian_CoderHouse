@@ -1,4 +1,4 @@
-import Products from "./product.dao.js";
+import {productsService as Products} from "./repository/index.js";
 
 async function getAll(req, res) {
   try {
@@ -87,14 +87,13 @@ async function update(req, res) {
     if (result.length > 0 && result._id !== pid) {
       return res.status(409).send({
         status: "fail",
-        msg: `The 'code': ${product.code} $ field already exists in the database.`,
+        msg: `The 'code': ${product.code}, field already exists in the database.`,
       });
     }
 
     // Update products
 
     let productUpdate = await Products.update(pid, product);
-    console.log(productUpdate);
     // Response Product not found
     if (!productUpdate) {
       return res
