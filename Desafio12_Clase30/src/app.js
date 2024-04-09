@@ -1,6 +1,5 @@
 import express from "express";
 import __dirname from "./utils.js";
-import connectDB from "./config/db.config.js";
 import handlebars_config from "./config/handlebars.config.js";
 import IOconfig from "./config/IO.config.js";
 import passport from "passport";

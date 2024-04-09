@@ -1,9 +1,12 @@
 import Users from "./users.model.js";
 import CartDao from "../carts/cart.dao.js"
+
+const cartDao = new CartDao ()
 // UsersDAO class
-class UsersDAO {
+export default class UsersDAO {
+  constructor(){}
   // get user by email
-  static async getUserByEmail(email) {
+  async getUserByEmail(email) {
     try {
       // find user by email
       return await Users.findOne({ email }).lean();
@@ -14,7 +17,7 @@ class UsersDAO {
   }
 
   // get user by credentials
-  static async getUserByCreds(email, password) {
+  async getUserByCreds(email, password) {
     try {
       // find user by email and password
       return await Users.findOne({ email, password }).lean();
@@ -25,9 +28,9 @@ class UsersDAO {
   }
 
   // insert new user
-  static async insert(userData) {
+  async insert(userData) {
     try {
-      const cart = await CartDao.createCartEmpty()
+      const cart = await cartDao.createCartEmpty()
       userData.cart=cart._id
       // save new user to database
       const newuser= await new Users(userData).save();
@@ -44,7 +47,7 @@ class UsersDAO {
   }
 
   // get user by id
-  static async getUserByID(id) {
+  async getUserByID(id) {
     try {
       // find user by id and select specific fields
       return await Users.findOne(
@@ -57,7 +60,7 @@ class UsersDAO {
     }
   }
 
-  static async newPassword(user) {
+  async newPassword(user) {
     try {
         return await Users.findOneAndUpdate({email:user.email},{password:user.password}).lean()
     } catch (error) {
@@ -68,4 +71,3 @@ class UsersDAO {
   
 }
 
-export default UsersDAO;

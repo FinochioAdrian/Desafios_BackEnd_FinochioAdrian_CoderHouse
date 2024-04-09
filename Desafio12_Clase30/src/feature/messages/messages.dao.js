@@ -1,7 +1,7 @@
 import Messages from "./messages.model.js";
 
 class MessagesDao {
-  static async getAll() {
+  async getAll() {
     try {
       return Messages.find().lean();
     } catch (error) {
@@ -9,7 +9,7 @@ class MessagesDao {
       throw err;
     }
   }
-  static async getById(id) {
+  async getById(id) {
     try {
       return Messages.find({ _id: id }).lean();
     } catch (error) {
@@ -25,7 +25,7 @@ class MessagesDao {
       throw err;
     }
   }
-  static async add(userMail, message) {
+  async add(userMail, message) {
     try {
       const newMessage =new Messages({ user: userMail, message });
       return newMessage.save()
@@ -46,7 +46,7 @@ class MessagesDao {
     }
   }
 
-  static async addNewMessageByUserMail(userMail, message) {
+  async addNewMessageByUserMail(userMail, message) {
     try {
       const result = await Messages.findOneAndUpdate(
         { user: userMail },
@@ -69,7 +69,7 @@ class MessagesDao {
       throw error;
     }
   }
-  static async update(id, message) {
+  async update(id, message) {
     try {
       return Messages.findOneAndUpdate({ _id: id }, message);
     } catch (error) {
@@ -77,7 +77,7 @@ class MessagesDao {
       throw error;
     }
   }
-  static async remove(id) {
+  async remove(id) {
     try {
       return Messages.findByIdAndDelete(id);
     } catch (error) {
@@ -85,7 +85,7 @@ class MessagesDao {
       throw error;
     }
   }
-  static async removeByUser(userMail) {
+  async removeByUser(userMail) {
     try {
       return Messages.findAndDelete({ user: userMail });
     } catch (error) {

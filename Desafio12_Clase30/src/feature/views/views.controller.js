@@ -1,11 +1,7 @@
 
 import { productsService as Products } from "../products/repository/index.js";
-import Carts from "../carts/cart.dao.js";
-import UsersDAO from "../users/users.dao.js";
-import viewValidatorMiddleware, {
-  runValidation,
-} from "./viewValidationMiddleware.js";
-import { passportCall, auth } from "../../utils.js";
+import {cartsService as Carts} from "../carts/repository/index.js";
+
 async function getHome(req, res) {
   try {
     const user = req.user;

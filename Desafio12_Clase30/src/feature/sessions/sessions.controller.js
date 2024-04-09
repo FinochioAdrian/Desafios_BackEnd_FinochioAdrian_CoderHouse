@@ -1,5 +1,5 @@
-import UsersDAO from "../users/users.dao.js";
-import { createHash, generateToken} from "../../utils.js";
+import { usersService } from "../users/repository/users.service.js";
+import { createHash, generateToken } from "../../utils.js";
 
 async function register(req, res) {
   // Verificar si el cliente acepta HTML
@@ -50,7 +50,7 @@ async function passwordReset(req, res) {
       });
     }
 
-    let user = await UsersDAO.getUserByEmail(email);
+    let user = await usersService.getUserByEmail(email);
 
     if (!user) {
       if (req.accepts("html")) {
@@ -63,7 +63,7 @@ async function passwordReset(req, res) {
 
     user.password = createHash(password);
 
-    await UsersDAO.newPassword(user);
+    await usersService.newPassword(user);
 
     delete req.body.password;
     delete user.password;
@@ -128,7 +128,7 @@ async function logout(req, res) {
   res.status(200).json({ status: 200, msg: "Logged out" });
 }
 
-async function failRegister (req, res) {
+async function failRegister(req, res) {
   if (req.accepts("html"))
     return res.render("403", {
       title: "Oops! Access Denied",
@@ -137,7 +137,7 @@ async function failRegister (req, res) {
   return res.status(403).send({ error: "Failed register" });
 }
 
-async function failLogin (req, res) {
+async function failLogin(req, res) {
   if (req.accepts("html"))
     return res.render("401", {
       title: "Oops! Access Denied",
@@ -146,7 +146,7 @@ async function failLogin (req, res) {
   return res.status(401).send({ error: "Failed login" });
 }
 
-async function current (req, res) {
+async function current(req, res) {
   res.json({ status: "success", payload: req.user });
 }
 
@@ -158,5 +158,5 @@ export default {
   logout,
   failRegister,
   failLogin,
-  current
+  current,
 };

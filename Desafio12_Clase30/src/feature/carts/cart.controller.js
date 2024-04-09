@@ -1,6 +1,5 @@
 import {productsService as Products} from "../products/repository/index.js";
-import Carts from "./cart.dao.js";
-
+import {cartsService as Carts} from './repository/index.js'
 async function getAll(req, res) {
   try {
 

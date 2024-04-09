@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import {productsService} from '../feature/products/repository/index.js'
-import Messages from "../feature/messages/messages.dao.js";
+import { productsService } from "../feature/products/repository/index.js";
+import { messagesService } from "../feature/messages/repository/messages.service.js";
 import validator from "validator";
 const { isEmail, isEmpty } = validator;
 import Joi from "joi";
@@ -165,7 +165,7 @@ function validarEmail(email) {
   return isEmail(email);
 }
 async function guardarChat(messages) {
-  const result = await Messages.addMany(messages);
+  const result = await messagesService.addMany(messages);
   return result;
 }
 

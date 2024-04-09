@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
  
-export default function connectDB(url) {
+ export default function connectDB(url) {
   
   
   try {

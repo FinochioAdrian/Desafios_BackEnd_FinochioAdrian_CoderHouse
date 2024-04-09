@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import UsersDAO from "../feature/users/users.dao.js";
+import {usersService} from "../feature/users/repository/users.service.js";
 import { createHash, isValidPassword } from "../utils.js";
 import jwt from "passport-jwt";
 import GitHubStrategy from "passport-github2";
@@ -42,7 +42,7 @@ const initializePassport = () => {
           });
         }
         try {
-          let user = await UsersDAO.getUserByEmail(username);
+          let user = await usersService.getUserByEmail(username);
           if (user) {
             return done(null, false, {
               type: "errorValidation",
@@ -57,7 +57,7 @@ const initializePassport = () => {
             password: createHash(password),
             role: "user",
           };
-          let result = await UsersDAO.insert(newUser);
+          let result = await usersService.insert(newUser);
           return done(null, result);
         } catch (error) {
           console.log("❌ ~passport.config - register - error:", error);
@@ -73,7 +73,8 @@ const initializePassport = () => {
       { usernameField: "email", session: false },
       async (username, password, done) => {
         try {
-          const user = await UsersDAO.getUserByEmail(username);
+          
+          const user = await usersService.getUserByEmail(username);
           if (!user) {
             return done(null, false, {
               type: "errorValidation",
@@ -131,7 +132,7 @@ const initializePassport = () => {
           profile?.emails[0].value ||
           profile._json.id + profile._json.login + "@github.com";
         try {
-          let user = await UsersDAO.getUserByEmail(email);
+          let user = await usersService.getUserByEmail(email);
           if (!user) {
             let newUser = {
               first_name: profile._json.name,
@@ -140,7 +141,7 @@ const initializePassport = () => {
               email,
               password: "",
             };
-            let result = await UsersDAO.insert(newUser);
+            let result = await usersService.insert(newUser);
             delete result.password;
             return done(null, result);
           } else {

@@ -1,14 +1,19 @@
-import { productsService } from "../products/repository/index.js";
+import ProductsDao from "../products/products.dao.js";
+
 import Cart from "./cart.model.js";
 
+const productsService = new ProductsDao()
 class CartDao {
-  static async getAll() {
+  constructor(){
+
+  }
+  getAll = async () => {
     return Cart.find().lean();
-  }
-  static async getById(id) {
+  };
+  getById = async (id) => {
     return Cart.findOne({ _id: id }).populate("products.product").lean();
-  }
-  static async add(products) {
+  };
+  add = async (products) => {
     const uniqueProductIds = new Set(
       products.map((product) => product.product)
     );
@@ -31,8 +36,8 @@ class CartDao {
     const newCart = new Cart({ products });
     await newCart.save();
     return newCart;
-  }
-  static async addNewProductInCartById(cartId, productID, quantity = 1) {
+  };
+  addNewProductInCartById = async (cartId, productID, quantity = 1) => {
     try {
       const result = await Cart.findOne({
         _id: cartId,
@@ -63,8 +68,8 @@ class CartDao {
       );
       throw error;
     }
-  }
-  static async updateOneProductInCart(cartId, productID, quantity) {
+  };
+  updateOneProductInCart = async (cartId, productID, quantity) => {
     try {
       const result = await Cart.findOneAndUpdate(
         { _id: cartId, "products.product": productID },
@@ -80,8 +85,8 @@ class CartDao {
       );
       throw error;
     }
-  }
-  static async updateAllProductsInCart(cartId, products) {
+  };
+  updateAllProductsInCart = async (cartId, products) => {
     try {
       const uniqueProductIds = new Set(products.map((product) => product._id));
 
@@ -104,8 +109,8 @@ class CartDao {
       );
       throw error;
     }
-  }
-  static async removeProductInCartById(cartId, productID) {
+  };
+  removeProductInCartById = async (cartId, productID) => {
     try {
       const result = await Cart.findOneAndUpdate(
         { _id: cartId },
@@ -121,29 +126,29 @@ class CartDao {
       );
       throw error;
     }
-  }
-  static async update(id, data) {
+  };
+  update = async (id, data) => {
     return Cart.findOneAndUpdate({ _id: id }, data).lean();
-  }
-  static async remove(id) {
+  };
+  remove = async (id) => {
     return Cart.findByIdAndDelete(id);
-  }
-  static async getAllWithLimit(limit, skip = 0) {
+  };
+  getAllWithLimit = async (limit, skip = 0) => {
     try {
       return Cart.find().skip(skip).limit(limit).lean();
     } catch (error) {
       console.log("Error get all carts with limit " + error);
       throw new Error("Error get all carts with limit");
     }
-  }
-  static async createCartEmpty(){
+  };
+  createCartEmpty = async () => {
     try {
-      const newCart = new Cart()
-      return newCart
+      const newCart = new Cart();
+      return newCart;
     } catch (error) {
       console.log("Error get all carts with limit " + error);
       throw new Error("Error get all carts with limit");
     }
-  }
+  };
 }
 export default CartDao;
