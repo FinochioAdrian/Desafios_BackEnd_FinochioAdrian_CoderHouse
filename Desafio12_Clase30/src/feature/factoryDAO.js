@@ -7,6 +7,7 @@ export default class DAOFactory {
   #cartsDao;
   #usersDao;
   #messagesDao;
+  #TicketsDao
 
   constructor() {
     if (DAOFactory.#instance) {
@@ -30,11 +31,13 @@ export default class DAOFactory {
         const { default: CartsMongoDAO } = await import("./carts/cart.dao.js");
         const { default: UsersMongoDAO } = await import("./users/users.dao.js");
         const { default: MessagesMongoDAO } = await import("./messages/messages.dao.js");
+        const { default: TicketsMongoDAO } = await import("./tickets/tickets.dao.js");
         const connection = await MongoSingleton.getInstance();
         this.#productsDao = ProductsMongoDAO;
         this.#cartsDao = CartsMongoDAO;
         this.#usersDao = UsersMongoDAO;
         this.#messagesDao = MessagesMongoDAO;
+        this.#TicketsDao = TicketsMongoDAO;
         break;
       case "MEMORY":
 
@@ -65,10 +68,16 @@ export default class DAOFactory {
     return this.#usersDao;
   }
   async getMessagesDao() {
-    if (!this.#usersDao) {
+    if (!this.#messagesDao) {
       await this.initialize();
     }
-    return this.#usersDao;
+    return this.#messagesDao;
+  }
+  async getTicketsDao() {
+    if (!this.#TicketsDao) {
+      await this.initialize();
+    }
+    return this.#TicketsDao;
   }
 }
 
@@ -77,3 +86,4 @@ export const Products = await factoryInstance.getProductsDao();
 export let Carts = await factoryInstance.getCartsDao();
 export let Users = await factoryInstance.getUsersDao()
 export let Messages = await factoryInstance.getMessagesDao()
+export let Tickets = await factoryInstance.getTicketsDao()

@@ -6,10 +6,10 @@ const cartDao = new CartDao ()
 export default class UsersDAO {
   constructor(){}
   // get user by email
-  async getUserByEmail(email) {
+  async getUserByEmail(user) {
     try {
       // find user by email
-      return await Users.findOne({ email }).lean();
+      return await Users.findOne({ email:user.email }).lean();
     } catch (error) {
       console.log("❌ ~ UsersDAO ~ getUserByEmail ~ error:", error);
       throw error;
@@ -17,8 +17,9 @@ export default class UsersDAO {
   }
 
   // get user by credentials
-  async getUserByCreds(email, password) {
+  async getUserByCreds(user) {
     try {
+      const {email, password} = user
       // find user by email and password
       return await Users.findOne({ email, password }).lean();
     } catch (error) {
@@ -47,11 +48,11 @@ export default class UsersDAO {
   }
 
   // get user by id
-  async getUserByID(id) {
+  async getUserByID(user) {
     try {
       // find user by id and select specific fields
       return await Users.findOne(
-        { _id: id },
+        { _id: user.id },
         { first_name: 1, last_name: 1, age: 1, email: 1, role: 1 }
       ).lean();
     } catch (error) {

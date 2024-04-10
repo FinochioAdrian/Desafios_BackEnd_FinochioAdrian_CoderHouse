@@ -8,10 +8,11 @@ class CartDao {
 
   }
   getAll = async () => {
-    return Cart.find().lean();
+    return await Cart.find().lean();
   };
   getById = async (id) => {
-    return Cart.findOne({ _id: id }).populate("products.product").lean();
+    const result = await Cart.findOne({ _id: id }).populate("products.product").lean()
+    return result
   };
   add = async (products) => {
     const uniqueProductIds = new Set(

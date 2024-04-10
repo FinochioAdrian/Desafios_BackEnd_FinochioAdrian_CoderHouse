@@ -9,7 +9,7 @@ import passportCall from "./utils/passportCall.js";
 /* Una private key sirve para utilizarse al momento de hacer el cifrado del token */
 const PRIVATE_KEY_JWT = "EidrienKeyJWTSecret";
 
-const auth = authorization()
+const auth = authorization
 export {passportCall,auth}
 
 
@@ -38,8 +38,7 @@ export const authToken = (req, res, next) => {
 
   jwt.verify(token, PRIVATE_KEY, (err, credentials) => {
     if (err) return res.status(403).send({ error: "Not authorized" });
-    console.log("credentials", credentials);
-    console.log("credentials.user", credentials.user);
+   
     req.user = credentials.user;
     next();
   });

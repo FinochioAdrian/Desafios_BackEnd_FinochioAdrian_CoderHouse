@@ -5,6 +5,7 @@ import { createHash, isValidPassword } from "../utils.js";
 import jwt from "passport-jwt";
 import GitHubStrategy from "passport-github2";
 import envConfig from "./config.js";
+import UserDto from "../feature/users/user.dto.js";
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -106,7 +107,7 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {
         try {
-          const { user } = jwt_payload;
+          const user = new UserDto(jwt_payload.user)
           return done(null, user);
         } catch (error) {
           console.log("❌ ~ initializePassport ~ error:", error);
@@ -134,19 +135,17 @@ const initializePassport = () => {
         try {
           let user = await usersService.getUserByEmail(email);
           if (!user) {
-            let newUser = {
+            
+            let user = await usersService.insert({
               first_name: profile._json.name,
-              last_name: "",
               age: 18,
               email,
-              password: "",
-            };
-            let result = await usersService.insert(newUser);
-            delete result.password;
-            return done(null, result);
+            });
+            delete user.password;
+            return done(null, user);
           } else {
             delete user.password;
-            done(null, user);
+            done(null, result);
           }
         } catch (error) {
           console.log("❌ ~ error:", error);
@@ -162,6 +161,7 @@ function cookieExtractor(req) {
   if (req && req.signedCookies) {
     token = req.signedCookies["jwt"];
   }
+  
   return token;
 }
 

@@ -25,8 +25,8 @@ async function login(req, res) {
       })
       .redirect("/products");
   }
-  res
-    .cookie("jwt", token, {
+ return  res
+    .cookie("jwt", access_token, {
       signed: true,
       httpOnly: true,
       maxAge: 3 * 60 * 60,

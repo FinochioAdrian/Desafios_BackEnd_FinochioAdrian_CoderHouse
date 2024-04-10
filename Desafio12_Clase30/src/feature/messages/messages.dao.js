@@ -1,6 +1,9 @@
 import Messages from "./messages.model.js";
 
-class MessagesDao {
+export default class MessagesDao {
+  constructor (){
+
+  }
   async getAll() {
     try {
       return Messages.find().lean();
@@ -17,7 +20,7 @@ class MessagesDao {
       throw err;
     }
   }
-  static async getByUser(userMail) {
+  async getByUser(userMail) {
     try {
       return Messages.find({ user: userMail }).lean();
     } catch (error) {
@@ -27,19 +30,17 @@ class MessagesDao {
   }
   async add(userMail, message) {
     try {
-      const newMessage =new Messages({ user: userMail, message });
-      return newMessage.save()
+      const newMessage = new Messages({ user: userMail, message });
+      return newMessage.save();
     } catch (error) {
       console.log(" ❌ ~ MessagesDao ~ add ~ error:", error);
       throw err;
     }
   }
-  static async addMany(collection) {
-   
+  async addMany(collection) {
     try {
       const newMessage = await Messages.insertMany(collection);
-      
-      return newMessage
+      return newMessage;
     } catch (error) {
       console.log(" ❌ ~ MessagesDao ~ add ~ error:", error);
       throw error;
@@ -94,4 +95,3 @@ class MessagesDao {
     }
   }
 }
-export default MessagesDao

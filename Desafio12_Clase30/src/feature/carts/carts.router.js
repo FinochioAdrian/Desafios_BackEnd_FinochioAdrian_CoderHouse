@@ -4,6 +4,7 @@ import * as CartController from "./cart.controller.js";
 import cartValidationMiddleware, {
   runValidation,
 } from "./cartValidationMiddleware.js";
+import { auth, passportCall } from "../../utils.js";
 
 const router = express.Router();
 router.get(
@@ -21,7 +22,8 @@ router.get(
 );
 // create new cart
 router.post(
-  "/",
+  "/",passportCall("jwt"),
+  auth(),
   cartValidationMiddleware("createCart"),
   runValidation,
   CartController.create
@@ -29,6 +31,8 @@ router.post(
 // Add new product in cart by cart id and product id
 router.post(
   "/:cid/product/:pid",
+  passportCall("jwt"),
+auth("user"),
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -39,6 +43,8 @@ router.post(
 
 router.put(
   "/:cid/product/:pid",
+  passportCall("jwt"),
+auth("user"),
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -48,6 +54,8 @@ router.put(
 //update all product in cart by cart id
 router.put(
   "/:cid",
+  passportCall("jwt"),
+auth("user"),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.updateProductsInCart
@@ -55,7 +63,9 @@ router.put(
 //delete product in cart by  id cart and id product
 router.delete(
   "/:cid/product/:pid",
-  
+  passportCall("jwt"),
+auth("user"),
+
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -63,10 +73,12 @@ router.delete(
 );
 //delete cart by id
 router.delete(
-  "/:cid/",
+  "/:cid/",passportCall("jwt"),
+  auth("user"),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.removeCart
 );
-
+router.post("/:cid/purchase",passportCall("jwt"),
+auth("user"),CartController.purchase)
 export default router;

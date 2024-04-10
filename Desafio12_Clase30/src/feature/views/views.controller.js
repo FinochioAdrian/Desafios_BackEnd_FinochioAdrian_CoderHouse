@@ -1,6 +1,6 @@
 
 import { productsService as Products } from "../products/repository/index.js";
-import {cartsService as Carts} from "../carts/repository/index.js";
+import {cartsService} from "../carts/repository/index.js";
 
 async function getHome(req, res) {
   try {
@@ -47,24 +47,27 @@ async function getProduct(req, res) {
   try {
     const user = req.user;
     const { pid } = req.params;
-
+   
     if (!pid) {
-      res.redirect("/products");
+
+      return res.redirect("/products");
     }
     let product = await Products.getById(pid);
+    
 
     if (!product) {
-      res.redirect("/products");
+      
+      return res.redirect("/products");
     }
 
-    res.render("product", { title: "Product", product, user });
+    return res.render("product", { title: "Product", product, user });
   } catch (error) {
     console.log("❌ ~ product ~ error:", error);
   }
 }
 
 async function getRealTimeProducts(req, res) {
-  res.render("realTimeProducts", { title: "realTimeProducts" });
+ return res.render("realTimeProducts", { title: "realTimeProducts" });
 }
 async function getCarts(req, res) {
   const { cid } = req.params;
@@ -74,51 +77,65 @@ async function getCarts(req, res) {
   if (!cid) {
     return res.redirect(referer);
   }
-  const cartFound = await Carts.getById(cid);
+  
+  const cartFound = await cartsService.getById(cid);
+
   if (!cartFound) {
     return res.redirect(referer);
   }
 
-  res.render("carts", { result: cartFound });
+  return res.render("carts", { result: cartFound });
 }
 async function postProductInCart(req, res) {
+  try {
+    
+  
   const { cid, pid } = req.params;
   const { quantity } = req.body;
+  
 
   const referer = req.get("referer") || "/products";
 
   if (!cid || !pid) {
     return res.redirect(referer);
   }
-  const cartFound = await Carts.getById(cid);
+  const cartFound = await cartsService.getById(cid);
   const product = await Products.getById(pid);
 
   if (!cartFound | !product) {
     return res.redirect(referer);
   }
 
-  const result = await Carts.addNewProductInCartById(
+  const result = await cartsService.addNewProductInCartById(
     cartFound._id,
     product._id,
     quantity
   );
 
-  res.redirect(`/carts/${cid}`);
+  return res.redirect(`/carts/${cid}`);
+} catch (error) {
+    console.log("❌ ~ postProductInCart ~ error:", error)
+    
+}
 }
 
 async function getChat(req, res) {
-  res.render("chat", {
+  const {email} = req.user
+  
+  return res.render("chat", {
     stylesheet: "/css/chat.css",
     title: "Chat con Socket.IO",
+    email
   });
 }
 
 async function getAddProducts(req, res) {
-  res.render("addProducts", { title: "addProducts" });
+ return res.render("addProducts", { title: "addProducts" });
 }
 
 async function getLogin(req, res) {
   try {
+    
     // render login page with message if there is
     const errorMessage = req.flash("error");
     const errorValidation = req.flash("errorValidation");
@@ -164,7 +181,7 @@ async function getRegister(req, res) {
   }
 }
 async function getChatBot(req, res) {
-  res.render("chatBot", {
+ return res.render("chatBot", {
     stylesheet: "/css/chat.css",
     title: "ChatBot con Socket.IO",
   });
@@ -179,7 +196,7 @@ async function getPasswordReset(req, res) {
         ? ["Oops! It looks like you missed a few fields."]
         : req.flash("errorEmptyField");
 
-    res.render("passwordReset", {
+     return res.render("passwordReset", {
       dangerMsg: errorValidation,
       warningMSG: emptyField,
       stylesheet: "/css/login.css",
