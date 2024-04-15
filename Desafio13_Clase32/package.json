@@ -1,7 +1,7 @@
 {
-  "name": "desafio12_clase30",
+  "name": "desafio13_clase32",
   "version": "1.0.0",
-  "description": "Desafío 12 de curso coderHouse para backEnd con NodeJS",
+  "description": "Desafío 13 de curso coderHouse para backEnd con NodeJS",
   "main": "./index.js",
   "type": "module",
   "scripts": {
