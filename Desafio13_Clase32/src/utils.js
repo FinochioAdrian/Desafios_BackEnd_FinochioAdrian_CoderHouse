@@ -4,13 +4,16 @@ import { dirname } from "path";
 import bcrypt from "bcrypt";
 import authorization from "./utils/auth.middleware.js";
 import passportCall from "./utils/passportCall.js";
+import errorHandler from './utils/errors/index.js'
 
 
 /* Una private key sirve para utilizarse al momento de hacer el cifrado del token */
 const PRIVATE_KEY_JWT = "EidrienKeyJWTSecret";
 
+
 const auth = authorization
-export {passportCall,auth}
+export {passportCall,auth,errorHandler}
+
 
 
 /** generateToken: al utilizar el jwt.sing

@@ -1,5 +1,5 @@
 import express from "express";
-import __dirname from "./utils.js";
+import __dirname,{errorHandler} from "./utils.js";
 import handlebars_config from "./config/handlebars.config.js";
 import IOconfig from "./config/IO.config.js";
 import passport from "passport";
@@ -65,4 +65,5 @@ app.use("/api/sessions", sessionsRouter);
 //manejo de Socket y chat
 IOconfig(httpServer);
 
+app.use(errorHandler)
 export default app;
