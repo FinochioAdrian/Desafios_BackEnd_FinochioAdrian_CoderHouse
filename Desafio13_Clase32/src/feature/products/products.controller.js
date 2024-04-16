@@ -1,4 +1,4 @@
-import { generateProducts } from "../../utils/Mocks.js";
+import { generateListProducts } from "../../utils/Mocks.js";
 import {productsService as Products} from "./repository/index.js";
 
 async function getAll(req, res) {
@@ -30,7 +30,7 @@ async function getAllMockingProducts(req, res) {
     const result = await generateListProducts()
 
     
-    res.send({ status: "sucess", payload, ...result });
+    res.send({ status: "sucess", payload: [...result] } );
   } catch (error) {
     console.log("❌ ~ getAll ~ error:", error);
     return res.status(error.status || 500).send({ error: error.message });

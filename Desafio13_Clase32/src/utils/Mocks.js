@@ -1,16 +1,16 @@
 import {faker} from '@faker-js/Faker'
-faker.locale = "es"
-export const generateListProducts = await  => {
-    let numOfProducts = 100
-    let products = []
+faker.location= "es"
+    export const generateListProducts = async ()  => {
+        let numOfProducts = 100
+        let products = []
 
-    for (let i =0 ; i<numOfProducts; i++){
-        products.push(generateProduct())
+        for (let i =0 ; i<numOfProducts; i++){
+             products.push(await generateProduct())
+        }
+
+        return products
     }
-
-    return products
-}
-export const generateProduct = await  => {
+export const generateProduct = async() => {
     
    return {
     _id:faker.database.mongodbObjectId(),
