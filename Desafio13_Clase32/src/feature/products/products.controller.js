@@ -1,3 +1,4 @@
+import { generateProducts } from "../../utils/Mocks.js";
 import {productsService as Products} from "./repository/index.js";
 
 async function getAll(req, res) {
@@ -18,6 +19,17 @@ async function getAll(req, res) {
       ? `http://localhost:8080/home?page=${result.nextPage}`
       : null;
 
+    res.send({ status: "sucess", payload, ...result });
+  } catch (error) {
+    console.log("❌ ~ getAll ~ error:", error);
+    return res.status(error.status || 500).send({ error: error.message });
+  }
+}
+async function getAllMockingProducts(req, res) {
+  try {
+    const result = await generateListProducts()
+
+    
     res.send({ status: "sucess", payload, ...result });
   } catch (error) {
     console.log("❌ ~ getAll ~ error:", error);
@@ -131,4 +143,4 @@ async function remove(req, res) {
   }
 }
 
-export { getAll, get, create, update, remove };
+export { getAll, get, create, update, remove, getAllMockingProducts };
