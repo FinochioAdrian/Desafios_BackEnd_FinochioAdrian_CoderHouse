@@ -1,6 +1,8 @@
 import { body, param, query, validationResult } from "express-validator";
 import { isValidObjectId } from "mongoose";
 import fs from "node:fs";
+import CustomError from "../../utils/errors/customError.js";
+import EErrors from "../../utils/errors/enums.js";
 
 export default function validate(method) {
   switch (method) {
@@ -143,7 +145,9 @@ export default function validate(method) {
 }
 
 export const runValidation = (req, res, next) => {
-  const errors = validationResult(req);
+  try {
+    
+    const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     const filePath = req.file && req.file.path;
@@ -156,10 +160,17 @@ export const runValidation = (req, res, next) => {
         );
       });
     }
+      let errores = errors.array()
+      
+      let cause=errors.array().map((val) => val.msg)
+      throw new CustomError({name:"VALIDATOR_ERROR",cause,message:"Error try router Products",code:EErrors.INVALID_TYPES_ERROR})
+    
 
-    return res
-      .status(422)
-      .send({ errors: errors.array().map((val) => val.msg) });
   }
   next();
+  } catch (error) {
+    
+      next(error)
+  }
+  
 };

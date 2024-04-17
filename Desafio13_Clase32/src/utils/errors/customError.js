@@ -1,9 +1,15 @@
 export default class CustomError extends Error {
-    constructor(error){
-        this.name=error.name || "Error"
-        this.cause=error.cause
-        this.message=error.message
-        this.code=error.code || 1
+    /**
+     * 
+     * @param {name,cause,message,code} error 
+     */
+    constructor({name,cause,message,code,status}){
+        super(message)
+        this.message=message
+        this.name=name
+        this.cause=cause
+        this.code=code || 1
+        this.status=status 
     }
     
 }

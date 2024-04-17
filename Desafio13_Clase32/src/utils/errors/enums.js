@@ -1,4 +1,4 @@
-const EErros = {
+const EErrors = {
     ROUNTING_ERRORS:1,
     INVALID_TYPES_ERROR:2,
     DATABASE_ERROR:3,
@@ -9,4 +9,4 @@ const EErros = {
     URI_ERROR:8
 }
 
-export default EErros
+export default EErrors

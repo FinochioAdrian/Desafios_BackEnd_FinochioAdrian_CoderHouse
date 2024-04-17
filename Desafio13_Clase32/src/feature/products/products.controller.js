@@ -1,7 +1,10 @@
 import { generateListProducts } from "../../utils/Mocks.js";
+import CustomError from "../../utils/errors/customError.js";
+import EErrors from "../../utils/errors/enums.js";
+import { customCauseErrorInfo } from "../../utils/errors/info.js";
 import {productsService as Products} from "./repository/index.js";
 
-async function getAll(req, res) {
+async function getAll(req, res,next) {
   try {
     const limit = req.query?.limit || 10;
     const page = req.query?.page || 1;
@@ -21,51 +24,48 @@ async function getAll(req, res) {
 
     res.send({ status: "sucess", payload, ...result });
   } catch (error) {
-    console.log("❌ ~ getAll ~ error:", error);
-    return res.status(error.status || 500).send({ error: error.message });
+    next(error)
   }
 }
-async function getAllMockingProducts(req, res) {
+async function getAllMockingProducts(req, res,next) {
   try {
     const result = await generateListProducts()
 
     
     res.send({ status: "sucess", payload: [...result] } );
   } catch (error) {
-    console.log("❌ ~ getAll ~ error:", error);
-    return res.status(error.status || 500).send({ error: error.message });
+    next(error)
   }
 }
 
-async function get(req, res) {
+async function get(req, res,next) {
   try {
     let { pid } = req.params;
 
     let productFound = await Products.getById(pid);
     if (!productFound) {
-      return res
-        .status(404)
-        .send({ status: "fail", msg: `Product with ID ${pid} not found.` });
+
+      const msg =`Product with ID ${pid} not found.`
+      throw new CustomError({name:"PRODUCT_NOT_FOUND",cause:customCauseErrorInfo(msg),message:"Error getting product by id",code:EErrors.DATABASE_EXCEPTION,status:404})
+     
     }
     // Product found, send it in the response
     return res.send({ product: productFound });
   } catch (error) {
-    console.error(error);
-    res.status(error.status || 500).send({ error: error.message });
+    next(error)
   }
 }
 
-async function create(req, res) {
+async function create(req, res,next) {
   const { body } = req;
   // Validate the request body against the schema
   try {
     const result = await Products.getWithCode(body.code);
 
     if (result.length > 0) {
-      return res.status(409).send({
-        status: "fail",
-        msg: `The 'code': ${body.code} $ field already exists in the database.`,
-      });
+      const msg =`The 'code': ${body.code} $ field already exists in the database.`
+      throw new CustomError({name:"Error_Create",cause:customCauseErrorInfo(msg),message:"Error Created product",code:EErrors.DATABASE_EXCEPTION,status:409})
+      
     }
 
     if (req.files) {
@@ -80,23 +80,19 @@ async function create(req, res) {
 
     res.status(201).send({ status: "success", payload });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      status: "error",
-      error: "Error occurring when creating this product." + error,
-    });
+    next(error)
   }
 }
 
-async function update(req, res) {
+async function update(req, res,next) {
   try {
     let { pid } = req.params;
     const product = req.body;
 
     let result = await Products.getWithCode(product.code);
     result = JSON.parse(JSON.stringify(result));
-
-    if (result.length > 0 && result._id !== pid) {
+    console.log(result);
+    if (result?.length > 0 && result._id !== pid) {
       return res.status(409).send({
         status: "fail",
         msg: `The 'code': ${product.code}, field already exists in the database.`,
@@ -115,14 +111,12 @@ async function update(req, res) {
     // Response Product found, send to response
     return res.send({ status: 200, payload: productUpdate });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .send({ error: "Error occurring when updating this product." });
+    
+    next(error)
   }
 }
 
-async function remove(req, res) {
+async function remove(req, res,next) {
   try {
     let { pid } = req.params;
 
@@ -135,11 +129,7 @@ async function remove(req, res) {
       msg: `Product with ID ${pid} has been deleted `,
     });
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-
-    res
-      .status(error.status || 500)
-      .send({ status: "error", message: error.message });
+    next(error)
   }
 }
 
