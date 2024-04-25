@@ -32,7 +32,7 @@ router.post(
 router.post(
   "/:cid/product/:pid",
   passportCall("jwt"),
-auth("user"),
+auth(["user"]),
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -44,7 +44,7 @@ auth("user"),
 router.put(
   "/:cid/product/:pid",
   passportCall("jwt"),
-auth("user"),
+auth(["user"]),
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -55,7 +55,7 @@ auth("user"),
 router.put(
   "/:cid",
   passportCall("jwt"),
-auth("user"),
+auth(["user"]),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.updateProductsInCart
@@ -64,7 +64,7 @@ auth("user"),
 router.delete(
   "/:cid/product/:pid",
   passportCall("jwt"),
-auth("user"),
+auth(["user"]),
 
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
@@ -74,11 +74,11 @@ auth("user"),
 //delete cart by id
 router.delete(
   "/:cid/",passportCall("jwt"),
-  auth("user"),
+  auth(["user"]),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.removeCart
 );
 router.post("/:cid/purchase",passportCall("jwt"),
-auth("user"),CartController.purchase)
+auth(["user"]),CartController.purchase)
 export default router;

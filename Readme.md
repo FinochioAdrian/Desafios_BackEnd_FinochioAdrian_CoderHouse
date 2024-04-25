@@ -18,6 +18,7 @@
 - [Desafió 11](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio11_Clase27)
 - [Desafió 12](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio12_Clase30)
 - [Desafió 13](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio13_Clase32)
+- [Desafió 14](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio14_Clase34)
 
 ## Instalación y configuración del entorno de desarrollo
 
@@ -43,10 +44,14 @@
      - Desafio_11 = npm run start_11 => "start_11": "node ./Desafio11_Clase27/index.js"
      - Desafio_12 = npm run start_12 => "start_12": "node ./Desafio12_Clase30/index.js"
      - Desafio_13 = npm run start_13 => "start_13": "node ./Desafio13_Clase32/index.js"
+     - Desafio_14 = npm run start_14 => "start_14": "node ./Desafio14_Clase34/index.js"
 
-## Work in => Feature Desafío 12
+## Work in => Feature Desafío 14
 
-        - status    modify
+         - status    modify
+        Finish       add winston logger
+
+        You test is config in localhost:port/loggerTest
 
 ## Feature Desafío 11
 

@@ -8,6 +8,7 @@ import __dirname from "../utils.js";
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
 import sharp from "sharp";
+import { logger } from "../utils/loggerMiddleware/logger.js";
 const productAddSchema = Joi.object({
   id: Joi.alternatives().try(Joi.number(), Joi.string()),
   title: Joi.string().required(),
@@ -34,7 +35,7 @@ const IOinit = (httpServer) => {
         //enviar los productos al cliente
         socket.emit("products", products);
       } catch (error) {
-        console.log("❌ ~ socket.on ~ error:", error);
+        logger.error("❌ ~ socket.on ~ error:", error);
       }
     });
 
@@ -76,7 +77,7 @@ const IOinit = (httpServer) => {
         //enviar los productos al cliente
         socket.emit("products", products);
       } catch (error) {
-        console.log("❌ ~ socket.on ~ error:", error);
+        logger.error("❌ ~ socket.on ~ error:", error);
         socket.emit({ status: "error", error: error.message });
       }
     });

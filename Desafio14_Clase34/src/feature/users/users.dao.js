@@ -1,5 +1,6 @@
 import Users from "./users.model.js";
 import CartDao from "../carts/cart.dao.js"
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 
 const cartDao = new CartDao ()
 // UsersDAO class
@@ -11,7 +12,7 @@ export default class UsersDAO {
       // find user by email
       return await Users.findOne({ email:user.email }).lean();
     } catch (error) {
-      console.log("❌ ~ UsersDAO ~ getUserByEmail ~ error:", error);
+      logger.error("❌ ~ UsersDAO ~ getUserByEmail ~ error:", error);
       throw error;
     }
   }
@@ -23,7 +24,7 @@ export default class UsersDAO {
       // find user by email and password
       return await Users.findOne({ email, password }).lean();
     } catch (error) {
-      console.log("❌ ~ UsersDAO ~ getUserByCreds ~ error:", error);
+      logger.error("❌ ~ UsersDAO ~ getUserByCreds ~ error:", error);
       throw error;
     }
   }
@@ -42,7 +43,7 @@ export default class UsersDAO {
       }
       return newuser
     } catch (error) {
-      console.log("❌ ~ UsersDAO ~ insert ~ error:", error);
+      logger.error("❌ ~ UsersDAO ~ insert ~ error:", error);
       throw error;
     }
   }
@@ -56,7 +57,7 @@ export default class UsersDAO {
         { first_name: 1, last_name: 1, age: 1, email: 1, role: 1 }
       ).lean();
     } catch (error) {
-      console.log("❌ ~ UsersDAO ~ getUserByID ~ error:", error);
+      logger.error("❌ ~ UsersDAO ~ getUserByID ~ error:", error);
       throw error;
     }
   }
@@ -65,7 +66,7 @@ export default class UsersDAO {
     try {
         return await Users.findOneAndUpdate({email:user.email},{password:user.password}).lean()
     } catch (error) {
-      console.log("❌ ~ newPassword ~ error:", error);
+      logger.error("❌ ~ newPassword ~ error:", error);
       throw error;
     }
   }

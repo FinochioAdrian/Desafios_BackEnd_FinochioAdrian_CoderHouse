@@ -1,4 +1,5 @@
-export default function authorization(role="everyone") {
+import {logger} from './loggerMiddleware/logger.js'
+export default function authorization(role=["everyone"]) {
   return async (req, res, next) => {
 
     if (!req.user) {
@@ -9,12 +10,13 @@ export default function authorization(role="everyone") {
       return res.status(401).send({ error: "Unauthorized" });
     }
   
-
-    if(!role||role=="everyone"){
+   
+    
+    if(!role||role.includes("everyone")){
       return next();
     }
-
-    if (req.user.role != role) {
+    
+    if (!role.includes(req.user.role)) {
       if (req.accepts("html")) {
         req.flash("errorValidation", "No permissions");
         return res.redirect("/");

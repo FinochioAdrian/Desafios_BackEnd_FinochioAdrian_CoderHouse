@@ -4,10 +4,12 @@ import {
 } from "../products/repository/index.js";
 import { cartsService as Carts, cartsService } from "./repository/index.js";
 import { ticketsService } from "../tickets/repository/tickets.service.js";
+import {logger} from '../../utils/loggerMiddleware/logger.js'
 async function getAll(req, res) {
   try {
+   
     const cartFound = await cartsService.getAll();
-    res.send(cartFound);
+    return res.send(cartFound);
   } catch (error) {
     console.error(error);
     return res.status(error.status || 500).send({
@@ -19,6 +21,8 @@ async function getAll(req, res) {
 }
 async function get(req, res) {
   try {
+   
+    
     const { cid } = req.params;
 
     const cartFound = await cartsService.getById(cid);
@@ -226,7 +230,7 @@ async function purchase(req, res) {
         try {
           await productsService.update(product.product._id, product.product);
         } catch (error) {
-          console.log("❌ ~ purchase ~ error:", error)
+          logger.error("❌ ~ purchase ~ error:", error)
           throw error
         }
    
@@ -247,7 +251,7 @@ async function purchase(req, res) {
       payload: { productsNotPurchase: cart.products },
     });
   } catch (error) {
-    console.log("❌ ~ purchase ~ error:", error);
+    logger.error("❌ ~ purchase ~ error:", error);
 
     return res
       .status(error.status || 500)

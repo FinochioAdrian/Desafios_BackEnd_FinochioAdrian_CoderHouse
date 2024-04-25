@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 import EErrors from "./enums.js";
 import CustomError from "./customError.js";
 import { generateCastErrorInfo } from "./info.js";
+import { logger } from "../loggerMiddleware/logger.js";
 
 export default (error, req, res, next) => {
-  console.log("❌ ~ handleError ~ error:", error);
+  logger.error("❌ ~ handleError ~ error:", error);
 
   if (error instanceof mongoose.Error.CastError) {
     console.error("Error de tipo CastError:", error.message);

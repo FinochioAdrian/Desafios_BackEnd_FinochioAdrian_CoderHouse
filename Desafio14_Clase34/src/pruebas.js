@@ -4,6 +4,7 @@ import ProductsModel from './feature/products/product.model.js';
 import ProductManager from './manager/productManager.js';
 import CartManager from './manager/cartManager.js';
 import CartDao from './feature/carts/cart.dao.js';
+import { logger } from './utils/loggerMiddleware/logger.js';
 async function enviromentPrueba (){
 
     await connectDB()
@@ -53,7 +54,7 @@ const guardarCartEnAtlas = async({products}) => {
     let result = await CartDao.add(products)
     
   } catch (error) {
-    console.log("❌ ~ guardarEnAtlas ~ error:", error)
+    logger.error("❌ ~ guardarEnAtlas ~ error:", error)
     
   }
   
@@ -63,7 +64,7 @@ const guardarProductosEnAtlas = async({title,description,price,thumbnail,code,st
     let result = await ProductsDao.add({title,description,code,price,stock,status,category,thumbnail})
     
   } catch (error) {
-    console.log("❌ ~ guardarEnAtlas ~ error:", error)
+    logger.error("❌ ~ guardarEnAtlas ~ error:", error)
     
   }
   

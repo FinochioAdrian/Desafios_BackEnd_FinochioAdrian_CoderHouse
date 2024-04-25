@@ -48,6 +48,6 @@ router.get("/failregister", sessionsController.failRegister);
 
 router.get("/failLogin", sessionsController.failLogin);
 
-router.get("/current", passportCall("jwt"), auth, sessionsController.current);
+router.get("/current", passportCall("jwt"), auth(), sessionsController.current);
 
 export default router;

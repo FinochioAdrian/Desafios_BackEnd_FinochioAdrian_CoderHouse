@@ -6,6 +6,9 @@ import jwt from "passport-jwt";
 import GitHubStrategy from "passport-github2";
 import envConfig from "./config.js";
 import UserDto from "../feature/users/user.dto.js";
+
+import { logger } from "../utils/loggerMiddleware/logger.js";
+
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -61,7 +64,7 @@ const initializePassport = () => {
           let result = await usersService.insert(newUser);
           return done(null, result);
         } catch (error) {
-          console.log("❌ ~passport.config - register - error:", error);
+          logger.error("❌ ~passport.config - register - error:", error);
           return done("Error al registrar el usuario: " + error);
         }
       }
@@ -91,7 +94,7 @@ const initializePassport = () => {
           delete user.password;
           return done(null, user);
         } catch (error) {
-          console.log("❌ ~ passport.use ~ login ~ error:", error);
+          logger.error("❌ ~ passport.use ~ login ~ error:", error);
         }
       }
     )
@@ -108,9 +111,11 @@ const initializePassport = () => {
       async (jwt_payload, done) => {
         try {
           const user = new UserDto(jwt_payload.user)
-          return done(null, user);
+          
+          
+          return done(null, {...user});
         } catch (error) {
-          console.log("❌ ~ initializePassport ~ error:", error);
+          logger.error("❌ ~ initializePassport ~ error:", error);
           return done(error);
         }
       }
@@ -148,7 +153,7 @@ const initializePassport = () => {
             done(null, result);
           }
         } catch (error) {
-          console.log("❌ ~ error:", error);
+          logger.error("❌ ~ error:", error);
           done(error);
         }
       }

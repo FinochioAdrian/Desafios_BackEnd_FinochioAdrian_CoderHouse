@@ -6,7 +6,7 @@ import mongoose from "mongoose";
   try {
     mongoose.connect(url);
   } catch (err) {
-    console.log(err.message);
+    console.log(`❌ ${err.message}`);
     process.exit(1);
   }
   const dbConnection = mongoose.connection;
@@ -15,7 +15,7 @@ import mongoose from "mongoose";
   });
  
   dbConnection.on("error", (err) => {
-    console.error(`connection error: ${err}`);
+    console.error(`❌ connection error: ${err}`);
   });
   
 }

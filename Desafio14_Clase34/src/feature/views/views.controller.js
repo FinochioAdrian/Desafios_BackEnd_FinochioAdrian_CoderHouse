@@ -1,6 +1,7 @@
 
 import { productsService as Products } from "../products/repository/index.js";
 import {cartsService} from "../carts/repository/index.js";
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 
 async function getHome(req, res) {
   try {
@@ -62,7 +63,7 @@ async function getProduct(req, res) {
 
     return res.render("product", { title: "Product", product, user });
   } catch (error) {
-    console.log("❌ ~ product ~ error:", error);
+    logger.error("❌ ~ product ~ error:", error);
   }
 }
 
@@ -114,7 +115,7 @@ async function postProductInCart(req, res) {
 
   return res.redirect(`/carts/${cid}`);
 } catch (error) {
-    console.log("❌ ~ postProductInCart ~ error:", error)
+  logger.error("❌ ~ postProductInCart ~ error:", error)
     
 }
 }
@@ -156,7 +157,7 @@ async function getLogin(req, res) {
       });
     }
   } catch (error) {
-    console.log("❌  ~ router.post ~ error:", error);
+    logger.error("❌  ~ router.post ~ error:", error);
     return res.status(error?.status || 500).send("Internal Server error");
   }
 }
@@ -176,7 +177,7 @@ async function getRegister(req, res) {
       stylesheet: "/css/login.css",
     });
   } catch (error) {
-    console.log("❌ ~ router.post ~ error:", error);
+    logger.error("❌ ~ router.post ~ error:", error);
     return res.status(error?.status || 500).send("Internal Server error");
   }
 }
@@ -202,7 +203,7 @@ async function getPasswordReset(req, res) {
       stylesheet: "/css/login.css",
     });
   } catch (error) {
-    console.log("❌ ~ router.post ~ error:", error);
+    logger.error("❌ ~ router.post ~ error:", error);
     return res.status(error?.status || 500).send("Internal Server error");
   }
 }

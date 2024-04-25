@@ -40,7 +40,7 @@ router.get(
 router.get(
   "/realTimeProducts",
   passportCall("jwt"),
-  auth("admin"),
+  auth(["admin"]),
   ViewsController.getRealTimeProducts
 );
 
@@ -60,7 +60,7 @@ router.get(
 router.post(
   "/carts/:cid/product/:pid",
   passportCall("jwt"),
-  auth("user"),
+  auth(["user"]),
   viewValidatorMiddleware("isCID"),
   viewValidatorMiddleware("isPID"),
 
@@ -68,13 +68,13 @@ router.post(
 );
 
 // Define a GET route for the "/chat" URL that renders the chat view
-router.get("/chat", passportCall("jwt"), auth("user"), ViewsController.getChat);
+router.get("/chat", passportCall("jwt"), auth(["user"]), ViewsController.getChat);
 
 // Define a GET route for the "/addProducts" URL that renders the addProducts view
 router.get(
   "/addProducts",
   passportCall("jwt"),
-  auth("admin"),
+  auth(["admin"]),
   ViewsController.getAddProducts
 );
 
@@ -85,7 +85,7 @@ router.get("/register", ViewsController.getRegister);
 router.get(
   "/chatBot",
   passportCall("jwt"),
-  auth("user"),
+  auth(["user"]),
   ViewsController.getChatBot
 );
 

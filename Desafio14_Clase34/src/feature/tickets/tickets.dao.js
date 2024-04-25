@@ -1,3 +1,4 @@
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 import Tickets from "./tickets.model.js"
 
 export default class TicketDao {
@@ -8,7 +9,7 @@ export default class TicketDao {
         try {
             
         } catch (error) {
-            console.log("❌ ~ TicketDao ~ get= ~ error:", error)
+            logger.error("❌ ~ TicketDao ~ get= ~ error:", error)
             throw error;
             
         }
@@ -18,7 +19,7 @@ export default class TicketDao {
             const newTicket= await new Tickets(ticketDao).save();
             return newTicket
         } catch (error) {
-            console.log("❌ ~ TicketDao ~ create= ~ error:", error)
+            logger.error("❌ ~ TicketDao ~ create= ~ error:", error)
             throw error;
         }
     }

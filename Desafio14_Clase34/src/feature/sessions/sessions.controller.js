@@ -1,5 +1,6 @@
 import { usersService } from "../users/repository/users.service.js";
 import { createHash, generateToken } from "../../utils.js";
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 
 async function register(req, res) {
   // Verificar si el cliente acepta HTML
@@ -75,7 +76,7 @@ async function passwordReset(req, res) {
 
     return res.send({ status: "success" });
   } catch (error) {
-    console.log("❌ ~ router.post ~ error:", error);
+    logger.error("❌ ~ router.post ~ error:", error);
 
     // Verificar si la solicitud es una API
     if (req.accepts("html")) {

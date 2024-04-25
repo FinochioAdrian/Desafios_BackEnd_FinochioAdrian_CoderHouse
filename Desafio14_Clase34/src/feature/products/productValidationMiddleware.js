@@ -3,6 +3,7 @@ import { isValidObjectId } from "mongoose";
 import fs from "node:fs";
 import CustomError from "../../utils/errors/customError.js";
 import EErrors from "../../utils/errors/enums.js";
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 
 export default function validate(method) {
   switch (method) {
@@ -154,7 +155,7 @@ export const runValidation = (req, res, next) => {
     if (filePath) {
       //elimina el archivo subido
       fs.unlinkSync(filePath).catch((err) => {
-        console.log("❌ ~ runValidation ~ err:",
+        logger.error("❌ ~ runValidation ~ err:",
           "error eliminando el archivo " + filePath + " ",
           err
         );

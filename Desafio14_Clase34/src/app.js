@@ -18,7 +18,9 @@ import viewsRouter from "./feature/views/views.router.js";
 import productsRouter from "./feature/products/products.router.js";
 import cartRouter from "./feature/carts/carts.router.js";
 import sessionsRouter from "./feature/sessions/sessions.router.js";
+import testRouter from "./feature/tests/test.router.js";
 import Server from "./server.js";
+import { addLogger } from "./utils/loggerMiddleware/logger.js";
 
 const app = express();
 
@@ -35,6 +37,8 @@ const httpServer = Server(app, PORT);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser(PRIVATE_KEY_COOKIE));
+//manejo de loggers
+app.use(addLogger)
 // Configuración de sesión y almacenamiento en MongoDB
 
 app.use(
@@ -58,12 +62,13 @@ app.use(express.static(__dirname + "/public"));
 
 // Routers
 app.use("/", viewsRouter);
+app.use("/loggerTest",testRouter)
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/sessions", sessionsRouter);
 
 //manejo de Socket y chat
 IOconfig(httpServer);
-
+// manejo de errores
 app.use(errorHandler)
 export default app;

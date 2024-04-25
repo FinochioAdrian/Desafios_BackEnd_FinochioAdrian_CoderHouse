@@ -23,6 +23,8 @@ export {passportCall,auth,errorHandler}
  *  */
 
 export const generateToken = (user) => {
+  console.log("🚀 ~ generateToken ~ user:", user)
+  
   const token = jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: "1h" });
   return token;
 };
@@ -34,6 +36,7 @@ export const authToken = (req, res, next) => {
     return res.status(403).send({ error: "Not authorized" });
   }
   let token = authHeader;
+  
 
   if (authHeader.includes("Bearer")) {
     token = authHeader.split(" ")[1];
