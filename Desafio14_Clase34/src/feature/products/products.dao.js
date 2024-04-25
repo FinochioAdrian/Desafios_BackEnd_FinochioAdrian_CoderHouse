@@ -1,5 +1,5 @@
 import Products from "./product.model.js";
-
+import {logger} from '../../utils/loggerMiddleware/logger.js'
 export default class ProductsDao {
   constructor(){
 
@@ -23,7 +23,7 @@ export default class ProductsDao {
       );
       return productsFind;
     } catch (error) {
-      console.log("Error while getting all products " + error);
+      logger.error("❌ Error while getting all products " + error);
       throw new Error("Error getting all products ");
     }
   }
@@ -31,7 +31,7 @@ export default class ProductsDao {
     try {
       return Products.find({ stock: { $gt: 0 } }).lean();
     } catch (error) {
-      console.log("Error get all products with Stock " + error);
+      logger.error("❌ Error get all products with Stock " + error);
       throw new Error("Error get all products with Stock ");
     }
   }
@@ -40,7 +40,7 @@ export default class ProductsDao {
       const result = await Products.findOne({ code }).lean();
       return result;
     } catch (error) {
-      console.log("Error get  products with Code " + error);
+      logger.error("❌ Error get  products with Code " + error);
       throw new Error("Error get products with Code ");
     }
   }
@@ -48,7 +48,7 @@ export default class ProductsDao {
     try {
       return Products.find().skip(skip).limit(limit).lean();
     } catch (error) {
-      console.log("Error get all products with limit " + error);
+      logger.error("❌ Error get all products with limit " + error);
       throw new Error("Error get all products with limit");
     }
   }
@@ -56,7 +56,7 @@ export default class ProductsDao {
     try {
       return Products.findOne({ _id: id }).lean();
     } catch (error) {
-      console.log("Error getting one product " + error);
+      logger.error("❌ Error getting one product " + error);
       throw new Error("Error getting one product");
     }
   }
@@ -66,7 +66,7 @@ export default class ProductsDao {
       
       return Products.find({ _id: { $in: productIds } }).lean();
     } catch (error) {
-      console.log("Error getting one product " + error);
+      logger.error("❌ Error getting one product " + error);
       throw new Error("Error getting one product");
     }
   }
@@ -81,7 +81,7 @@ export default class ProductsDao {
       const savedProduct = await newProduct.save();
       return savedProduct;
     } catch (error) {
-      console.log("Error add product " + error);
+      logger.error("❌ Error add product " + error);
       throw new Error("Error add product");
     }
   }
@@ -91,7 +91,7 @@ export default class ProductsDao {
 
       return updateProduct;
     } catch (error) {
-      console.log("Error add product " + error);
+      logger.error("❌ Error add product " + error);
       throw new Error("Error add product");
     }
   }
@@ -101,7 +101,7 @@ export default class ProductsDao {
 
       return result;
     } catch (error) {
-      console.log("Error remove product " + error + " " + error.name);
+      logger.error("❌ Error remove product " + error + " " + error.name);
       throw error; // Re-lanzar el error para que se maneje en el controlador
     }
   }

@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import authorization from "./utils/auth.middleware.js";
 import passportCall from "./utils/passportCall.js";
 import errorHandler from './utils/errors/index.js'
+import { logger } from "./utils/loggerMiddleware/logger.js";
 
 
 /* Una private key sirve para utilizarse al momento de hacer el cifrado del token */
@@ -23,7 +24,7 @@ export {passportCall,auth,errorHandler}
  *  */
 
 export const generateToken = (user) => {
-  console.log("🚀 ~ generateToken ~ user:", user)
+  logger.info("🚀 ~ generateToken ~ user:", user)
   
   const token = jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: "1h" });
   return token;

@@ -91,7 +91,7 @@ async function update(req, res,next) {
 
     let result = await Products.getWithCode(product.code);
     result = JSON.parse(JSON.stringify(result));
-    console.log(result);
+    
     if (result?.length > 0 && result._id !== pid) {
       return res.status(409).send({
         status: "fail",

@@ -132,7 +132,7 @@ const initializePassport = () => {
         scope: ["user:email"],
       },
       async (accessToken, refreshToken, profile, done) => {
-        //  console.log(profile);
+       
 
         const email =
           profile?.emails[0].value ||

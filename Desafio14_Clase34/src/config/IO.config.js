@@ -27,7 +27,7 @@ const IOinit = (httpServer) => {
   const io = new Server(httpServer);
   let messagesChat = [];
   io.on("connection", (socket) => {
-    console.log("New user is connected");
+    logger.info("New user is connected");
 
     socket.on("getProducts", async (data) => {
       try {
@@ -47,8 +47,7 @@ const IOinit = (httpServer) => {
         });
 
         if (validationResult.error) {
-          console.log(
-            "❌ ~ socket.on ~ validationResult.error:",
+          logger.error("❌  ~ socket.on ~ validationResult.error:",
             validationResult.error
           );
           const errors = validationResult.error.details.map(
@@ -84,7 +83,7 @@ const IOinit = (httpServer) => {
 
     socket.on("disconnect", () => {
       if (messagesChat.length > 0) guardarChat(messagesChat);
-      console.log("A user disconnected");
+      logger.info("A user disconnected");
     });
 
     /* //Implemetacion Chat Bot
@@ -195,8 +194,7 @@ async function SaveImages(data) {
     // Devolver nombres de archivo al cliente
     return fileNames;
   } catch (error) {
-    console.log(
-      "❌ ~ SaveImages ~ error:",
+    logger.error("❌ ~ SaveImages ~ error:",
       "Error al procesar imágenes:",
       error
     );

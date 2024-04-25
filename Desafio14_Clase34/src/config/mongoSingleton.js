@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import envConfig from "./config.js";
+import { logger } from "../utils/loggerMiddleware/logger.js";
 
 
 
@@ -7,15 +8,15 @@ function connectDB(url) {
   try {
     mongoose.connect(url);
   } catch (err) {
-    console.log(err.message);
+    logger.error("❌ ",err.message);
     process.exit(1);
   }
   const dbConnection = mongoose.connection;
   dbConnection.once("open", (_) => {
-    console.log(`⚡️[Database] Database connected: ${url}`);
+    logger.info (`⚡️[Database] Database connected: ${url}`);
   });
   dbConnection.on("error", (err) => {
-    console.error(`connection error: ${err}`);
+    logger.error(`❌ connection error: ${err}`);
   });
 }
 
@@ -29,7 +30,7 @@ export default class MongoSingleton {
 
   static getInstance() {
     if (this.#instance) {
-      console.log("Already connected");
+      logger.info("Already connected");
       return this.#instance;
     }
     this.#instance = new MongoSingleton();

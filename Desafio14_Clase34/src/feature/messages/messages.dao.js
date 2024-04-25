@@ -1,3 +1,4 @@
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 import Messages from "./messages.model.js";
 
 export default class MessagesDao {
@@ -8,7 +9,7 @@ export default class MessagesDao {
     try {
       return Messages.find().lean();
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ getAll ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ getAll ~ error:", error);
       throw err;
     }
   }
@@ -16,7 +17,7 @@ export default class MessagesDao {
     try {
       return Messages.find({ _id: id }).lean();
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ getById ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ getById ~ error:", error);
       throw err;
     }
   }
@@ -24,7 +25,7 @@ export default class MessagesDao {
     try {
       return Messages.find({ user: userMail }).lean();
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ getByUser ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ getByUser ~ error:", error);
       throw err;
     }
   }
@@ -33,7 +34,7 @@ export default class MessagesDao {
       const newMessage = new Messages({ user: userMail, message });
       return newMessage.save();
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ add ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ add ~ error:", error);
       throw err;
     }
   }
@@ -42,7 +43,7 @@ export default class MessagesDao {
       const newMessage = await Messages.insertMany(collection);
       return newMessage;
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ add ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ add ~ error:", error);
       throw error;
     }
   }
@@ -74,7 +75,7 @@ export default class MessagesDao {
     try {
       return Messages.findOneAndUpdate({ _id: id }, message);
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ update ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ update ~ error:", error);
       throw error;
     }
   }
@@ -82,7 +83,7 @@ export default class MessagesDao {
     try {
       return Messages.findByIdAndDelete(id);
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ remove ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ remove ~ error:", error);
       throw error;
     }
   }
@@ -90,7 +91,7 @@ export default class MessagesDao {
     try {
       return Messages.findAndDelete({ user: userMail });
     } catch (error) {
-      console.log(" ❌ ~ MessagesDao ~ removeByUser ~ error:", error);
+      logger.error(" ❌ ~ MessagesDao ~ removeByUser ~ error:", error);
       throw error;
     }
   }

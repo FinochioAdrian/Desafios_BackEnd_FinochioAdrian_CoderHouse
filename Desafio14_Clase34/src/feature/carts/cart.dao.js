@@ -1,3 +1,4 @@
+import { logger } from "../../utils/loggerMiddleware/logger.js";
 import ProductsDao from "../products/products.dao.js";
 
 import Cart from "./cart.model.js";
@@ -138,7 +139,7 @@ class CartDao {
     try {
       return Cart.find().skip(skip).limit(limit).lean();
     } catch (error) {
-      console.log("Error get all carts with limit " + error);
+      logger.error("❌Error get all carts with limit " + error);
       throw new Error("Error get all carts with limit");
     }
   };
@@ -147,7 +148,7 @@ class CartDao {
       const newCart = new Cart();
       return newCart;
     } catch (error) {
-      console.log("Error get all carts with limit " + error);
+      logger.error("❌ Error get all carts with limit " + error);
       throw new Error("Error get all carts with limit");
     }
   };

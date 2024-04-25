@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { logger } from "../utils/loggerMiddleware/logger";
  
  export default function connectDB(url) {
   
@@ -6,16 +7,16 @@ import mongoose from "mongoose";
   try {
     mongoose.connect(url);
   } catch (err) {
-    console.log(`❌ ${err.message}`);
+    logger.error(`❌ ${err.message}`);
     process.exit(1);
   }
   const dbConnection = mongoose.connection;
   dbConnection.once("open", (_) => {
-    console.log(`⚡️[Database] Database connected: ${url}`);
+    logger.info(`⚡️[Database] Database connected: ${url}`);
   });
  
   dbConnection.on("error", (err) => {
-    console.error(`❌ connection error: ${err}`);
+    logger.error(`❌ connection error: ${err}`);
   });
   
 }
