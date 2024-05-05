@@ -1,0 +1,49 @@
+{
+  "name": "desafio13_clase32",
+  "version": "1.0.0",
+  "description": "Desafío 13 de curso coderHouse para backEnd con NodeJS",
+  "main": "./index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./process.js ",
+    "prod": "set NODE_ENV=production&& node ./index.js ",
+    "dev": "set NODE_ENV=development&& npx nodemon ./index.js",
+    "load": "npx nodemon ./src/pruebas.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*.json"
+    ]
+  },
+  "author": "Finochio Adrian E",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "bcrypt": "^5.1.1",
+    "commander": "^12.0.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-handlebars": "^7.1.2",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.0.1",
+    "inquirer": "^9.2.17",
+    "joi": "^17.12.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.0",
+    "mongoose-paginate-v2": "^1.8.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "sharp": "^0.33.3",
+    "socket.io": "^4.7.5",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
