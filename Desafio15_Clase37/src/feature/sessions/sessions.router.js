@@ -24,6 +24,8 @@ router.post(
   sessionsController.login
 );
 
+router.post("/forgotEmailAndPassword", sessionsController.forgotEmailAndPassword);
+
 router.post("/password-reset", sessionsController.passwordReset);
 
 router.get(

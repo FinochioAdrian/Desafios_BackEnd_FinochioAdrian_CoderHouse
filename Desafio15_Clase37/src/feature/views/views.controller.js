@@ -1,8 +1,9 @@
+import jwt from "jsonwebtoken";
 
 import { productsService as Products } from "../products/repository/index.js";
 import {cartsService} from "../carts/repository/index.js";
 import { logger } from "../../utils/loggerMiddleware/logger.js";
-
+import envConfig from "../../config/config.js"
 async function getHome(req, res) {
   try {
     const user = req.user;
@@ -188,7 +189,29 @@ async function getChatBot(req, res) {
   });
 }
 async function getPasswordReset(req, res) {
-  try {
+  try {  
+  const authHeader =  req.query.token;
+
+  if (!authHeader) {
+    if (req.accepts("html")) return res.redirect("/login");
+    return res.status(403).send({ error: "Not authorized",redirect:"/login" });
+  }
+  let token = authHeader;
+  if (authHeader.includes("Bearer")) {
+    token = authHeader.split(" ")[1];
+    
+  }
+
+  jwt.verify(token, envConfig.PRIVATE_KEY_JWT, (err) => {
+    if (err) {
+      if (req.accepts("html")) return res.redirect("/findEmail");
+      return res.status(403).send({ error: "Not authorized",redirect:"/findEmail" });
+    }
+       
+  });
+   
+    
+
     // render login page with message if there is
     const errorMessage = req.flash("error");
     const errorValidation = req.flash("errorValidation");
@@ -201,7 +224,30 @@ async function getPasswordReset(req, res) {
       dangerMsg: errorValidation,
       warningMSG: emptyField,
       stylesheet: "/css/login.css",
+      token
     });
+
+  } catch (error) {
+    logger.error("❌ ~ router.post ~ error:", error);
+    return res.status(error?.status || 500).send("Internal Server error");
+  }
+}
+async function findEmail(req, res) {
+  try {
+    // render login page with message if there is
+    const errorMessage = req.flash("error");
+    const errorValidation = req.flash("errorValidation");
+    const emptyField =
+      errorMessage[0] == "Missing credentials"
+        ? ["Oops! It looks like you missed a few fields."]
+        : req.flash("errorEmptyField");
+
+     return res.render("findEmail", {
+      dangerMsg: errorValidation,
+      warningMSG: emptyField,
+      stylesheet: "/css/login.css",
+    });
+    
   } catch (error) {
     logger.error("❌ ~ router.post ~ error:", error);
     return res.status(error?.status || 500).send("Internal Server error");
@@ -219,5 +265,6 @@ export {
   getLogin,
   getRegister,
   getChatBot,
-  getPasswordReset
+  getPasswordReset,
+  findEmail
 };

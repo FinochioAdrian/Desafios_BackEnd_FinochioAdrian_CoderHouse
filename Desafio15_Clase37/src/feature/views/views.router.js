@@ -7,7 +7,7 @@ import viewValidatorMiddleware, {
   runValidation,
 } from "./viewValidationMiddleware.js";
 
-import { passportCall, auth } from "../../utils.js";
+import { passportCall, auth, authToken } from "../../utils.js";
 // Create an express router instance
 const router = express.Router();
 
@@ -90,6 +90,8 @@ router.get(
 );
 
 // add desafio 9
-router.get("/password-reset", ViewsController.getPasswordReset);
+router.get("/findEmail", ViewsController.findEmail);
+
+router.get("/password-reset",ViewsController.getPasswordReset);
 
 export default router;

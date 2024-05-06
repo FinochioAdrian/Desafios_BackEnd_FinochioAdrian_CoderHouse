@@ -1,7 +1,8 @@
 import { usersService } from "../users/repository/users.service.js";
 import { createHash, generateToken } from "../../utils.js";
 import { logger } from "../../utils/loggerMiddleware/logger.js";
-
+import envConfig from "../../config/config.js";
+import { sendEmail, transportGmailNodemailer } from "../../utils/sendEmail.js";
 async function register(req, res) {
   // Verificar si el cliente acepta HTML
   if (req.accepts("html")) {
@@ -26,7 +27,7 @@ async function login(req, res) {
       })
       .redirect("/products");
   }
- return  res
+  return res
     .cookie("jwt", access_token, {
       signed: true,
       httpOnly: true,
@@ -37,12 +38,14 @@ async function login(req, res) {
 
 async function passwordReset(req, res) {
   try {
-    let { email, password } = req.body;
-    /// copiar para el msg flash
-    if (!email || !password) {
+    let { email, password, token } = req.body;
+
+
+    if (!email || !password || !token) {
       if (req.accepts("html")) {
         req.flash("errorEmptyField", "Values name o password is empty");
-        return res.redirect("/password-reset");
+
+        return res.redirect(`/password-reset?token=${token}`);
       }
 
       return res.status(400).send({
@@ -56,7 +59,7 @@ async function passwordReset(req, res) {
     if (!user) {
       if (req.accepts("html")) {
         req.flash("errorValidation", "User not Found");
-        return res.redirect("/password-reset");
+        return res.redirect("/findEmail");
       }
 
       return res.status(400).send({ status: "error", msg: "User not found" });
@@ -78,15 +81,78 @@ async function passwordReset(req, res) {
   } catch (error) {
     logger.error("❌ ~ router.post ~ error:", error);
 
-    // Verificar si la solicitud es una API
-    if (req.accepts("html")) {
-      return res.status(error?.status || 500).send("Internal Server error");
-    }
-    return res
-      .status(error?.status || 500)
-      .json({ error: "Internal Server error" });
+    next(error)
   }
 }
+async function forgotEmailAndPassword(req, res) {
+
+  try {
+    let { email } = req.body;
+
+    if (!email) {
+      if (req.accepts("html")) {
+        req.flash("errorEmptyField", "Values Email is empty, this is required");
+        return res.redirect("/findEmail");
+      }
+
+      return res.status(400).send({
+        status: "error",
+        msg: "Error Empty Values: Values Email is empty, this is required",
+      });
+    }
+    const message = 'Check your email for a link to reset your password.'
+
+
+
+    let user = await usersService.getUserByEmail(email);
+
+    if (!user) {
+      if (req.accepts("html")) {
+        req.flash("infoMsg", message);
+        return res.redirect("/login");
+      }
+
+      return res.send({ status: "success", message });
+    }
+
+    delete user.password;
+    const token = generateToken({ _id: user._id, email: user.email }, "1h")
+    const verificationLink = `${envConfig.HOST}:${envConfig.PORT}/password-reset?token=${token}`
+    sendEmail(transportGmailNodemailer, {
+      from: "recoveryPasswordTiendaCoder",
+      to: user.email,
+      subject: "Recovery Password From Tienda Coder",
+      html: `
+      <div> <h1>Recuperacion de Password </h1></div>
+        <div>  <h4>Usted Solicito Recuperacion de su password</h4></div>
+        <div> <h4>Haga Click en el siguiente boton</h4></div>
+        
+        <td align="center" valign="middle" style="color:#17a2b8; font-family:Helvetica, Arial, sans-serif; font-size:16px; font-weight:bold; letter-spacing:-.5px; line-height:150%; padding-top:15px; padding-right:30px; padding-bottom:15px; padding-left:30px;">
+  <a href="${verificationLink}" target="_blank" style="color:#ffc107; text-decoration:none;">Recovery Password</a>
+</td>
+        <div> <h4>o copie y pegue el siguiente enlace en el navegador</h4> ${verificationLink}</div>
+        
+        
+        <div> <h4>si usted no solicito la recuperacion de su password, ignore este mensaje</h4></div>
+      `,
+      attachments: [],
+
+    })
+
+    if (req.accepts("html")) {
+      req.flash("infoMsg", message);
+      return res.redirect("/login");
+    }
+
+    return res.send({ status: "success", message });
+  } catch (error) {
+    logger.error("❌ ~ router.post ~ error:", error);
+
+    next(error)
+  }
+}
+
+
 
 async function githubcallback(req, res) {
   const user = req.user;
@@ -155,6 +221,7 @@ export default {
   register,
   login,
   passwordReset,
+  forgotEmailAndPassword,
   githubcallback,
   logout,
   failRegister,
