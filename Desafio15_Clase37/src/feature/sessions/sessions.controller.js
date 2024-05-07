@@ -54,15 +54,28 @@ async function passwordReset(req, res, next) {
         msg: "Error Empty Values: Field name o password is empty",
       });
     }
-
-    jwt.verify(token, envConfig.PRIVATE_KEY_JWT, (err) => {
+    let emailToken;
+    try {
+      let credentiales=jwt.verify(token, envConfig.PRIVATE_KEY_JWT)
+      const {user:userToken} =credentiales
+      emailToken=userToken.email
+    } catch (error) {
       if (err) {
         if (req.accepts("html")) return res.redirect("/findEmail");
         return res.status(403).send({ error: "Not authorized", redirect: "/findEmail" });
       }
+    }
+    
+    
+    if (!(email==emailToken)) {
+      if (req.accepts("html")) {
+        req.flash("errorValidation", "Not authorized");
+        return res.redirect("/login");
+      }
 
-    });
-
+      return res.status(403).send({ status: "error", msg: "Not authorized" });
+    }
+    
     let user = await usersService.getUserByEmail(email);
 
     if (!user) {
