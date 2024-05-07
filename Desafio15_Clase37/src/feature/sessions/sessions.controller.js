@@ -67,7 +67,7 @@ async function passwordReset(req, res, next) {
     }
     
     
-    if (!(email==emailToken)) {
+    if (!(email.toLowerCase()==emailToken.toLowerCase())) {
       if (req.accepts("html")) {
         req.flash("errorValidation", "Not authorized");
         return res.redirect("/login");
@@ -75,8 +75,8 @@ async function passwordReset(req, res, next) {
 
       return res.status(403).send({ status: "error", msg: "Not authorized" });
     }
-    
-    let user = await usersService.getUserByEmail(email);
+    const regexEmail = new RegExp(email,'i')
+    let user = await usersService.getUserByEmail(regexEmail);
 
     if (!user) {
       if (req.accepts("html")) {
