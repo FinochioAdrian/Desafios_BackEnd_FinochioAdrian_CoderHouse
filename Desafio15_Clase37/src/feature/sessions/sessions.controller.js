@@ -1,5 +1,6 @@
+import jwt from "jsonwebtoken";
 import { usersService } from "../users/repository/users.service.js";
-import { createHash, generateToken } from "../../utils.js";
+import { createHash, generateToken, isValidPassword } from "../../utils.js";
 import { logger } from "../../utils/loggerMiddleware/logger.js";
 import envConfig from "../../config/config.js";
 import { sendEmail, transportGmailNodemailer } from "../../utils/sendEmail.js";
@@ -36,7 +37,7 @@ async function login(req, res) {
     .json({ status: 200, msg: "Logged in" });
 }
 
-async function passwordReset(req, res) {
+async function passwordReset(req, res, next) {
   try {
     let { email, password, token } = req.body;
 
@@ -54,6 +55,14 @@ async function passwordReset(req, res) {
       });
     }
 
+    jwt.verify(token, envConfig.PRIVATE_KEY_JWT, (err) => {
+      if (err) {
+        if (req.accepts("html")) return res.redirect("/findEmail");
+        return res.status(403).send({ error: "Not authorized", redirect: "/findEmail" });
+      }
+
+    });
+
     let user = await usersService.getUserByEmail(email);
 
     if (!user) {
@@ -64,7 +73,15 @@ async function passwordReset(req, res) {
 
       return res.status(400).send({ status: "error", msg: "User not found" });
     }
+    if (isValidPassword(user, password)){
+      if (req.accepts("html")) {
+        req.flash("errorValidation", "The password cannot be the same as the old password");
+        return res.redirect(`/password-reset?token=${token}`);
+      }
 
+      return res.status(400).send({ status: "error", msg: "The password cannot be the same as the old password" });
+    }
+    
     user.password = createHash(password);
 
     await usersService.newPassword(user);
@@ -84,7 +101,7 @@ async function passwordReset(req, res) {
     next(error)
   }
 }
-async function forgotEmailAndPassword(req, res) {
+async function forgotEmailAndPassword(req, res,next) {
 
   try {
     let { email } = req.body;
