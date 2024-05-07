@@ -53,7 +53,8 @@
 ## Feature Desafío 15
 
         - status    modify
-                finish      resetPassword email
+        add route   put api/users/premium/:uid
+          finish      resetPassword email
 
 ## Feature Desafío 14
 

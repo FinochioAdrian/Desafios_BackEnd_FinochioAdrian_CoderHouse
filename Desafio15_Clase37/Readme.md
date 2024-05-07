@@ -3,6 +3,7 @@
 ## Feature Desafío 15
 
         - status    modify
+                add route       put api/users/premium/:uid
                 finish      resetPassword email
 
 ## Instalación y configuración del entorno de desarrollo
