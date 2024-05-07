@@ -58,6 +58,8 @@ export default function validate(method) {
           .withMessage("The 'price' field is required.")
           .isFloat()
           .withMessage("The 'code' field isn´t number."),
+          body("owner").custom((value) => (isValidObjectId(value) ? value : false))
+          .withMessage("Search parameter 'owner': is not a valid id identifier.").default("admin"),
         body("status", "The 'status' isn´t boolean.").customSanitizer(
           (value, { req }) => {
             if (value === "on") {

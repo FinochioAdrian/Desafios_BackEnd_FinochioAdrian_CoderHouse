@@ -22,7 +22,6 @@
           return res.status(401).send({error:info.messages||info})
         }
         req.user= user;
-        console.log("🚀 ~ passport.authenticate ~ user:", user)
         
         next()
       })(req,res,next)

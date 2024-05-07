@@ -58,7 +58,9 @@ async function get(req, res,next) {
 
 async function create(req, res,next) {
   const { body } = req;
+  console.log("🚀 ~ create ~ body:", body)
   // Validate the request body against the schema
+  
   try {
     const result = await Products.getWithCode(body.code);
 

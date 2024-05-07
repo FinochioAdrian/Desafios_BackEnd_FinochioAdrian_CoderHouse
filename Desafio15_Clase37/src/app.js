@@ -18,6 +18,7 @@ import viewsRouter from "./feature/views/views.router.js";
 import productsRouter from "./feature/products/products.router.js";
 import cartRouter from "./feature/carts/carts.router.js";
 import sessionsRouter from "./feature/sessions/sessions.router.js";
+import usersRouter from "./feature/users/users.router.js";
 import testRouter from "./feature/tests/test.router.js";
 import Server from "./server.js";
 import { addLogger } from "./utils/loggerMiddleware/logger.js";
@@ -66,6 +67,7 @@ app.use("/loggerTest",testRouter)
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/users", usersRouter);
 
 //manejo de Socket y chat
 IOconfig(httpServer);

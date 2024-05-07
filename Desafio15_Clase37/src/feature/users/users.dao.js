@@ -2,15 +2,15 @@ import Users from "./users.model.js";
 import CartDao from "../carts/cart.dao.js"
 import { logger } from "../../utils/loggerMiddleware/logger.js";
 
-const cartDao = new CartDao ()
+const cartDao = new CartDao()
 // UsersDAO class
 export default class UsersDAO {
-  constructor(){}
+  constructor() { }
   // get user by email
   async getUserByEmail(user) {
     try {
       // find user by email
-      return await Users.findOne({ email:user.email }).lean();
+      return await Users.findOne({ email: user.email }).lean();
     } catch (error) {
       logger.error("❌ ~ UsersDAO ~ getUserByEmail ~ error:", error);
       throw error;
@@ -20,7 +20,7 @@ export default class UsersDAO {
   // get user by credentials
   async getUserByCreds(user) {
     try {
-      const {email, password} = user
+      const { email, password } = user
       // find user by email and password
       return await Users.findOne({ email, password }).lean();
     } catch (error) {
@@ -33,13 +33,14 @@ export default class UsersDAO {
   async insert(userData) {
     try {
       const cart = await cartDao.createCartEmpty()
-      userData.cart=cart._id
+      userData.cart = cart._id
       // save new user to database
-      const newuser= await new Users(userData).save();
+      const newuser = await new Users(userData).save();
+      //save cart in the dbs
       if (newuser) {
         await cart.save()
         return newuser
-       
+
       }
       return newuser
     } catch (error) {
@@ -53,7 +54,7 @@ export default class UsersDAO {
     try {
       // find user by id and select specific fields
       return await Users.findOne(
-        { _id: user.id },
+        { _id: user?.id || user._id },
         { first_name: 1, last_name: 1, age: 1, email: 1, role: 1 }
       ).lean();
     } catch (error) {
@@ -64,12 +65,23 @@ export default class UsersDAO {
 
   async newPassword(user) {
     try {
-        return await Users.findOneAndUpdate({email:user.email},{password:user.password}).lean()
+      return await Users.findOneAndUpdate({ email: user.email }, { password: user.password }).lean()
     } catch (error) {
       logger.error("❌ ~ newPassword ~ error:", error);
       throw error;
     }
   }
-  
+  async updateUser(user) {
+    try {
+      return await Users.findOneAndUpdate({ _id: user?.id || user._id },user,{new:true}).lean()
+      
+    
+      
+    } catch (error) {
+      logger.error("❌ ~ newPassword ~ error:", error);
+      throw error;
+    }
+  }
+
 }
 
