@@ -1,11 +1,9 @@
-# Desafío 14 Clase 34
+# Desafío 15 Clase 37
 
-## Feature Desafío 14
+## Feature Desafío 15
 
         - status    modify
-        Finish       add winston logger
-
-        You test is config in localhost:port/loggerTest
+                finish      resetPassword email
 
 ## Instalación y configuración del entorno de desarrollo
 
