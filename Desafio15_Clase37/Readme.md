@@ -11,7 +11,7 @@
         - git init
         - git remote add origin <https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse.git>
         - git config core.sparseCheckout true
-        - git sparse-checkout set Desafio14_Clase34
+        - git sparse-checkout set Desafio15_Clase37
         - git pull origin main
 
 2. Instalar dependencias "npm i"
