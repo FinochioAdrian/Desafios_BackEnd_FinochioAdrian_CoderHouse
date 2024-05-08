@@ -75,8 +75,8 @@ async function passwordReset(req, res, next) {
 
       return res.status(403).send({ status: "error", msg: "Not authorized" });
     }
-    const regexEmail = new RegExp(email,'i')
-    let user = await usersService.getUserByEmail(regexEmail);
+    
+    let user = await usersService.getUserByEmail(email);
 
     if (!user) {
       if (req.accepts("html")) {

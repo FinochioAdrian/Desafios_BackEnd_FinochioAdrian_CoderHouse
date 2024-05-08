@@ -40,7 +40,7 @@ router.get(
 router.get(
   "/realTimeProducts",
   passportCall("jwt"),
-  auth(["admin"]),
+  auth(["admin","premium"]),
   ViewsController.getRealTimeProducts
 );
 

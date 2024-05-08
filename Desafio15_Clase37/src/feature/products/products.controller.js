@@ -57,15 +57,31 @@ async function get(req, res,next) {
 }
 
 async function create(req, res,next) {
-  const { body } = req;
-  console.log("🚀 ~ create ~ body:", body)
   // Validate the request body against the schema
+  const { body:product } = req;
+  const {user} = req
+  console.log("🚀 ~ create ~ user:", user)
+  console.log("🚀 ~ create ~ product:", product)
+  product.owner={
+    _id:user._id,
+    admin:false
+  }
+ 
   
-  try {
-    const result = await Products.getWithCode(body.code);
+  if (user.role=="admin"){
+    product.owner.admin=true
+    console.log("🚀 ~ create ~ user.role=='admin':", user.role=="admin")
+    
+    console.log("🚀 ~ create ~ product:", product)
+  }
+  
+  console.log("🚀 ~ create ~ product:", product)
+   try {
+    const result = await Products.getWithCode(product.code);
+    
 
-    if (result.length > 0) {
-      const msg =`The 'code': ${body.code} $ field already exists in the database.`
+    if (result?.length > 0) {
+      const msg =`The 'code': ${product.code} $ field already exists in the database.`
       throw new CustomError({name:"Error_Create",cause:customCauseErrorInfo(msg),message:"Error Created product",code:EErrors.DATABASE_EXCEPTION,status:409})
       
     }
@@ -75,15 +91,15 @@ async function create(req, res,next) {
       const thumbnails = filePath.map((value) => {
         return value.path.replace(/\\/g, "/");
       });
-      body.thumbnails = thumbnails;
+      product.thumbnails = thumbnails;
     }
 
-    const payload = await Products.add({ ...body });
+    const payload = await Products.add({ ...product });
 
     res.status(201).send({ status: "success", payload });
   } catch (error) {
     next(error)
-  }
+  } 
 }
 
 async function update(req, res,next) {

@@ -1,7 +1,7 @@
 import {logger} from './loggerMiddleware/logger.js'
 export default function authorization(role=["everyone"]) {
   return async (req, res, next) => {
-
+    
     if (!req.user) {
       if (req.accepts("html")) {
         req.flash("errorValidation", "Unauthorized");

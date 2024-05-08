@@ -38,11 +38,25 @@ const productSchema = mongoose.Schema({
     type: [String],
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
-    required: true
+    type:
+    {
+      _id:
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+      },
+      admin:
+      {
+        type: Boolean,
+        default: false
+      }
+
+    }
+
   }
+
 });
+
 productSchema.plugin(mongoosePaginate);
 
 export default mongoose.model(productCollection, productSchema);

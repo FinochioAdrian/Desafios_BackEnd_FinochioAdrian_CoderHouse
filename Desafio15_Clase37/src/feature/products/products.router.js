@@ -2,14 +2,14 @@ import express from "express";
 import * as ProductsController from "./products.controller.js";
 import productValidationMiddleware, { runValidation } from "./productValidationMiddleware.js";
 import upload from "../../utils/upload.middleware.js";
-import { auth } from "../../utils.js";
+import { auth, passportCall } from "../../utils.js";
 const router = express.Router();
 
 
-router.get("/", auth(["user","admin"]),productValidationMiddleware('getAllQueries'),runValidation ,ProductsController.getAll);
+router.get("/", passportCall("jwt"),auth(["user","admin"]),productValidationMiddleware('getAllQueries'),runValidation ,ProductsController.getAll);
 router.get("/mockingproducts", productValidationMiddleware('getAllQueries'),runValidation ,ProductsController.getAllMockingProducts);
-router.get("/:pid",auth(["user","admin"]),productValidationMiddleware('isID'),runValidation, ProductsController.get);
-router.post("/",auth(["admin","premium"]),upload.array("thumbnails",3), productValidationMiddleware('createProduct'),runValidation,ProductsController.create);
-router.put("/:pid",auth(["admin","premium"]),productValidationMiddleware('updateProduct'),runValidation, ProductsController.update);
-router.delete("/:pid",auth(["admin","premium"]),productValidationMiddleware('isID'),runValidation, ProductsController.remove);
+router.get("/:pid",passportCall("jwt"),auth(["user","admin"]),productValidationMiddleware('isID'),runValidation, ProductsController.get);
+router.post("/",passportCall("jwt"),auth(["admin","premium"]),upload.array("thumbnails",3), productValidationMiddleware('createProduct'),runValidation,ProductsController.create);
+router.put("/:pid",passportCall("jwt"),auth(["admin","premium"]),productValidationMiddleware('updateProduct'),runValidation, ProductsController.update);
+router.delete("/:pid",passportCall("jwt"),auth(["admin","premium"]),productValidationMiddleware('isID'),runValidation, ProductsController.remove);
 export default router;

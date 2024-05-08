@@ -58,8 +58,22 @@ export default function validate(method) {
           .withMessage("The 'price' field is required.")
           .isFloat()
           .withMessage("The 'code' field isn´t number."),
-          body("owner").custom((value) => (isValidObjectId(value) ? value : false))
-          .withMessage("Search parameter 'owner': is not a valid id identifier.").default("admin"),
+        body("owner")
+          .optional()
+          .custom((value, { req }) => {
+
+            
+
+            // Si el valor es un ObjectId válido, se pasa
+            if (isValidObjectId(value)) {
+              return true;
+            }
+
+            // Si no es un ObjectId válido, se rechaza
+            return false;
+          })
+          .withMessage("Search parameter 'owner': is not a valid id identifier ")
+        ,
         body("status", "The 'status' isn´t boolean.").customSanitizer(
           (value, { req }) => {
             if (value === "on") {
@@ -149,31 +163,31 @@ export default function validate(method) {
 
 export const runValidation = (req, res, next) => {
   try {
-    
+
     const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const filePath = req.file && req.file.path;
-    if (filePath) {
-      //elimina el archivo subido
-      fs.unlinkSync(filePath).catch((err) => {
-        logger.error("❌ ~ runValidation ~ err:",
-          "error eliminando el archivo " + filePath + " ",
-          err
-        );
-      });
-    }
+    if (!errors.isEmpty()) {
+      const filePath = req.file && req.file.path;
+      if (filePath) {
+        //elimina el archivo subido
+        fs.unlinkSync(filePath).catch((err) => {
+          logger.error("❌ ~ runValidation ~ err:",
+            "error eliminando el archivo " + filePath + " ",
+            err
+          );
+        });
+      }
       let errores = errors.array()
-      
-      let cause=errors.array().map((val) => val.msg)
-      throw new CustomError({name:"VALIDATOR_ERROR",cause,message:"Error try router Products",code:EErrors.INVALID_TYPES_ERROR})
-    
 
-  }
-  next();
+      let cause = errors.array().map((val) => val.msg)
+      throw new CustomError({ name: "VALIDATOR_ERROR", cause, message: "Error try router Products", code: EErrors.INVALID_TYPES_ERROR })
+
+
+    }
+    next();
   } catch (error) {
-    
-      next(error)
+
+    next(error)
   }
-  
+
 };

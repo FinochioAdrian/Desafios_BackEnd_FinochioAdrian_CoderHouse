@@ -3,6 +3,8 @@
 ## Feature Desafío 15
 
         - status    modify
+                modify route    post api/products/
+                                ahora acepta de owner de admin con su id o el owner de premium con su id
                 add route       put api/users/premium/:uid
                 finish      resetPassword email
 
