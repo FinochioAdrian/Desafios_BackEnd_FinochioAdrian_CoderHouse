@@ -3,6 +3,10 @@
 ## Feature Desafío 15
 
         - status    modify
+                modify route    put api/products/:pid
+                                solo puede actualizar un producto su creador o un administrador
+                modify route    delete api/products/:pid
+                                solo puede eliminar un producto su creador o un administrador
                 modify route    post api/products/
                                 ahora acepta de owner de admin con su id o el owner de premium con su id
                 add route       put api/users/premium/:uid

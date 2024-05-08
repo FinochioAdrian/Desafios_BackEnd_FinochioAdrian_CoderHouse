@@ -53,7 +53,9 @@ export default class ProductsDao {
     }
   }
    getById=async (id)=> {
+    console.log("🚀 ~ ProductsDao ~ getById= ~ id:", id)
     try {
+      
       return Products.findOne({ _id: id }).lean();
     } catch (error) {
       logger.error("❌ Error getting one product " + error);

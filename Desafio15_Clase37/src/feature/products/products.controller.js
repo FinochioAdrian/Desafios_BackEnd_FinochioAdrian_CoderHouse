@@ -104,9 +104,8 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    let { pid } = req.params;
-    const product = req.body;
-
+    const { pid } = req.params
+    let { body: product, user } = req;
     let result = await Products.getWithCode(product.code);
     result = JSON.parse(JSON.stringify(result));
 
@@ -117,17 +116,52 @@ async function update(req, res, next) {
       });
     }
 
-    // Update products
+    /*----  Update products ----*/
 
-    let productUpdate = await Products.update(pid, product);
-    // Response Product not found
-    if (!productUpdate) {
-      return res
-        .status(404)
-        .send({ status: "fail", msg: `No product found with ID ${pid}` });
+
+    console.log("🚀 ~ update ~ user.role:", user.role)
+
+    if (user.role == "admin") {
+      let productUpdate = await Products.update(pid, product);
+      // Response Product not found
+      if (!productUpdate) {
+        return res
+          .status(404)
+          .send({ status: "fail", msg: `No product found with ID ${pid}` });
+      }
+      // Response Product found, send to response
+      return res.send({ status: 200, payload: productUpdate });
     }
-    // Response Product found, send to response
-    return res.send({ status: 200, payload: productUpdate });
+    const findProduct = await Products.getById(pid)
+    if (!findProduct) {
+      return res.status(404).send({
+        status: "fail", msg: `No product found with ID ${pid}`,
+      });
+    }
+    const { owner: ownerFind } = findProduct
+
+    if ((!ownerFind.admin) && user._id == ownerFind._id) {
+      console.log("🚀 ~ update ~ (!ownerFind.admin) || user._id == ownerFind._id:", (!ownerFind.admin) || user._id == ownerFind._id)
+      
+      let productUpdate = await Products.update(pid, product);
+      // Response Product not found
+      if (!productUpdate) {
+        return res
+          .status(404)
+          .send({ status: "fail", msg: `No product found with ID ${pid}` });
+      }
+      // Response Product found, send to response
+      return res.send({ status: 200, payload: productUpdate });
+    }
+
+    return res.status(403).send({
+      status: "fail",
+      msg: "You do not have permission to access this resource.",
+    });
+
+
+
+
   } catch (error) {
 
     next(error)
@@ -142,7 +176,7 @@ async function remove(req, res, next) {
     // Delete product
     if (user.role == "admin") {
       const productRemove = await Products.remove({ _id: pid });
-      
+
       return res.status(201).send({
         status: "success",
         msg: `Product with ID ${pid} has been deleted `,
@@ -151,19 +185,15 @@ async function remove(req, res, next) {
 
     const findProduct = await Products.getById(pid)
     if (!findProduct) {
-      return res.status(404).send({
-        status: "error",
-        msg: `Product with ID ${pid} not found `,
-      });
+      return res.status(404).send({ status: "fail", msg: `No product found with ID ${pid}` });
     }
-    const {owner:ownerFind}=findProduct
-    
-    if(!ownerFind.admin || user._id == ownerFind._id ){
+    const { owner: ownerFind } = findProduct
+
+    if (!ownerFind.admin && user._id == ownerFind._id) {
       const productRemove = await Products.remove({ _id: pid });
       if (!productRemove) {
         return res.status(404).send({
-          status: "error",
-          msg: `Product with ID ${pid} not found `,
+          status: "fail", msg: `No product found with ID ${pid}`
         });
       }
       return res.status(201).send({
@@ -180,8 +210,7 @@ async function remove(req, res, next) {
       msg: ` "You do not have permission to access this resource." `,
     });
 
-    // Product found, send it in the response
-   
+
   } catch (error) {
     next(error)
   }
