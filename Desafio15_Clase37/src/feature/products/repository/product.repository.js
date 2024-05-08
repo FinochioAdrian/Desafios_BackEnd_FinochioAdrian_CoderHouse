@@ -42,8 +42,9 @@ export default class ProductRepository {
     let result = await this.dao.update(id, productToUpdate);
     return result;
   };
-  remove = async (id) => {
-    let result = await this.dao.remove(id);
+  remove = async (product) => {
+    let productToRemove = new ProductDTO(product)
+    let result = await this.dao.remove(productToRemove);
     return result;
   };
 }

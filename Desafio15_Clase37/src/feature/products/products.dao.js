@@ -95,9 +95,9 @@ export default class ProductsDao {
       throw new Error("Error add product");
     }
   }
-   remove=async(id) =>{
+   remove=async(product) =>{
     try {
-      const result = await Products.findByIdAndDelete(id).lean();
+      const result = await Products.findByIdAndDelete(product._id).lean();
 
       return result;
     } catch (error) {

@@ -2,9 +2,9 @@ import { generateListProducts } from "../../utils/Mocks.js";
 import CustomError from "../../utils/errors/customError.js";
 import EErrors from "../../utils/errors/enums.js";
 import { customCauseErrorInfo } from "../../utils/errors/info.js";
-import {productsService as Products} from "./repository/index.js";
+import { productsService as Products } from "./repository/index.js";
 
-async function getAll(req, res,next) {
+async function getAll(req, res, next) {
   try {
     const limit = req.query?.limit || 10;
     const page = req.query?.page || 1;
@@ -27,27 +27,27 @@ async function getAll(req, res,next) {
     next(error)
   }
 }
-async function getAllMockingProducts(req, res,next) {
+async function getAllMockingProducts(req, res, next) {
   try {
     const result = await generateListProducts()
 
-    
-    res.send({ status: "sucess", payload: [...result] } );
+
+    res.send({ status: "sucess", payload: [...result] });
   } catch (error) {
     next(error)
   }
 }
 
-async function get(req, res,next) {
+async function get(req, res, next) {
   try {
     let { pid } = req.params;
 
     let productFound = await Products.getById(pid);
     if (!productFound) {
 
-      const msg =`Product with ID ${pid} not found.`
-      throw new CustomError({name:"PRODUCT_NOT_FOUND",cause:customCauseErrorInfo(msg),message:"Error getting product by id",code:EErrors.DATABASE_EXCEPTION,status:404})
-     
+      const msg = `Product with ID ${pid} not found.`
+      throw new CustomError({ name: "PRODUCT_NOT_FOUND", cause: customCauseErrorInfo(msg), message: "Error getting product by id", code: EErrors.DATABASE_EXCEPTION, status: 404 })
+
     }
     // Product found, send it in the response
     return res.send({ product: productFound });
@@ -56,34 +56,34 @@ async function get(req, res,next) {
   }
 }
 
-async function create(req, res,next) {
+async function create(req, res, next) {
   // Validate the request body against the schema
-  const { body:product } = req;
-  const {user} = req
+  const { body: product } = req;
+  const { user } = req
   console.log("🚀 ~ create ~ user:", user)
   console.log("🚀 ~ create ~ product:", product)
-  product.owner={
-    _id:user._id,
-    admin:false
+  product.owner = {
+    _id: user._id,
+    admin: false
   }
- 
-  
-  if (user.role=="admin"){
-    product.owner.admin=true
-    console.log("🚀 ~ create ~ user.role=='admin':", user.role=="admin")
-    
+
+
+  if (user.role == "admin") {
+    product.owner.admin = true
+    console.log("🚀 ~ create ~ user.role=='admin':", user.role == "admin")
+
     console.log("🚀 ~ create ~ product:", product)
   }
-  
+
   console.log("🚀 ~ create ~ product:", product)
-   try {
+  try {
     const result = await Products.getWithCode(product.code);
-    
+
 
     if (result?.length > 0) {
-      const msg =`The 'code': ${product.code} $ field already exists in the database.`
-      throw new CustomError({name:"Error_Create",cause:customCauseErrorInfo(msg),message:"Error Created product",code:EErrors.DATABASE_EXCEPTION,status:409})
-      
+      const msg = `The 'code': ${product.code} $ field already exists in the database.`
+      throw new CustomError({ name: "Error_Create", cause: customCauseErrorInfo(msg), message: "Error Created product", code: EErrors.DATABASE_EXCEPTION, status: 409 })
+
     }
 
     if (req.files) {
@@ -99,17 +99,17 @@ async function create(req, res,next) {
     res.status(201).send({ status: "success", payload });
   } catch (error) {
     next(error)
-  } 
+  }
 }
 
-async function update(req, res,next) {
+async function update(req, res, next) {
   try {
     let { pid } = req.params;
     const product = req.body;
 
     let result = await Products.getWithCode(product.code);
     result = JSON.parse(JSON.stringify(result));
-    
+
     if (result?.length > 0 && result._id !== pid) {
       return res.status(409).send({
         status: "fail",
@@ -129,23 +129,59 @@ async function update(req, res,next) {
     // Response Product found, send to response
     return res.send({ status: 200, payload: productUpdate });
   } catch (error) {
-    
+
     next(error)
   }
 }
 
-async function remove(req, res,next) {
+async function remove(req, res, next) {
   try {
     let { pid } = req.params;
+    let { user } = req;
 
     // Delete product
-    const productRemove = await Products.remove(pid);
+    if (user.role == "admin") {
+      const productRemove = await Products.remove({ _id: pid });
+      
+      return res.status(201).send({
+        status: "success",
+        msg: `Product with ID ${pid} has been deleted `,
+      });
+    }
+
+    const findProduct = await Products.getById(pid)
+    if (!findProduct) {
+      return res.status(404).send({
+        status: "error",
+        msg: `Product with ID ${pid} not found `,
+      });
+    }
+    const {owner:ownerFind}=findProduct
+    
+    if(!ownerFind.admin || user._id == ownerFind._id ){
+      const productRemove = await Products.remove({ _id: pid });
+      if (!productRemove) {
+        return res.status(404).send({
+          status: "error",
+          msg: `Product with ID ${pid} not found `,
+        });
+      }
+      return res.status(201).send({
+        status: "success",
+        msg: `Product with ID ${pid} has been deleted `,
+      });
+    }
+
+
+
+
+    return res.status(403).send({
+      status: "error",
+      msg: ` "You do not have permission to access this resource." `,
+    });
 
     // Product found, send it in the response
-    return res.status(201).send({
-      status: "success",
-      msg: `Product with ID ${pid} has been deleted `,
-    });
+   
   } catch (error) {
     next(error)
   }
