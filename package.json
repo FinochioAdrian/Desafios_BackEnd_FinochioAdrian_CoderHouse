@@ -19,6 +19,7 @@
     "start_13": "node ./Desafio13_Clase32/index.js",
     "start_14": "node ./Desafio14_Clase34/index.js",
     "start_15": "node ./Desafio15_Clase37/index.js",
+    "start_16": "node ./Desafio16_Clase39/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

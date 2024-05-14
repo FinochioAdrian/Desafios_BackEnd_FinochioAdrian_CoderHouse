@@ -20,6 +20,7 @@
 - [Desafió 13](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio13_Clase32)
 - [Desafió 14](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio14_Clase34)
 - [Desafió 15](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio15_Clase37)
+- [Desafió 16](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio16_Clase39)
 
 ## Instalación y configuración del entorno de desarrollo
 
@@ -47,14 +48,22 @@
      - Desafio_13 = npm run start_13 => "start_13": "node ./Desafio13_Clase32/index.js"
      - Desafio_14 = npm run start_14 => "start_14": "node ./Desafio14_Clase34/index.js"
      - Desafio_15 = npm run start_15 => "start_15 "node ./Desafio15_Clase37/index.js"
+     - Desafio_16 = npm run start_16 => "start_16 "node ./Desafio16_Clase39/index.js"
 
-## Work in =># Desafío 15 Clase 37
+## Work in =># Desafío 16 Clase 39
+
+## Feature Desafío 16
+
+        - status                modify
+          unstarted   Docs      products module
+          unstarted   Docs      cart module
 
 ## Feature Desafío 15
 
         - status    modify
+        unstarted   post/cart a premium user should not add their own products to their cart 
         add route   put api/users/premium/:uid
-          finish      resetPassword email
+        finish      resetPassword email
 
 ## Feature Desafío 14
 
