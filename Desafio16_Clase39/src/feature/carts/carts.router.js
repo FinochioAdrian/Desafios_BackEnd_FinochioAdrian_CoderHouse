@@ -7,12 +7,14 @@ import cartValidationMiddleware, {
 import { auth, passportCall } from "../../utils.js";
 
 const router = express.Router();
+/* Docs finalizada */
 router.get(
   "/",passportCall("jwt"),auth(["admin"]),
   cartValidationMiddleware("getAll"),
   runValidation,
   CartController.getAll
 );
+/* Docs finalizada */
 
 router.get(
   "/:cid",passportCall("jwt"),auth(["user","premium","admin"]),
@@ -20,7 +22,10 @@ router.get(
   runValidation,
   CartController.get
 );
+
 // create new cart
+
+/* Docs finalizada */
 router.post(
   "/",passportCall("jwt"),
   auth(["user","premium","admin"]),
@@ -28,6 +33,8 @@ router.post(
   runValidation,
   CartController.create
 );
+
+
 // Add new product in cart by cart id and product id
 router.post(
   "/:cid/product/:pid",

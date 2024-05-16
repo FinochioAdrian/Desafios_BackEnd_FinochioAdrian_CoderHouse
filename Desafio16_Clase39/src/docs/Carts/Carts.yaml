@@ -62,7 +62,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CartsAdd'
+              $ref: '#/components/schemas/CartAdd'
           
         required: true
       responses:
@@ -690,6 +690,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Cart'
+
     CartGetOneResponse:
       type: object
       properties:
@@ -699,3 +700,27 @@ components:
           example: "success"
         payload:
           $ref: '#/components/schemas/Cart'
+
+    CartAdd:
+      type: object
+      required:
+        - products
+        - product
+        - quantity
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: The product's ID (Mongoose ObjectId)
+                example: "60d21b4667d0d8992e610c85"
+              quantity:
+                type: integer
+                description: The quantity of the product
+                example: 2
+        
+
+   
