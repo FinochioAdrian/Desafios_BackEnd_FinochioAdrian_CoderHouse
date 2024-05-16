@@ -68,6 +68,16 @@ const __dirname = dirname(__filename);
 
 export default __dirname;
 
+export const swaggerOptions = {
+  definition:{
+    openapi:'3.0.1',
+    info:{
+      title: "Documentacion Tienda Online",
+      description: "API Tienda Online, Demostración de documentación creada con Swagger",
 
+    }
+  },
+  apis:[`${__dirname}/docs/**/*.yaml`]
+}
 
 export const transportGmailNodemailer = transportGmail

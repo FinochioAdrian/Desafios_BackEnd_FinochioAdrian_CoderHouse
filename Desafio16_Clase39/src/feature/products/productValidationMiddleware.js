@@ -18,10 +18,10 @@ export default function validate(method) {
           .withMessage("Valid option for sort is 'asc','desc' "),
         query("stock", "Query params 'stock' is incorrect")
           .optional()
-          .isString(),
+          .isBoolean(),
         query("available", "Query params 'available' is incorrect")
           .optional()
-          .isString(),
+          .isBoolean(),
         query("category", "Query params 'category' is incorrect")
           .optional()
           .isString(),

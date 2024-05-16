@@ -60,8 +60,7 @@ async function create(req, res, next) {
   // Validate the request body against the schema
   const { body: product } = req;
   const { user } = req
-  console.log("🚀 ~ create ~ user:", user)
-  console.log("🚀 ~ create ~ product:", product)
+  
   product.owner = {
     _id: user._id,
     admin: false
@@ -70,12 +69,10 @@ async function create(req, res, next) {
 
   if (user.role == "admin") {
     product.owner.admin = true
-    console.log("🚀 ~ create ~ user.role=='admin':", user.role == "admin")
-
-    console.log("🚀 ~ create ~ product:", product)
+    
   }
 
-  console.log("🚀 ~ create ~ product:", product)
+  
   try {
     const result = await Products.getWithCode(product.code);
 

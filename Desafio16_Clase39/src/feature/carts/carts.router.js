@@ -8,22 +8,22 @@ import { auth, passportCall } from "../../utils.js";
 
 const router = express.Router();
 router.get(
-  "/",
+  "/",/* passportCall("jwt"),auth(["admin"]), */
   cartValidationMiddleware("getAll"),
   runValidation,
   CartController.getAll
 );
 
 router.get(
-  "/:cid",
+  "/:cid",/* passportCall("jwt"),auth(["user","premium","admin"]), */
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.get
 );
 // create new cart
 router.post(
-  "/",passportCall("jwt"),
-  auth(),
+  "/",/* passportCall("jwt"),
+  auth(["user","premium","admin"]), */
   cartValidationMiddleware("createCart"),
   runValidation,
   CartController.create
@@ -32,7 +32,7 @@ router.post(
 router.post(
   "/:cid/product/:pid",
   passportCall("jwt"),
-auth(["user"]),
+auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -44,7 +44,7 @@ auth(["user"]),
 router.put(
   "/:cid/product/:pid",
   passportCall("jwt"),
-auth(["user"]),
+  auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
   runValidation,
@@ -79,6 +79,7 @@ router.delete(
   runValidation,
   CartController.removeCart
 );
+
 router.post("/:cid/purchase",passportCall("jwt"),
 auth(["user"]),CartController.purchase)
 export default router;
