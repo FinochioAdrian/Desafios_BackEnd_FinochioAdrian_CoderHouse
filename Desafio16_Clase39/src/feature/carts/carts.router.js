@@ -8,22 +8,22 @@ import { auth, passportCall } from "../../utils.js";
 
 const router = express.Router();
 router.get(
-  "/",/* passportCall("jwt"),auth(["admin"]), */
+  "/",passportCall("jwt"),auth(["admin"]),
   cartValidationMiddleware("getAll"),
   runValidation,
   CartController.getAll
 );
 
 router.get(
-  "/:cid",/* passportCall("jwt"),auth(["user","premium","admin"]), */
+  "/:cid",passportCall("jwt"),auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.get
 );
 // create new cart
 router.post(
-  "/",/* passportCall("jwt"),
-  auth(["user","premium","admin"]), */
+  "/",passportCall("jwt"),
+  auth(["user","premium","admin"]),
   cartValidationMiddleware("createCart"),
   runValidation,
   CartController.create
@@ -55,7 +55,7 @@ router.put(
 router.put(
   "/:cid",
   passportCall("jwt"),
-auth(["user"]),
+auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.updateProductsInCart
@@ -64,7 +64,7 @@ auth(["user"]),
 router.delete(
   "/:cid/product/:pid",
   passportCall("jwt"),
-auth(["user"]),
+auth(["user","premium","admin"]),
 
   cartValidationMiddleware("isCid"),
   cartValidationMiddleware("isPid"),
@@ -74,12 +74,13 @@ auth(["user"]),
 //delete cart by id
 router.delete(
   "/:cid/",passportCall("jwt"),
-  auth(["user"]),
+  auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),
   runValidation,
   CartController.removeCart
 );
 
 router.post("/:cid/purchase",passportCall("jwt"),
-auth(["user"]),CartController.purchase)
+passportCall("jwt"),
+auth(["user","premium"]),CartController.purchase)
 export default router;
