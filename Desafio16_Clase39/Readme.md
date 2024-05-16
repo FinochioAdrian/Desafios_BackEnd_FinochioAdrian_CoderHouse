@@ -3,8 +3,8 @@
 ## Feature Desafío 16
 
         - status                modify
-          unstarted   Docs      products module
-          unstarted   Docs      cart module
+          finish   Docs      products module
+          incomplete   Docs      cart module
 
 ## Instalación y configuración del entorno de desarrollo
 
