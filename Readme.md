@@ -21,6 +21,7 @@
 - [Desafió 14](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio14_Clase34)
 - [Desafió 15](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio15_Clase37)
 - [Desafió 16](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio16_Clase39)
+- [Desafió 17](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio17_Clase41)
 
 ## Instalación y configuración del entorno de desarrollo
 
@@ -49,14 +50,23 @@
      - Desafio_14 = npm run start_14 => "start_14": "node ./Desafio14_Clase34/index.js"
      - Desafio_15 = npm run start_15 => "start_15 "node ./Desafio15_Clase37/index.js"
      - Desafio_16 = npm run start_16 => "start_16 "node ./Desafio16_Clase39/index.js"
+     - Desafio_17 = npm run start_17 => "start_17 "node ./Desafio17_Clase41/index.js"
 
-## Work in =># Desafío 16 Clase 39
+## Work in =># Desafío 17 Clase 41
+
+## Feature Desafío 17
+
+        - status                modify
+          unstarted            testing products
+          unstarted            testing carts
+          unstarted            testing session
+
 
 ## Feature Desafío 16
 
         - status                modify
-          unstarted   Docs      products module
-          unstarted   Docs      cart module
+          finish       Docs      products module
+          incomplete   Docs      cart module
 
 ## Feature Desafío 15
 
