@@ -1,4 +1,3 @@
-import envConfig from '../../config/config.js'
 import { transportGmailNodemailer } from '../../utils.js'
 
 async function loggerTest(req, res) {

@@ -4,6 +4,7 @@ import { createHash, generateToken, isValidPassword } from "../../utils.js";
 import { logger } from "../../utils/loggerMiddleware/logger.js";
 import envConfig from "../../config/config.js";
 import { sendEmail, transportGmailNodemailer } from "../../utils/sendEmail.js";
+
 async function register(req, res) {
   // Verificar si el cliente acepta HTML
   if (req.accepts("html")) {
@@ -12,7 +13,7 @@ async function register(req, res) {
   }
 
   // Si el cliente no acepta HTML, devolver respuesta JSON
-  return res.status(200).json({ message: "Usuario registrado exitosamente" });
+  return res.status(200).json({ status:"success", message: "Usuario registrado exitosamente" });
 }
 
 async function login(req, res) {
@@ -34,7 +35,7 @@ async function login(req, res) {
       httpOnly: true,
       maxAge: 3 * 60 * 60,
     })
-    .json({ status: 200, msg: "Logged in" });
+    .json({ status: "success", msg: "Logged in" });
 }
 
 async function passwordReset(req, res, next) {
