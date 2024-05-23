@@ -3,9 +3,9 @@
 ## Feature Desafío 17
 
          - status                modify
-          unstarted            testing products
+          Finish            testing products
           unstarted            testing carts
-          unstarted            testing session
+          Finish            testing session
 
 ## Instalación y configuración del entorno de desarrollo
 

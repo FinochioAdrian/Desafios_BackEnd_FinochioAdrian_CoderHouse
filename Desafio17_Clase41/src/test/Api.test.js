@@ -5,7 +5,8 @@ import usersModel from "../feature/users/users.model.js";
 import cartModel from "../feature/carts/cart.model.js";
 import productModel from "../feature/products/product.model.js";
 import { createHash } from "../utils.js";
-
+import { logger } from "../utils/loggerMiddleware/logger.js";
+import fs from 'fs/promises'
 
 const url = "mongodb://localhost:27017/loginClase20"
 
@@ -37,6 +38,8 @@ describe('Testing API', () => {
     before(async function () {
         await usersModel.deleteMany({})
         await cartModel.deleteMany({})
+        const products = await productModel.find()
+        await BorrarImagenesAlmacenadas(products)
         await productModel.deleteMany({})
 
 
@@ -60,21 +63,18 @@ describe('Testing API', () => {
 
         })
         it('Se creo un usuario Admin correctamente', async () => {
-            let {email,password} = mockUserAdmin
+            let { email, password } = mockUserAdmin
             password = createHash(mockUserAdmin.password)
-            
-            
-            await usersModel.create({...mockUserAdmin,password})
-            
+
+
+            await usersModel.create({ ...mockUserAdmin, password })
+
             const userAdmin = await usersModel.findOne({ email, password })
             expect(userAdmin.email).to.be.equal(mockUserAdmin.email)
             expect(userAdmin.role).to.be.equal(mockUserAdmin.role)
 
         })
     })
-
-
-
 
     describe("Endpoint Users test", () => {
         it('/api/sessions/register Debe registrar correctamente a un usuario', async function () {
@@ -114,8 +114,8 @@ describe('Testing API', () => {
         it('/api/sessions/login Debe logear un admin correctamente y DEVOLVER UNA COOKIE', async function () {
 
             const { email, password } = mockUserAdmin
-            
-            
+
+
             const result = await requester.post('/api/sessions/login').set('Accept', 'application/json').send({ email, password })
             const cookieResult = result.headers['set-cookie'][0]
             expect(cookieResult).to.be.ok
@@ -141,97 +141,111 @@ describe('Testing API', () => {
             expect(_body.payload.email).to.be.eql(mockUser.email)
 
         })
+    })
+    describe("Endpoint Products test", () => {
+        let pid
 
-        describe("Endpoint Products test",  () => {
-            let pid
+        it("post /api/sessions/products permite añadir un producto con imagen solo a usuarios premium y admin", async () => {
+            const mockProducts = {
+                title: "Notebook Chiken",
+                description: "Nuevo Notebook Chiken",
+                code: "Chiken1000",
+                price: 10000,
+                status: true,
+                stock: 10,
+                category: "IT",
+                thumbnails: [
+                    "./src/test/ImgProductTest/NotebookChiken.webp"
+                ]
+            }
 
-            it("post /api/sessions/products permite añadir un producto con imagen solo a usuarios premium y admin", async () => {
-                const mockProducts = {
-                    title: "Notebook Chiken",
-                    description: "Nuevo Notebook Chiken",
-                    code: "Chiken1000",
-                    price: 10000,
-                    status: true,
-                    stock: 10,
-                    category: "IT",
-                    thumbnails: [
-                        "./src/test/ImgProductTest/NotebookChiken.webp"
-                    ]
-                }
-
-                const {statusCode,_body} = await requester.post("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])                
-                    .field('title', mockProducts.title)
-                    .field('description', mockProducts.description)
-                    .field('code', mockProducts.code)
-                    .field('price', mockProducts.price)
-                    .field('status', mockProducts.status)
-                    .field('stock', mockProducts.stock)
-                    .field('category', mockProducts.category)
-                    .attach("thumbnails", mockProducts.thumbnails[0])
-                    
-                    
-                    
-                    expect(statusCode).to.be.eq(403)
-                    expect(_body).to.have.property("error").with.eql('No permissions')
-
-                const {statusCode:code,_body:body} = await requester.post("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`])                
-                    .field('title', mockProducts.title)
-                    .field('description', mockProducts.description)
-                    .field('code', mockProducts.code)
-                    .field('price', mockProducts.price)
-                    .field('status', mockProducts.status)
-                    .field('stock', mockProducts.stock)
-                    .field('category', mockProducts.category)
-                    .attach("thumbnails", mockProducts.thumbnails[0])                   
-                    
-
-                    expect(code).to.be.eq(201)
-                    expect(body).to.be.an("object").and.to.have.property('payload')
-                    pid=body.payload._id
-                    
-
-            })
-
-            it("get /api/products devuelve una lista de productos solo a usuarios logueados ", async () => {
-                
-
-                let result = await requester.get("/api/products/").set('Accept', 'application/json')               
-                                                          
-                expect(result.statusCode).to.be.eq(401)
-                expect(result._body).to.have.property("error").with.eql('Unauthorized')
-                    
-                result = await requester.get("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])                
-                    
-                    
-                    
-                    
-                    expect(result.statusCode).to.be.eq(200)
-                    expect(result._body.payload).to.be.an("array").and.to.not.empty
+            const { statusCode, _body } = await requester.post("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                .field('title', mockProducts.title)
+                .field('description', mockProducts.description)
+                .field('code', mockProducts.code)
+                .field('price', mockProducts.price)
+                .field('status', mockProducts.status)
+                .field('stock', mockProducts.stock)
+                .field('category', mockProducts.category)
+                .attach("thumbnails", mockProducts.thumbnails[0])
 
 
-            })
-            it("get /api/products/:pid devuelve un unico producto por id de producto solo a usuarios logueados ", async () => {
-                
 
-                    
-                    let result = await requester.get("/api/products/${pid}").set('Accept', 'application/json')               
-                console.log("🚀 ~ it ~ result.statusCode:", result.statusCode)
-                                                          
-                expect(result.statusCode).to.be.eq(401)
-                expect(result._body).to.have.property("error").with.eql('Unauthorized')
-                    
-                result = await requester.get("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])                
-                    
-                    
-                    
-                    
-                    expect(result.statusCode).to.be.eq(200)
-                    expect(result._body.payload).to.be.an("array").and.to.not.empty
+            expect(statusCode).to.be.eq(403)
+            expect(_body).to.have.property("error").with.eql('No permissions')
+
+            const { statusCode: code, _body: body } = await requester.post("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`])
+                .field('title', mockProducts.title)
+                .field('description', mockProducts.description)
+                .field('code', mockProducts.code)
+                .field('price', mockProducts.price)
+                .field('status', mockProducts.status)
+                .field('stock', mockProducts.stock)
+                .field('category', mockProducts.category)
+                .attach("thumbnails", mockProducts.thumbnails[0])
 
 
-            })
-                console.log("🚀 ~ it ~ result._body:", result._body)
+            expect(code).to.be.eq(201)
+            expect(body).to.be.an("object").and.to.have.property('payload')
+            pid = body.payload._id
 
+
+        })
+        
+        it("get /api/products devuelve una lista de productos solo a usuarios logueados ", async () => {
+
+
+            let result = await requester.get("/api/products/").set('Accept', 'application/json')
+
+            expect(result.statusCode).to.be.eq(401)
+            expect(result._body).to.have.property("error").with.eql('Unauthorized')
+
+            result = await requester.get("/api/products/").set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+
+
+
+
+            expect(result.statusCode).to.be.eq(200)
+            expect(result._body.payload).to.be.an("array").and.to.not.empty
+
+
+        })
+        it("get /api/products/:pid devuelve un unico producto por id de producto solo a usuarios logueados ", async () => {
+
+
+
+            let result = await requester.get(`/api/products/${pid}`).set('Accept', 'application/json')
+
+
+            expect(result.statusCode).to.be.eq(401)
+            expect(result._body).to.have.property("error").with.eql('Unauthorized')
+
+
+            result = await requester.get(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+
+
+
+            expect(result.statusCode).to.be.eq(200)
+            expect(result._body.product).to.be.an("object").and.to.not.empty
+            expect(result._body.product._id).to.be.equal(pid)
+
+
+        })
+        it("put /api/sessions/products permite modificar un producto con imagen", async () => {
+            let newPrice=50000
+            let result = await requester.get(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`])
+            const mockProducts = {...result._body.product,price:newPrice}
+
+
+            const { statusCode, _body } = await requester.put(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`]).send(mockProducts)
+
+
+            expect(statusCode).to.be.eq(200)
+            expect(_body).to.be.an("object").and.to.have.property('payload')
+            
+            result = await requester.get(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`])
+
+            expect(result._body.product.price).to.be.eq(newPrice)
 
 
 
@@ -240,9 +254,36 @@ describe('Testing API', () => {
 
 
 
-
     })
 
 
 
+
+
+
+
+
+
 })
+
+async function borrarImagen(filePath) {
+    try {
+        await fs.unlink(filePath);
+    } catch (err) {
+        logger.error(
+            "❌ ~ runValidation ~ err:",
+            "error eliminando el archivo " + filePath + " ",
+            err
+        );
+    }
+}
+
+async function BorrarImagenesAlmacenadas(products) {
+    for (const product of products) {
+        if (product.thumbnails.length > 0) {
+            for (const ruta of product.thumbnails) {
+                await borrarImagen(ruta);
+            }
+        }
+    }
+}

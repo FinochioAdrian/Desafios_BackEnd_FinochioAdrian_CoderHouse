@@ -138,7 +138,7 @@ async function update(req, res, next) {
     const { owner: ownerFind } = findProduct
 
     if ((!ownerFind.admin) && user._id == ownerFind._id) {
-      console.log("🚀 ~ update ~ (!ownerFind.admin) || user._id == ownerFind._id:", (!ownerFind.admin) || user._id == ownerFind._id)
+      
       
       let productUpdate = await Products.update(pid, product);
       // Response Product not found
