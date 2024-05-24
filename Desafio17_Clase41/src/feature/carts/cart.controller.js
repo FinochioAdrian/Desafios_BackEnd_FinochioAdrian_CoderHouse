@@ -5,6 +5,10 @@ import {
 import { cartsService as Carts, cartsService } from "./repository/index.js";
 import { ticketsService } from "../tickets/repository/tickets.service.js";
 import {logger} from '../../utils/loggerMiddleware/logger.js'
+
+
+//TODO: Agregar middleware de errors, and logger
+
 async function getAll(req, res) {
   try {
    

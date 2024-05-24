@@ -38,6 +38,7 @@ router.post(
 // Add new product in cart by cart id and product id
 router.post(
   "/:cid/product/:pid",
+  
   passportCall("jwt"),
 auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),
@@ -50,6 +51,8 @@ auth(["user","premium","admin"]),
 
 router.put(
   "/:cid/product/:pid",
+  
+    
   passportCall("jwt"),
   auth(["user","premium","admin"]),
   cartValidationMiddleware("isCid"),

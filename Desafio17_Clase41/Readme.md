@@ -4,7 +4,7 @@
 
          - status                modify
           Finish            testing products
-          unstarted            testing carts
+          Finish            testing carts
           Finish            testing session
 
 ## Instalación y configuración del entorno de desarrollo

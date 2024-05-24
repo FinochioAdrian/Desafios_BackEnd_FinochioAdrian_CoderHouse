@@ -75,7 +75,7 @@ class CartDao {
     try {
       const result = await Cart.findOneAndUpdate(
         { _id: cartId, "products.product": productID },
-        { $inc: { "products.$.quantity": quantity } },
+        { $set: { "products.$.quantity": quantity } },
         { new: true }
       ).lean();
 

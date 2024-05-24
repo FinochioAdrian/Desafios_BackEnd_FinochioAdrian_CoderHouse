@@ -57,9 +57,9 @@
 ## Feature Desafío 17
 
         - status                modify
-          unstarted            testing products
-          unstarted            testing carts
-          unstarted            testing session
+          Finished            testing products
+          Finished            testing carts
+          Finished            testing session
 
 
 ## Feature Desafío 16

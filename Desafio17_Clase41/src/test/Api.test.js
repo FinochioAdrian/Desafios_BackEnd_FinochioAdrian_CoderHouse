@@ -191,7 +191,7 @@ describe('Testing API', () => {
 
 
         })
-        
+
         it("get /api/products devuelve una lista de productos solo a usuarios logueados ", async () => {
 
 
@@ -232,9 +232,9 @@ describe('Testing API', () => {
 
         })
         it("put /api/sessions/products permite modificar un producto con imagen", async () => {
-            let newPrice=50000
+            let newPrice = 50000
             let result = await requester.get(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`])
-            const mockProducts = {...result._body.product,price:newPrice}
+            const mockProducts = { ...result._body.product, price: newPrice }
 
 
             const { statusCode, _body } = await requester.put(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`]).send(mockProducts)
@@ -242,7 +242,7 @@ describe('Testing API', () => {
 
             expect(statusCode).to.be.eq(200)
             expect(_body).to.be.an("object").and.to.have.property('payload')
-            
+
             result = await requester.get(`/api/products/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieAdmin.name}=${cookieAdmin.value}`])
 
             expect(result._body.product.price).to.be.eq(newPrice)
@@ -251,9 +251,98 @@ describe('Testing API', () => {
 
         })
 
+        describe("Endpoint Carts test", () => {
+            it("Un usuario debe poder agregar un producto a su cart", async () => {
+                const ProductsResult = await requester.get(`/api/products/`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const pid = ProductsResult._body.payload[0]._id
+
+
+                expect(mongoose.isValidObjectId(pid)).to.be.true
+
+                const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const cid = userResult._body.payload.cart
+
+                const cartResult = await requester.post(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const { statusCode, _body } = cartResult
 
 
 
+                expect(statusCode).to.be.eql(201)
+                expect(_body).to.have.property("payload")
+
+
+
+                const productFound = _body.payload.products.some((product) => { return product.product === pid })
+                expect(productFound).to.be.true
+
+            })
+            it("Un usuario debe poder actualizar la cantidad un producto en su cart", async () => {
+
+
+                const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const cid = userResult._body.payload.cart
+
+                const cartResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const { statusCode, _body } = cartResult
+
+                const pid = _body.payload.products[0].product._id
+                
+                expect(pid).to.be.exist
+                expect(mongoose.isValidObjectId(pid)).to.be.true
+
+
+
+                const quantity = 10
+                const cartDeleteResult = await requester.put(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`]).send({ quantity })
+                const { statusCode: statusCode_cartDeleteResult, _body: _body_cartDeleteResult } = cartDeleteResult
+
+
+                expect(statusCode_cartDeleteResult).to.be.eql(201)
+                expect(_body_cartDeleteResult).to.have.property("payload")
+
+                const cartNewResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const { statusCode:statusCode_cartNewResult, _body: _body_cartNewResult } = cartNewResult
+
+                
+                  expect(_body_cartNewResult.payload.products[0].quantity).to.be.equal(quantity)
+
+            })
+            it("Un usuario debe poder eliminar un producto de su cart", async () => {
+
+
+                const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const cid = userResult._body.payload.cart
+
+                const cartResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const { statusCode, _body } = cartResult
+
+                const pid = _body.payload.products[0].product._id
+                
+                expect(pid).to.be.exist
+                expect(mongoose.isValidObjectId(pid)).to.be.true
+
+
+
+                
+                const cartDeleteResult = await requester.delete(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const { statusCode: statusCode_cartDeleteResult, _body: _body_cartDeleteResult } = cartDeleteResult
+
+
+                expect(statusCode_cartDeleteResult).to.be.eql(201)
+                expect(_body_cartDeleteResult).to.have.property("payload")
+
+                const cartNewResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                const { statusCode:statusCode_cartNewResult, _body: _body_cartNewResult } = cartNewResult
+
+                const productInCart = _body_cartNewResult.payload.products.some((product) => {return product.product._id === pid})
+
+                expect(productInCart).to.be.false
+
+            })
+
+
+
+        })
     })
 
 
