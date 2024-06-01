@@ -22,6 +22,7 @@
 - [Desafió 15](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio15_Clase37)
 - [Desafió 16](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio16_Clase39)
 - [Desafió 17](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio17_Clase41)
+- [Desafió 18](https://github.com/FinochioAdrian/Desafios_BackEnd_FinochioAdrian_CoderHouse/tree/main/Desafio18_Clase44)
 
 ## Instalación y configuración del entorno de desarrollo
 
@@ -51,8 +52,20 @@
      - Desafio_15 = npm run start_15 => "start_15 "node ./Desafio15_Clase37/index.js"
      - Desafio_16 = npm run start_16 => "start_16 "node ./Desafio16_Clase39/index.js"
      - Desafio_17 = npm run start_17 => "start_17 "node ./Desafio17_Clase41/index.js"
+     - Desafio_18 = npm run start_18 => "start_18 "node ./Desafio18_Clase44/index.js"
 
-## Work in =># Desafío 17 Clase 41
+## Work in =># Desafío 18 Clase 44
+
+## Feature Desafío 18
+
+      - Status                Action          Description
+        
+        undstarted            Modify          move /api/users/premium/:uid To /api/users in users.router file
+        undstarted            Modify          modify User model, add new property "documents" 
+        undstarted            Modify          modify User model, add new property "last_connection" and this modify when the user login or logout
+        undstarted            add             add endpoint post in api/users/:uid/documents y que permita subir file y que modificar el status del user
+        undstarted            Modify          archivos posbles para subir profile, products,documents
+        undstarted            Modify          modify /api/users/premium/:uid para que actulize al usuario como premium solo si ha cargado los siguientes documentos identificacion, Comprobante de domicilio, comprobante de estado de cuenta, devolver error indicando que el usuario no ha terminado de procesar su documentacion.
 
 ## Feature Desafío 17
 
@@ -60,7 +73,6 @@
           Finished            testing products
           Finished            testing carts
           Finished            testing session
-
 
 ## Feature Desafío 16
 
