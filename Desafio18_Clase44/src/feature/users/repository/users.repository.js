@@ -3,7 +3,10 @@ export default class UsersRepository {
   constructor(dao) {
     this.dao = dao;
   }
-
+  getAllUsers = async () =>{
+    const result = await this.dao.getAllUsers()
+    return result
+  }
   getUserByEmail = async (email) => {
 
     const regexEmail = new RegExp(email,'i')

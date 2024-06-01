@@ -6,6 +6,16 @@ const cartDao = new CartDao()
 // UsersDAO class
 export default class UsersDAO {
   constructor() { }
+  // find all user
+  async getAllUsers() {
+    try {
+      return await Users.find().lean();
+    } catch (error) {
+      logger.error("❌ ~ UsersDAO ~ getAllUser ~ error:", error);
+      throw error;
+    }
+  }
+
   // get user by email
   async getUserByEmail(user) {
     try {
@@ -73,10 +83,10 @@ export default class UsersDAO {
   }
   async updateUser(user) {
     try {
-      return await Users.findOneAndUpdate({ _id: user?.id || user._id },user,{new:true}).lean()
-      
-    
-      
+      return await Users.findOneAndUpdate({ _id: user?.id || user._id }, user, { new: true }).lean()
+
+
+
     } catch (error) {
       logger.error("❌ ~ newPassword ~ error:", error);
       throw error;

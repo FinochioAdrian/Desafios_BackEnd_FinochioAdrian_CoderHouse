@@ -26,8 +26,16 @@ const UsersSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
     default:null,
-    
   },
+  documents:{
+    type: [
+      {
+        name: String,
+        reference: String
+      }
+    ]
+  },
+  
 });
 
 export default mongoose.model("Users", UsersSchema);
