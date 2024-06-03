@@ -6,5 +6,5 @@ const router = express.Router();
 
 
 router.put("/premium/:uid",userValidationMiddleware("isID"),runValidation,UsersController.switchUserRole);
-
+/* router.get("/:uid",UsersController.getUser) */
 export default router;

@@ -116,7 +116,6 @@ async function update(req, res, next) {
     /*----  Update products ----*/
 
 
-    console.log("🚀 ~ update ~ user.role:", user.role)
 
     if (user.role == "admin") {
       let productUpdate = await Products.update(pid, product);

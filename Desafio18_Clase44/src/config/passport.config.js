@@ -79,6 +79,7 @@ const initializePassport = () => {
         try {
           
           const user = await usersService.getUserByEmail(username);
+          
           if (!user) {
             return done(null, false, {
               type: "errorValidation",

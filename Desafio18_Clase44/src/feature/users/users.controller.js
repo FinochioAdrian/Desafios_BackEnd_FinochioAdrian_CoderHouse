@@ -21,5 +21,21 @@ async function getAll (req, res, next) {
         next(error)
     }
 }
+async function getUser (req, res, next) {
+    try {
+        const {uid:id} = req.params
+        if(!id) {
+            return res.send(400).send({result:fail,msg:`uid params is requiered`})
+        }
 
-export { switchUserRole,getAll }
+        const user= await Users.getUserByID(id)
+        if (!user){
+            return res.send({ result: "fail", msg: "User no found" })
+        }
+        return res.send({ result: "succes", user })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export { switchUserRole,getAll, getUser}

@@ -13,7 +13,7 @@
           if(req.accepts("html")&&req.path=="/login",req.method=="GET") {
             return next ()
           }
-          
+          /* Redirige a la direccion fe failureRedirect si acepta html  */
           if(req.accepts("html")&&failureRedirect) {
             failureFlash && req.flash(info?.type||"error", info?.message||info);
             return res.redirect(failureRedirect)

@@ -13,29 +13,43 @@ async function register(req, res) {
   }
 
   // Si el cliente no acepta HTML, devolver respuesta JSON
-  return res.status(200).json({ status:"success", message: "Usuario registrado exitosamente" });
+  return res.status(200).json({ status: "success", message: "Usuario registrado exitosamente" });
 }
 
-async function login(req, res) {
-  const user = req.user;
-  const access_token = generateToken(user);
+async function login(req, res, next) {
+  try {
+    const user = req.user;
+    const access_token = generateToken(user);
+    /* Registrar el login */
 
-  if (req.accepts("html")) {
+    const userData = {
+      _id: user._id,
+      last_connection: {
+        name: 'login',
+        date: new Date().toISOString()
+      }
+
+    }
+    const login = await usersService.updateLast_connection(userData)
+    if (req.accepts("html")) {
+      return res
+        .cookie("jwt", access_token, {
+          signed: true,
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60,
+        })
+        .redirect("/products");
+    }
     return res
       .cookie("jwt", access_token, {
         signed: true,
         httpOnly: true,
-        maxAge: 1000 * 60 * 60,
+        maxAge: 3 * 60 * 60,
       })
-      .redirect("/products");
+      .json({ status: "success", msg: "Logged in" });
+  } catch (error) {
+    next(error)
   }
-  return res
-    .cookie("jwt", access_token, {
-      signed: true,
-      httpOnly: true,
-      maxAge: 3 * 60 * 60,
-    })
-    .json({ status: "success", msg: "Logged in" });
 }
 
 async function passwordReset(req, res, next) {
@@ -57,18 +71,18 @@ async function passwordReset(req, res, next) {
     }
     let emailToken;
     try {
-      let credentiales=jwt.verify(token, envConfig.PRIVATE_KEY_JWT)
-      const {user:userToken} =credentiales
-      emailToken=userToken.email
+      let credentiales = jwt.verify(token, envConfig.PRIVATE_KEY_JWT)
+      const { user: userToken } = credentiales
+      emailToken = userToken.email
     } catch (error) {
       if (err) {
         if (req.accepts("html")) return res.redirect("/findEmail");
         return res.status(403).send({ error: "Not authorized", redirect: "/findEmail" });
       }
     }
-    
-    
-    if (!(email.toLowerCase()==emailToken.toLowerCase())) {
+
+
+    if (!(email.toLowerCase() == emailToken.toLowerCase())) {
       if (req.accepts("html")) {
         req.flash("errorValidation", "Not authorized");
         return res.redirect("/login");
@@ -76,7 +90,7 @@ async function passwordReset(req, res, next) {
 
       return res.status(403).send({ status: "error", msg: "Not authorized" });
     }
-    
+
     let user = await usersService.getUserByEmail(email);
 
     if (!user) {
@@ -87,7 +101,7 @@ async function passwordReset(req, res, next) {
 
       return res.status(400).send({ status: "error", msg: "User not found" });
     }
-    if (isValidPassword(user, password)){
+    if (isValidPassword(user, password)) {
       if (req.accepts("html")) {
         req.flash("errorValidation", "The password cannot be the same as the old password");
         return res.redirect(`/password-reset?token=${token}`);
@@ -95,7 +109,7 @@ async function passwordReset(req, res, next) {
 
       return res.status(400).send({ status: "error", msg: "The password cannot be the same as the old password" });
     }
-    
+
     user.password = createHash(password);
 
     await usersService.newPassword(user);
@@ -115,7 +129,7 @@ async function passwordReset(req, res, next) {
     next(error)
   }
 }
-async function forgotEmailAndPassword(req, res,next) {
+async function forgotEmailAndPassword(req, res, next) {
 
   try {
     let { email } = req.body;
@@ -183,8 +197,6 @@ async function forgotEmailAndPassword(req, res,next) {
   }
 }
 
-
-
 async function githubcallback(req, res) {
   const user = req.user;
   if (!user) {
@@ -220,10 +232,31 @@ async function githubcallback(req, res) {
     .json({ status: 200, msg: "Logged in" });
 }
 
-async function logout(req, res) {
-  res.clearCookie("jwt");
-  if (req.accepts("html")) return res.redirect("/login");
-  res.status(200).json({ status: 200, msg: "Logged out" });
+async function logout(req, res, next) {
+  try {
+
+
+    /* Registrar logout */
+
+    const user = req.user;
+    const userData = {
+      _id: user._id,
+      last_connection: {
+        name: 'logout',
+        date: new Date().toISOString()
+      }
+    }
+
+    await usersService.updateLast_connection(userData)
+    res.clearCookie("jwt");
+
+    if (req.accepts("html")) return res.redirect("/login");
+    res.status(200).json({ status: 200, msg: "Logged out" });
+  } catch (error) {
+    next(error)
+  }
+
+
 }
 
 async function failRegister(req, res) {

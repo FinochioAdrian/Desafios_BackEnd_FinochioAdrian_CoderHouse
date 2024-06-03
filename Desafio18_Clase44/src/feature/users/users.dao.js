@@ -83,10 +83,27 @@ export default class UsersDAO {
   }
   async updateUser(user) {
     try {
-      return await Users.findOneAndUpdate({ _id: user?.id || user._id }, user, { new: true }).lean()
+      const result = await Users.findOneAndUpdate({ _id: user?.id || user._id }, user, { new: true }).lean()
+      return result
+    } catch (error) {
+      logger.error("❌ ~ newPassword ~ error:", error);
+      throw error;
+    }
+  }
+  async updateLast_connection(user) {
+
+    try {
+
+      const result = await Users.findOneAndUpdate(
+        { _id: user?.id || user._id },
+        { $set: { last_connection: user.last_connection } },
+        { new: true }
+      ).lean();
+
+    
 
 
-
+      return result
     } catch (error) {
       logger.error("❌ ~ newPassword ~ error:", error);
       throw error;

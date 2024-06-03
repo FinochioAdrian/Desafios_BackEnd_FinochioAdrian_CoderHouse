@@ -44,7 +44,7 @@ router.get(
   sessionsController.githubcallback
 );
 
-router.get("/logout", sessionsController.logout);
+router.get("/logout",passportCall("jwt"), auth(["user","premium","admin"]), sessionsController.logout);
 
 router.get("/failregister", sessionsController.failRegister);
 

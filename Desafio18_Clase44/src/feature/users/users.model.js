@@ -19,23 +19,39 @@ const UsersSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user","premium"],
+    enum: ["admin", "user", "premium"],
     default: "user",
   },
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
-    default:null,
+    default: null,
   },
-  documents:{
-    type: [
-      {
-        name: String,
-        reference: String
+  documents: {
+    type: [{
+      name: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      reference: {
+        type: String,
+        required: true,
+      },
+    }],
+  },
+  last_connection: {
+    type: {
+      name: {
+        type: String,
+        enum: ["login", "logout"],
+      },
+      date: {
+        type: Date,
       }
-    ]
-  },
-  
+    },
+  }
+
 });
 
 export default mongoose.model("Users", UsersSchema);
