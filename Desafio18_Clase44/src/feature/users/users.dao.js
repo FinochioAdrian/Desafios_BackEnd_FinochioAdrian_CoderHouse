@@ -109,6 +109,25 @@ export default class UsersDAO {
       throw error;
     }
   }
+  async updateDocumentation(user) {
+
+    try {
+
+      const result = await Users.findOneAndUpdate(
+        { _id: user?.id || user._id },
+        { $set: { documents: user.documents } },
+        { new: true }
+      ).lean();
+
+    
+
+
+      return result
+    } catch (error) {
+      logger.error("❌ ~ newPassword ~ error:", error);
+      throw error;
+    }
+  }
 
 }
 

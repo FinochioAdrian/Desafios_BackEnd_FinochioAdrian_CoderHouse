@@ -1,7 +1,7 @@
 import express from "express";
 import * as ProductsController from "./products.controller.js";
 import productValidationMiddleware, { runValidation } from "./productValidationMiddleware.js";
-import upload from "../../utils/upload.middleware.js";
+import {uploadProducts} from "../../utils/upload.middleware.js";
 import { auth, passportCall } from "../../utils.js";
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get("/mockingproducts", productValidationMiddleware('getAllQueries'),runV
 
 router.get("/:pid",passportCall("jwt"),auth(["user","admin","premium"]),productValidationMiddleware('isID'),runValidation, ProductsController.get);
 
-router.post("/",passportCall("jwt"),auth(["admin","premium"]),upload.array("thumbnails",3), productValidationMiddleware('createProduct'),runValidation,ProductsController.create);
+router.post("/",passportCall("jwt"),auth(["admin","premium"]),uploadProducts.array("thumbnails",3), productValidationMiddleware('createProduct'),runValidation,ProductsController.create);
 
 router.put("/:pid",passportCall("jwt"),auth(["admin","premium"]),productValidationMiddleware('updateProduct'),runValidation, ProductsController.update);
 

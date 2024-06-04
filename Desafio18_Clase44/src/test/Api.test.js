@@ -7,6 +7,7 @@ import productModel from "../feature/products/product.model.js";
 import { createHash } from "../utils.js";
 import { logger } from "../utils/loggerMiddleware/logger.js";
 import fs from 'fs/promises'
+import { assert } from "console";
 
 const url = "mongodb://localhost:27017/loginClase20"
 
@@ -16,7 +17,7 @@ const requester = supertest('http://localhost:8080')
 
 
 
-
+const documents = []
 let cookieUser;
 let cookieAdmin;
 let mockUser = {
@@ -44,6 +45,14 @@ describe('Testing API', () => {
 
 
         this.timeout = 5000
+
+    })
+    after(async function () {
+
+
+
+        await BorrarDocumentsAlmacenados(documents)
+        this.timeout = 10000
 
     })
 
@@ -76,7 +85,7 @@ describe('Testing API', () => {
         })
     })
 
-    describe("Endpoint Users test", () => {
+    describe("Endpoint Session test", () => {
         it('/api/sessions/register Debe registrar correctamente a un usuario', async function () {
 
 
@@ -142,6 +151,9 @@ describe('Testing API', () => {
 
         })
     })
+
+
+
     describe("Endpoint Products test", () => {
         let pid
 
@@ -251,97 +263,195 @@ describe('Testing API', () => {
 
         })
 
-        describe("Endpoint Carts test", () => {
-            it("Un usuario debe poder agregar un producto a su cart", async () => {
-                const ProductsResult = await requester.get(`/api/products/`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const pid = ProductsResult._body.payload[0]._id
 
 
-                expect(mongoose.isValidObjectId(pid)).to.be.true
-
-                const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const cid = userResult._body.payload.cart
-
-                const cartResult = await requester.post(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const { statusCode, _body } = cartResult
+    })
+    describe("Endpoint Carts test", () => {
+        it("Un usuario debe poder agregar un producto a su cart", async () => {
+            const ProductsResult = await requester.get(`/api/products/`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const pid = ProductsResult._body.payload[0]._id
 
 
+            expect(mongoose.isValidObjectId(pid)).to.be.true
 
-                expect(statusCode).to.be.eql(201)
-                expect(_body).to.have.property("payload")
+            const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const cid = userResult._body.payload.cart
+
+            const cartResult = await requester.post(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const { statusCode, _body } = cartResult
 
 
 
-                const productFound = _body.payload.products.some((product) => { return product.product === pid })
-                expect(productFound).to.be.true
+            expect(statusCode).to.be.eql(201)
+            expect(_body).to.have.property("payload")
+
+
+
+            const productFound = _body.payload.products.some((product) => { return product.product === pid })
+            expect(productFound).to.be.true
+
+        })
+        it("Un usuario debe poder actualizar la cantidad un producto en su cart", async () => {
+
+
+            const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const cid = userResult._body.payload.cart
+
+            const cartResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const { statusCode, _body } = cartResult
+
+            const pid = _body.payload.products[0].product._id
+
+            expect(pid).to.be.exist
+            expect(mongoose.isValidObjectId(pid)).to.be.true
+
+
+
+            const quantity = 10
+            const cartDeleteResult = await requester.put(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`]).send({ quantity })
+            const { statusCode: statusCode_cartDeleteResult, _body: _body_cartDeleteResult } = cartDeleteResult
+
+
+            expect(statusCode_cartDeleteResult).to.be.eql(201)
+            expect(_body_cartDeleteResult).to.have.property("payload")
+
+            const cartNewResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const { statusCode: statusCode_cartNewResult, _body: _body_cartNewResult } = cartNewResult
+
+
+            expect(_body_cartNewResult.payload.products[0].quantity).to.be.equal(quantity)
+
+        })
+        it("Un usuario debe poder eliminar un producto de su cart", async () => {
+
+
+            const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const cid = userResult._body.payload.cart
+
+            const cartResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const { statusCode, _body } = cartResult
+
+            const pid = _body.payload.products[0].product._id
+
+            expect(pid).to.be.exist
+            expect(mongoose.isValidObjectId(pid)).to.be.true
+
+
+
+
+            const cartDeleteResult = await requester.delete(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const { statusCode: statusCode_cartDeleteResult, _body: _body_cartDeleteResult } = cartDeleteResult
+
+
+            expect(statusCode_cartDeleteResult).to.be.eql(201)
+            expect(_body_cartDeleteResult).to.have.property("payload")
+
+            const cartNewResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+            const { statusCode: statusCode_cartNewResult, _body: _body_cartNewResult } = cartNewResult
+
+            const productInCart = _body_cartNewResult.payload.products.some((product) => { return product.product._id === pid })
+
+            expect(productInCart).to.be.false
+
+        })
+
+
+
+    })
+
+    describe("Endpoint Users test", () => {
+        const mockDocument = {
+            identification: "./src/test/documentsTest/identification.pdf",
+            proofOfResidence: "./src/test/documentsTest/proofOfResidence.pdf",
+            accountStatement: "./src/test/documentsTest/accountStatement.pdf"
+        }
+        it('/api/users/:uid/documents debe poder subir documento de identificacion', async () => {
+
+
+            const { _body } = await requester.get('/api/sessions/current').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+
+            const { statusCode, _body: body } = await requester.post(`/api/users/${_body.payload._id}/documents`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                .attach("identification", mockDocument.identification)
+
+            body.payload.documents.forEach((document) => {
+                if (!documents.includes(document.reference)) {
+
+                    documents.push(document.reference)
+                }
 
             })
-            it("Un usuario debe poder actualizar la cantidad un producto en su cart", async () => {
 
 
-                const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const cid = userResult._body.payload.cart
+            expect(statusCode).to.be.eq(201)
 
-                const cartResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const { statusCode, _body } = cartResult
 
-                const pid = _body.payload.products[0].product._id
-                
-                expect(pid).to.be.exist
-                expect(mongoose.isValidObjectId(pid)).to.be.true
+        })
 
 
 
-                const quantity = 10
-                const cartDeleteResult = await requester.put(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`]).send({ quantity })
-                const { statusCode: statusCode_cartDeleteResult, _body: _body_cartDeleteResult } = cartDeleteResult
+        it('/api/users/:uid/documents debe poder subir documento Comprobante de domicilio', async () => {
 
 
-                expect(statusCode_cartDeleteResult).to.be.eql(201)
-                expect(_body_cartDeleteResult).to.have.property("payload")
+            const { _body } = await requester.get('/api/sessions/current').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
 
-                const cartNewResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const { statusCode:statusCode_cartNewResult, _body: _body_cartNewResult } = cartNewResult
+            const { statusCode, _body: body } = await requester.post(`/api/users/${_body.payload._id}/documents`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                .attach("proofOfResidence", mockDocument.proofOfResidence)
+            body.payload.documents.forEach((document) => {
+                if (!documents.includes(document.reference)) {
 
-                
-                  expect(_body_cartNewResult.payload.products[0].quantity).to.be.equal(quantity)
-
-            })
-            it("Un usuario debe poder eliminar un producto de su cart", async () => {
-
-
-                const userResult = await requester.get('/api/sessions/current').set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const cid = userResult._body.payload.cart
-
-                const cartResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const { statusCode, _body } = cartResult
-
-                const pid = _body.payload.products[0].product._id
-                
-                expect(pid).to.be.exist
-                expect(mongoose.isValidObjectId(pid)).to.be.true
-
-
-
-                
-                const cartDeleteResult = await requester.delete(`/api/carts/${cid}/product/${pid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const { statusCode: statusCode_cartDeleteResult, _body: _body_cartDeleteResult } = cartDeleteResult
-
-
-                expect(statusCode_cartDeleteResult).to.be.eql(201)
-                expect(_body_cartDeleteResult).to.have.property("payload")
-
-                const cartNewResult = await requester.get(`/api/carts/${cid}`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
-                const { statusCode:statusCode_cartNewResult, _body: _body_cartNewResult } = cartNewResult
-
-                const productInCart = _body_cartNewResult.payload.products.some((product) => {return product.product._id === pid})
-
-                expect(productInCart).to.be.false
+                    documents.push(document.reference)
+                }
 
             })
 
+            expect(statusCode).to.be.eq(201)
+
+        })
+        it('/api/users/:uid/documents debe poder subir documento de Comprobante de Estado de cuenta', async () => {
 
 
+            const { _body } = await requester.get('/api/sessions/current').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+
+            const { statusCode, _body: body } = await requester.post(`/api/users/${_body.payload._id}/documents`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                .attach("accountStatement", mockDocument.accountStatement)
+
+            body.payload.documents.forEach((document) => {
+                if (!documents.includes(document.reference)) {
+
+                    documents.push(document.reference)
+                }
+
+            })
+            expect(statusCode).to.be.eq(201)
+        })
+        it('/api/users/:uid/documents debe poder subir multiples documentos', async () => {
+
+
+            const { _body } = await requester.get('/api/sessions/current').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+
+            const { statusCode, _body: body } = await requester.post(`/api/users/${_body.payload._id}/documents`).set('Accept', 'application/json').set('Cookie', [`${cookieUser.name}=${cookieUser.value}`])
+                .attach("identification", mockDocument.identification)
+                .attach("proofOfResidence", mockDocument.proofOfResidence)
+                .attach("accountStatement", mockDocument.accountStatement)
+
+            body.payload.documents.forEach((document) => {
+                if (!documents.includes(document.reference)) {
+
+                    documents.push(document.reference)
+                }
+
+            })
+            expect(statusCode).to.be.eq(201)
+        })
+
+        it('/api/users/:uid debe devolver error si el usuario no ha cargado los documentos', async ()=>{
+            expect("incomplete").to.be.eql("complete")  
+        })
+        it('/api/users/:uid debe actualizar a un usuario como premiun solo si ha cargado los 3 documentos', async ()=>{
+            expect("incomplete").to.be.eql("complete")  
+        })
+        it('/api/users/:uid debe de poder actualizar a un usuario premiun como user', async ()=>{
+            expect("incomplete").to.be.eql("complete")  
         })
     })
 
@@ -353,9 +463,10 @@ describe('Testing API', () => {
 
 
 
+
 })
 
-async function borrarImagen(filePath) {
+async function borrarArchivo(filePath) {
     try {
         await fs.unlink(filePath);
     } catch (err) {
@@ -371,8 +482,17 @@ async function BorrarImagenesAlmacenadas(products) {
     for (const product of products) {
         if (product.thumbnails.length > 0) {
             for (const ruta of product.thumbnails) {
-                await borrarImagen(ruta);
+                await borrarArchivo(ruta);
             }
         }
     }
+}
+async function BorrarDocumentsAlmacenados(documents) {
+
+
+    for (const ruta of documents) {
+
+        await borrarArchivo(ruta);
+    }
+
 }

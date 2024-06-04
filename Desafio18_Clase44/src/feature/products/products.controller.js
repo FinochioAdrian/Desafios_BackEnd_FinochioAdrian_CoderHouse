@@ -60,7 +60,7 @@ async function create(req, res, next) {
   // Validate the request body against the schema
   const { body: product } = req;
   const { user } = req
-  
+
   product.owner = {
     _id: user._id,
     admin: false
@@ -69,10 +69,9 @@ async function create(req, res, next) {
 
   if (user.role == "admin") {
     product.owner.admin = true
-    
   }
 
-  
+
   try {
     const result = await Products.getWithCode(product.code);
 
@@ -83,12 +82,13 @@ async function create(req, res, next) {
 
     }
 
-    if (req.files) {
+    if (req.files && req.files.length > 0) {
       const filePath = req.files;
       const thumbnails = filePath.map((value) => {
         return value.path.replace(/\\/g, "/");
       });
       product.thumbnails = thumbnails;
+
     }
 
     const payload = await Products.add({ ...product });
@@ -137,8 +137,8 @@ async function update(req, res, next) {
     const { owner: ownerFind } = findProduct
 
     if ((!ownerFind.admin) && user._id == ownerFind._id) {
-      
-      
+
+
       let productUpdate = await Products.update(pid, product);
       // Response Product not found
       if (!productUpdate) {

@@ -49,6 +49,15 @@ export default class UsersRepository {
     if (!result) return null;
     return new UserDto(result);
   };
+  updateDocumentation = async (userData) => {
+
+    const UserToInsert = new UserDto(userData);
+    
+    const result = await this.dao.updateDocumentation(UserToInsert);
+
+    if (!result) return null;
+    return new UserDto(result);
+  };
   getUserByID = async (id) => {
     const UserToFind = new UserDto({ _id: id });
     const result = await this.dao.getUserByID(UserToFind);

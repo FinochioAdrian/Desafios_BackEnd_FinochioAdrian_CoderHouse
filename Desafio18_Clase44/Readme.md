@@ -4,11 +4,11 @@
 |Feature_Number |  Status        | Action |  Description |
 |---------------|----------------|--------|---------|
 | 18_01         |   finished     | Modify |  move /api/users/premium/:uid To /api/users in users.router file |
-| 18_02         |   finished      | Modify |  modify User model, add new property "last_connection" and this modify when the user login or logout |
-| 18_03         |   undstarted   | Modify |  modify User model, add new property "documents"  |
-| 18_04         |   undstarted   | Add    |  add endpoint post in api/users/:uid/documents y que permita subir file y que modificar el status del user |
-| 18_05         |   undstarted   | Modify |  archivos posbles para subir profile, products,documents |
-| 18_06         |   undstarted   | Modify |  modify /api/users/premium/:uid para que actulize al usuario como premium solo si ha cargado los siguientes documentos identificacion, Comprobante de domicilio, comprobante de estado de cuenta, devolver error indicando que el usuario no ha terminado de procesar su documentacion. |
+| 18_02         |   finished     | Modify |  modify User model, add new property "last_connection" and this modify when the user login or logout |
+| 18_03         |   finished      | Modify |  modify User model, add new property "documents"  |
+| 18_04         |   finished      | Add    |  add endpoint post in api/users/:uid/documents y que permita subir file y que modificar el status del user |
+| 18_05         |   finished   | Modify |  archivos posbles para subir profile, products,documents |
+| 18_06         |   started   | Modify |  modify /api/users/premium/:uid para que actulize al usuario como premium solo si ha cargado los siguientes documentos identificacion, Comprobante de domicilio, comprobante de estado de cuenta, devolver error indicando que el usuario no ha terminado de procesar su documentacion. |
 
 ## Instalación y configuración del entorno de desarrollo
 
