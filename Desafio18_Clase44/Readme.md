@@ -25,3 +25,4 @@
         - inicio Guiado => "npm start";
         - ambiente production => npm run prod
         - ambiente developer => npm run dev
+        - ambiente test => npm run test
